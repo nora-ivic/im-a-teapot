@@ -8,8 +8,13 @@
 			
 			\begin{packed_enum}
 				
-				\item Dionik 1
-				\item ...
+				\item Neregistrirani korisnik
+				\item Registrirani korisnik
+				\begin{packed_item}
+					\item[a)] Klijent
+					\item[b)] Sklonište
+				\end{packed_item}
+				\item Razvojni tim
 				
 			\end{packed_enum}
 			
@@ -17,28 +22,43 @@
 			
 			
 			\begin{packed_enum}
-				\item  \underbar{Aktor 1 (inicijator) može:}
-				
+				\item  \underbar{Neregistriran/neprijavljen korisnik (inicijator) može:}
 				\begin{packed_enum}
-					
-					\item funkcionalnost 1
-					\item funkcionalnost 2
-					\begin{packed_enum}
-						
-						\item  podfunkcionalnost 1 
-						\item  podfunkcionalnost 2
-				
-					\end{packed_enum}
-					
+					\item pregledavati aktivne oglase
+					\item pretraživati aktivne oglase
+					\item registrirati se
+					\item prijaviti se u sustav (za postojećeg korisnika)
+					\item detaljnijije pregledati oglas i komunikacije
 				\end{packed_enum}
 			
-				\item  \underbar{...}
-				
+				\item  \underbar{Klijent (inicijator) može:}
 				\begin{packed_enum}
-					
-					\item ...
-					
+					\item pregledavati sve oglase
+					\item pretraživati sve oglase
+					\item detaljnije pregledati oglas i komunikacije
+					\item komunikacirati u vezi potrage
+					\item ukloniti oglas
+					\item izmjeniti oglas
 				\end{packed_enum}
+				
+				\item  \underbar{Sklonište (inicijator) može:}
+				\begin{packed_enum}
+					\item pregledavati sve oglase
+					\item pretraživati sve oglase
+					\item detaljnijije pregledati oglas i komunikacije
+					\item komunicirati u vezi potrage
+					\item ukloniti oglas
+					\item izmijeniti oglasa
+					\item postaviti oglas o ljubimcu u skloništu
+				\end{packed_enum}
+				
+				\item  \underbar{Baza podataka (sudionik) može:}
+				\begin{packed_enum}
+					\item pohranjivati sve podatke o korisničkim računima
+					\item pohranjivati sve podatke o oglasima nestalih ljubimaca
+					\item pohranjivati komunikaciju o nestalim ljubimcima
+				\end{packed_enum}
+				
 			\end{packed_enum}
 			
 			\eject 
