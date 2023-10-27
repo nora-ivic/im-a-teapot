@@ -1,5 +1,13 @@
 <resources>
     <string name="app_name">Nestali Ljubimci</string>
+    <string name="email_text">Email</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="passwordText">Password</string>
+    <string name="phoneText">Phone number</string>
+    <string name="shelterNameText">Shelter name</string>
+    <string name="registerAsUser">Register user</string>
+    <string name="registerAsShelter">Register shelter</string>
+    <string name="repeatPasswordText">Repeat password</string>
+    <string name="usernameText">Username</string>
 </resources>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="bottom_margin_show_details_const_layout">10dp</dimen>
+    <dimen name="margin_16dp">16dp</dimen>
+    <dimen name="margin_24dp">24dp</dimen>
+    <dimen name="horizontal_margin_show_details">24dp</dimen>
+    <dimen name="margin_8">8dp</dimen>
+    <dimen name="text16sp">16sp</dimen>
+    <dimen name="text24sp">24sp</dimen>
+    <dimen name="size16dp">16dp</dimen>
+    <dimen name="size32dp">32dp</dimen>
+    <dimen name="size40dp">40dp</dimen>
+    <dimen name="size88dp">88dp</dimen>
+    <dimen name="size96dp">96dp</dimen>
+</resources>
