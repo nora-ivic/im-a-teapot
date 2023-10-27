@@ -66,7 +66,23 @@ Drugi tip korisnika aplikacije je \underbar{\textbf{ registrirani korisnik}}. On
 
 		Oglas, osim ovih podataka, sadrži i kontakt podatke korisnika koji se automatski povlače iz korisničkih podataka danih pri registraciji (za običnog korisnika to su e-pošta i broj telefona, a dodatno za skloništa povlači se i naziv skloništa). 
 Aplikacija pri unosu automatski provjerava je li korisnik unio sve potrebne podatke. Ako je unos ispravan, oglas je objavljuje i postaje dostupan svim korisnicima, a u protivnome se korisnik obavještava o grešci i od njega se traži ponovni upis podataka.
-Kao i neregistrirani korisnik, nakon prijave korisnik može odabrati bilo koji oglas i klikom na njega dobiti više informacija o tom ljubimcu (slika 2), kao i pregled dotadašnje komunikacije o potrazi. No, za razliku od neregistriranog, sada korisnik može i sudjelovati u komunikaciji ako misli da ima bilo kakvu korisnu informaciju (slika 3). Komunikacija omogućuje unos tekstualne poruke (npr. obavijestiti vlasnika o pronalasku ili pojavi sličnog ljubimca, zatražiti više informacija ako nije siguran i slično), slike i slanje geolokacije (putem vanjske usluge, isto kao i kod postavljanja oglasa). Pri slanju bilo koje informacije aplikacija također automatski bilježi i kontakt podatke osobe koja informaciju šalje.
+Kao i neregistrirani korisnik, nakon prijave korisnik može odabrati bilo koji oglas i klikom na njega dobiti više informacija o tom ljubimcu (slika \ref{fig:slika2}), kao i pregled dotadašnje komunikacije o potrazi. No, za razliku od neregistriranog, sada korisnik može i sudjelovati u komunikaciji ako misli da ima bilo kakvu korisnu informaciju (slika \ref{fig:slika3}). Komunikacija omogućuje unos tekstualne poruke (npr. obavijestiti vlasnika o pronalasku ili pojavi sličnog ljubimca, zatražiti više informacija ako nije siguran i slično), slike i slanje geolokacije (putem vanjske usluge, isto kao i kod postavljanja oglasa). Pri slanju bilo koje informacije aplikacija također automatski bilježi i kontakt podatke osobe koja informaciju šalje.
+
+		\begin{figure}
+			\centering
+			\begin{minipage}{.5\textwidth}
+	 			 \centering
+				  \includegraphics[width=.4\linewidth]{slike/viseInformacija.PNG}
+				  \caption{Prikaz više informacija o ljubimcu kod sličnog rješenja}
+				  \label{fig:slika2}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				  \centering
+				  \includegraphics[width=.5\linewidth]{slike/Komunikacija.PNG}
+				  \caption{Komunikacija kod sličnog rješenja}
+				  \label{fig:slika3}
+			\end{minipage}
+		\end{figure}
 
 		Iz bilo kojih razloga, korisnik uvijek ima mogućnost \underbar{ukloniti oglas} koji je sa svoga profila postavio. Uklanjanjem oglasa određeni oglas i sva njegova komunikacija nestati će iz popisa vidljivih oglasa, ali se oglas ne briše iz baze podataka. Tako on više neće biti dostupan ni njemu ni drugim korisnicima na pregled.
 Registriranom korisniku nudi se i opcija izmjene oglasa koje je on postavio. \underbar{Izmjena oglasa} omogućuje izmjenu svih kategorija podataka o ljubimcu (navedeni gore kod postavljanja oglasa). Moguće je izmijeniti i kategoriju oglasa. Izbor kategorija oglasa uključuje:
