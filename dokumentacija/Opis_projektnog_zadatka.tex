@@ -38,6 +38,7 @@ Ako želi sudjelovati u potrazi za ljubimcem davanjem nekih informacija, neregis
 		\end{packed_item}
 
 		Ako je uspješno unio sve podatke, registracija je uspješno provedena i korisnik je stvorio svoj profil u aplikaciji. U suprotnome će aplikacija zahtijevati ponovni unos podataka.
+
 Drugi tip korisnika aplikacije je \underbar{\textbf{ registrirani korisnik}}. On je u prošlosti već stvorio svoj profil. Pri ulasku u aplikaciju on odabire opciju za prijavu te unosi svoje korisničko ime i lozinku. Uspješna prijava omogućuje mu pristup dodatnim stavkama ove aplikacije. On, kao i neregistrirani korisnik ima opciju pregleda i pretraživanja oglasa, no njemu su pri pretraživanju dodatno dostupni ne samo aktivni, nego svi postojeći oglasi bez obzira koja im je kategorija oglasa postavljena. Osim ovih funkcija, nakon prijave korisnik također može i:
 
 		\begin{packed_enum}
@@ -64,11 +65,11 @@ Drugi tip korisnika aplikacije je \underbar{\textbf{ registrirani korisnik}}. On
 			
 		\end{packed_item}
 
-		Oglas, osim ovih podataka, sadrži i kontakt podatke korisnika koji se automatski povlače iz korisničkih podataka danih pri registraciji (za običnog korisnika to su e-pošta i broj telefona, a dodatno za skloništa povlači se i naziv skloništa). 
-Aplikacija pri unosu automatski provjerava je li korisnik unio sve potrebne podatke. Ako je unos ispravan, oglas je objavljuje i postaje dostupan svim korisnicima, a u protivnome se korisnik obavještava o grešci i od njega se traži ponovni upis podataka.
+		Oglas, osim ovih podataka, sadrži i kontakt podatke korisnika koji se automatski povlače iz korisničkih podataka danih pri registraciji (za običnog korisnika to su e-pošta i broj telefona, a dodatno za skloništa povlači se i naziv skloništa). Aplikacija pri unosu automatski provjerava je li korisnik unio sve potrebne podatke. Ako je unos ispravan, oglas je objavljuje i postaje dostupan svim korisnicima, a u protivnome se korisnik obavještava o grešci i od njega se traži ponovni upis podataka.
+
 Kao i neregistrirani korisnik, nakon prijave korisnik može odabrati bilo koji oglas i klikom na njega dobiti više informacija o tom ljubimcu (slika \ref{fig:slika2}), kao i pregled dotadašnje komunikacije o potrazi. No, za razliku od neregistriranog, sada korisnik može i sudjelovati u komunikaciji ako misli da ima bilo kakvu korisnu informaciju (slika \ref{fig:slika3}). Komunikacija omogućuje unos tekstualne poruke (npr. obavijestiti vlasnika o pronalasku ili pojavi sličnog ljubimca, zatražiti više informacija ako nije siguran i slično), slike i slanje geolokacije (putem vanjske usluge, isto kao i kod postavljanja oglasa). Pri slanju bilo koje informacije aplikacija također automatski bilježi i kontakt podatke osobe koja informaciju šalje.
 
-		\begin{figure}
+		\begin{figure}[H]
 			\centering
 			\begin{minipage}{.5\textwidth}
 	 			 \centering
@@ -85,6 +86,7 @@ Kao i neregistrirani korisnik, nakon prijave korisnik može odabrati bilo koji o
 		\end{figure}
 
 		Iz bilo kojih razloga, korisnik uvijek ima mogućnost \underbar{ukloniti oglas} koji je sa svoga profila postavio. Uklanjanjem oglasa određeni oglas i sva njegova komunikacija nestati će iz popisa vidljivih oglasa, ali se oglas ne briše iz baze podataka. Tako on više neće biti dostupan ni njemu ni drugim korisnicima na pregled.
+
 Registriranom korisniku nudi se i opcija izmjene oglasa koje je on postavio. \underbar{Izmjena oglasa} omogućuje izmjenu svih kategorija podataka o ljubimcu (navedeni gore kod postavljanja oglasa). Moguće je izmijeniti i kategoriju oglasa. Izbor kategorija oglasa uključuje:
 
 		\begin{packed_enum}
@@ -98,6 +100,7 @@ Registriranom korisniku nudi se i opcija izmjene oglasa koje je on postavio. \un
 
 		Po izvornim postavkama, pri objavi oglasa kategorija je automatski namještena da se za ljubimcem trenutno traga. Svaka izmjena kategorije oglasa u onu koja nije da se za ljubimcem aktivno traga automatski prebacuje oglas u popis neaktivnih oglasa, koji mogu pretraživati samo registrirani korisnici. 
 Treći tip korisnika su \underbar{\textbf{skloništa za životinje}}. Skloništa za životinje su specijalni tip registriranih korisnika. Pri registraciji, kada se želi stvoriti profil za sklonište, potrebno je odabrati opciju „sklonište“. Unose se iste informacije kao i pri registraciji običnog korisnika, osim što se umjesto imena i prezimena osobe bilježi naziv skloništa. Prijava funkcionira isto kao i kod prijave običnih korisnika. U aplikaciji skloništa imaju dostupne sve opcije koje se nude i registriranim korisnicima (pregled i pretraživanje, postavljanje, uklanjanje i izmjena oglasa, te komunikacija oko potrage). Međutim, zbog toga što skloništa predstavljaju privremeni dom za mnoge tek pronađene ljubimce, kako bi se vlasnicima olakšalo lociranje njihovih ljubimaca, skloništa imaju i dodatnu mogućnost oglašavanja životinja koje su pronašli i koje se nalaze u njihovom prostoru. Zato skloništa pri postavljanju oglasa imaju ponuđenu i dodatnu opciju „u skloništu“ kojima tražene vlasnike obavještavaju da je ljubimac privremeno smješten kod njih, te čeka da vlasnici dođu po njega.
+
 Ukoliko se aplikacija pokaže korisnom, nudi i brojne mogućnosti nadogradnje. Moguće bi bilo proširenje informacija koje se bilježe o ljubimcima, formiranje grupa za razgovor među vlasnicima koje bi mogle poslužiti i kao utjeha tijekom potrage za ljubimcima, dodavanje opcije videa, nagrada za pronalazak ljubimca ako vlasnik to želi, slanje obavijesti o nestancima u blizini i još mnogo drugih opcija.
 
 		\eject
