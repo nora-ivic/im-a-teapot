@@ -72,34 +72,108 @@
 				\subsubsection{Opis obrazaca uporabe}
 					Opis...
 					
-					\noindent \underbar{\textbf{UC$<$broj obrasca$>$ -$<$ime obrasca$>$}}
+					\noindent \underbar{\textbf{UC1 -Registracija}}
 					\begin{packed_item}
 	
-						\item \textbf{Glavni sudionik: }$<$sudionik$>$
-						\item  \textbf{Cilj:} $<$cilj$>$
-						\item  \textbf{Sudionici:} $<$sudionici$>$
-						\item  \textbf{Preduvjet:} $<$preduvjet$>$
+						\item \textbf{Glavni sudionik: } neregistriran korisnik
+						\item  \textbf{Cilj:} stvoriti korisnički račun za pristup aplikaciji
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} -
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
 	
-							\item $<$opis korak jedan$>$
-							\item ...
+							\item korisnik odabire opciju za registraciju
+							\item korisnik unosi potrebne korisničke podatke
+							\item korisnik prima obavijest o uspješnoj registraciji
+							\item unos podataka u bazu podataka
 						\end{packed_enum}
 						
 						\item  \textbf{Opis mogućih odstupanja:}
 						
 						\item[] \begin{packed_item}
 	
-							\item[2.a] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
+							\item[2.a] odabir već zauzetog korisničkog imena ili emaila, unos korisničkih podataka u nedozvoljenom formatu
 							\item[] \begin{packed_enum}
-								
-								\item $<$opis rješenja mogućeg scenarija korak 1$>$
-								\item $<$opis rješenja mogućeg scenarija korak 2$>$
-								
+								\item sustav obavještava korisnika o neuspjelom upisu i vraća ga na stranicu za registraciju
+								\item korisnik mijenja potrebne podatke te završava unos ili odustaje od registracije
 							\end{packed_enum}
-							\item[2.b] $<$opis mogućeg scenarija odstupanja u koraku 2$>$
-							\item[3.a] $<$opis mogućeg scenarija odstupanja  u koraku 3$>$
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC2 -Prijava}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} prijava u postojeći korisnički račun za pristup aplikaciji
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} registracija
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za prijavu
+							\item korisnik unosi korisničko ime i lozinku
+							\item potvrda o ispravnosti unesenih podataka
+							\item pristup korisničkim funkcijama
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[3.a] neispravno korisničko ime ili lozinka
+							\item[] \begin{packed_enum}
+								\item sustav obavještava korisnika o neuspjelom upisu
+								\item vraćanje na stranicu za prijavu
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC3 -Pregled oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } neregistriran korisnik, registriran korisnik
+						\item  \textbf{Cilj:} pregledati oglase
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} -
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item oglasi su prikazani prilikom učitavanja aplikacije
+							\item korisnik pregledava oglase
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC4 -Pretraživanje aktivnih oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } neregistriran korisnik, registriran korisnik
+						\item  \textbf{Cilj:} pronaći željeni aktivni oglas
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} -
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opcije za pretraživanje
+							\item korisnik unosi željene podatke o kategorijama
+							\item korisnik odabire opciju "Pretraži"
+							\item prikaz pronađenih oglasa
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[3.a] nijedan oglas ne ispunjava kriterije pretrage
+							\item[] \begin{packed_enum}
+								\item korisnika se obavještava da nema pronađenih oglasa
+							\end{packed_enum}
 							
 						\end{packed_item}
 					\end{packed_item}
