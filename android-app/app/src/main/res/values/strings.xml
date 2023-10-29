@@ -7,8 +7,12 @@
     <string name="phoneText">Phone number</string>
     <string name="shelterNameText">Shelter name</string>
     <string name="registerText">Register</string>
-    <string name="checkBoxText">Register as shelter</string>
+    <string name="registerAsShelterCheckBoxText">Register as shelter</string>
     <string name="registerAsShelter">Register shelter</string>
     <string name="repeatPasswordText">Repeat password</string>
     <string name="usernameText">Username</string>
+    <string name="email_error_message">Invalid Email</string>
+    <string name="password_error_message">Password must be at least 6 characters long</string>
+    <string name="passwords_dont_match">Passwords don\'t match</string>
+
 </resources>

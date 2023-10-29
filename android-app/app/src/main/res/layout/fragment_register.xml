@@ -157,12 +157,12 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <CheckBox
-            android:id="@+id/checkBox"
+            android:id="@+id/registerAsShelterCheckBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="4dp"
-            android:text="@string/checkBoxText"
+            android:text="@string/registerAsShelterCheckBoxText"
             app:layout_constraintTop_toBottomOf="@id/phoneFieldLayout"
             tools:layout_editor_absoluteX="24dp" />
 
@@ -178,7 +178,7 @@
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/checkBox">
+            app:layout_constraintTop_toBottomOf="@id/registerAsShelterCheckBox">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/shelterNameField"
