@@ -177,7 +177,174 @@
 							
 						\end{packed_item}
 					\end{packed_item}
-				
+					
+					\noindent \underbar{\textbf{UC5 -Pretraživanje neaktivnih oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} pronaći željeni neaktivni oglas
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opcije za pretraživanje
+							\item korisnik unosi željene podatke o kategorijama
+							\item korisnik odabire opciju "Pretraži"
+							\item prikaz pronađenih oglasa
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[3.a] nijedan oglas ne ispunjava kriterije pretrage
+							\item[] \begin{packed_enum}
+								\item korisnika se obavještava da nema pronađenih oglasa
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC6 - Postavljanje oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} postaviti oglas o izgubljenom kućnom ljubimcu
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za postavljanje novog oglasa
+							\item korisnik korisnik unosi informacije o nestalom ljubimcu
+							\item automatsko povlačenje korisničkih podataka
+							\item korisnik odabire opciju za objavu
+							\item spremanje podataka u bazu podataka
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[4.a] nedostatak jedne ili više kategorija podataka o ljubimcu
+							\item[] \begin{packed_enum}
+								\item korisnika se vraća na ponovni upis oglasa
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC7 - Komunikacija oko potrage}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} razmjena informacija o određenom izgubljenom ljubimcu
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava, postojeći aktivni oglas
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za komunikaciju
+							\item korisnik korisnik unosi informacije, sliku i lokaciju nestalog ljubimca
+							\item korisnik odabire opciju za slanje
+							\item nove informacije se prikazuju svim korisnicima
+							\item spremanje u bazu podataka
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC8 - Detaljni pregled oglasa i komunikacije}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } neregistriran korisnik, registriran korisnik
+						\item  \textbf{Cilj:} pregled svih informacija i dosadašnje komunikacije o određenom ljubimcu
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:}
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju „Prikaži više“
+							\item prikaz svih podataka i komunikacije
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC9 - Uklanjanje oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} ukloniti postojeći oglas s popisa vidljivih oglasa
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava, postojeći oglas
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za uklanjanje oglasa
+							\item nestanak oglasa s liste vidljivih oglasa
+							\item korisnik automatsko povlačenje korisničkih podataka
+							\item ažuriranje baze podataka
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC10 - Izmjena oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik
+						\item  \textbf{Cilj:} izmijeniti  željene kategorije podataka o ljubimcu i kategoriju oglasa
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava, postojeći oglas
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za izmjenu oglasa
+							\item korisnik izmjenjuje podatke ili kategoriju oglasa o ljubimcu
+							\item korisnik odabire opciju za spremanje promjena
+							\item ažuriranje baze podataka
+						\end{packed_enum}
+						
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC11 - Oglašavanje ljubimaca u skloništu}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } sklonište
+						\item  \textbf{Cilj:} obavijestiti u kojem se skloništu nalazi nestali ljubimac
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item odabir opcije za postavljanje novog oglasa
+							\item unos informacija o nestalom ljubimcu
+							\item automatsko povlačenje korisničkih podataka
+							\item odabir opcije za objavu
+							\item spremanje podataka u bazu podataka
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[4.a] nedostatak jedne ili više kategorija podataka o ljubimcu
+							\item[] \begin{packed_enum}
+								\item  vraćanje na ponovni upis oglasa
+							\end{packed_enum}
+							
+						\end{packed_item}
+					\end{packed_item}
+					
+					
+					
+					
 					
 				\subsubsection{Dijagrami obrazaca uporabe}
 					
