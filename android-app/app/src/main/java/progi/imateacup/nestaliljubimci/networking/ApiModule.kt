@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiModule {
-    private const val BASE_URL = "::host::/api"
+    private const val BASE_URL = "http://localhost:3000/"
 
     lateinit var retrofit: PetsApiService
 
