@@ -26,7 +26,7 @@ object ApiModule {
                 val originalRequest = chain.request()
 
                 val newRequest = originalRequest.newBuilder()
-                    .header("access-token", accessToken)
+                    .header("Authorization", accessToken)
                     .build()
 
                 chain.proceed(newRequest)

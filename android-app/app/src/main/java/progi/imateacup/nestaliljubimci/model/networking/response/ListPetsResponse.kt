@@ -9,7 +9,7 @@ data class ListPetsResponse(
 
 @kotlinx.serialization.Serializable
 data class Pet(
-    val temp: String
+    @SerialName("temp") val temp: String
     //TODO
     // implement correct fields
 )
