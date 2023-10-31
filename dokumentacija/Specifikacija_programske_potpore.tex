@@ -274,13 +274,13 @@
 						
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC9 - Uklanjanje oglasa}}
+					\noindent \underbar{\textbf{UC9 - Uklanjanje vlastitih oglasa}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: } registriran korisnik
 						\item  \textbf{Cilj:} ukloniti postojeći oglas s popisa vidljivih oglasa
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} prijava, postojeći oglas
+						\item  \textbf{Preduvjet:} prijava, pregled vlastitih oglasa, postojeći vlastiti oglas
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -293,13 +293,13 @@
 						
 					\end{packed_item}
 					
-					\noindent \underbar{\textbf{UC10 - Izmjena oglasa}}
+					\noindent \underbar{\textbf{UC10 - Izmjena vlastitih oglasa}}
 					\begin{packed_item}
 						
 						\item \textbf{Glavni sudionik: } registriran korisnik
-						\item  \textbf{Cilj:} izmijeniti  željene kategorije podataka o ljubimcu i kategoriju oglasa
+						\item  \textbf{Cilj:} izmijeniti  željene kategorije podataka o ljubimcu i kategoriju vlastitog oglasa
 						\item  \textbf{Sudionici:} baza podataka
-						\item  \textbf{Preduvjet:} prijava, postojeći oglas
+						\item  \textbf{Preduvjet:} prijava, pregled vlastitih oglasa, postojeći vlastiti oglas
 						\item  \textbf{Opis osnovnog tijeka:}
 						
 						\item[] \begin{packed_enum}
@@ -340,6 +340,52 @@
 							\end{packed_enum}
 							
 						\end{packed_item}
+					\end{packed_item}
+					
+					\noindent \underbar{\textbf{UC12 - Pregled vlastitih oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } registriran korisnik, sklonište
+						\item  \textbf{Cilj:} pregled vlastitih oglasa koje je korisnik objavio
+						\item  \textbf{Sudionici:} baza podataka
+						\item  \textbf{Preduvjet:} prijava, postojeći vlastiti oglas
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item korisnik odabire opciju za prikaz vlastitih oglasa
+							\item korisnik pregledava sve svoje oglase
+						\end{packed_enum}
+						
+						\item  \textbf{Opis mogućih odstupanja:}
+						
+						\item[] \begin{packed_item}
+							
+							\item[1.a] korisnik do sad nije objavio nijedan oglas
+							\item[] \begin{packed_enum}
+								\item  korisnika se obavještava da nema izrađenih oglasa
+							\end{packed_enum}
+							
+						\end{packed_item}
+						
+					\end{packed_item}
+					
+						\noindent \underbar{\textbf{UC13 - Izmjena tuđih oglasa}}
+					\begin{packed_item}
+						
+						\item \textbf{Glavni sudionik: } sklonište
+						\item  \textbf{Cilj:} označiti ljubimca s tuđeg oglasa kao smještenog u sklonište
+						\item  \textbf{Sudionici:} baza podataka, registriran korisnik
+						\item  \textbf{Preduvjet:} prijava, postojeći aktivni oglas
+						\item  \textbf{Opis osnovnog tijeka:}
+						
+						\item[] \begin{packed_enum}
+							
+							\item odabir opcije za detaljniji pregled tuđeg oglasa
+							\item označavnje ljubimca kao smještenog u sklonište
+							\item ažuriranje baze podataka
+						\end{packed_enum}
+						
 					\end{packed_item}
 					
 					
