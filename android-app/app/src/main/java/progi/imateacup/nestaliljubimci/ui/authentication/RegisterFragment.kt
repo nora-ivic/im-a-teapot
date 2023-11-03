@@ -55,22 +55,44 @@ class RegisterFragment : Fragment() {
     private fun initListeners() {
         with(binding) {
 
-            emailField.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    updateEmailField()
+            usernameField.setOnFocusChangeListener { _, hasFocus ->
+                if(!hasFocus) {
+                    updateUsernameField()
                 }
             }
-
             passwordFieldLayout.setErrorIconOnClickListener {
                 passwordFieldLayout.error = null
             }
-
             passwordField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     updatePasswordField()
                 }
             }
-
+            emailField.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    updateEmailField()
+                }
+            }
+            phoneField.setOnFocusChangeListener { _, hasFocus ->
+                if (!hasFocus) {
+                    updatePhoneField()
+                }
+            }
+            firstNameField.setOnFocusChangeListener { _, hasFocus ->
+                if(!hasFocus) {
+                    updateFirstNameField()
+                }
+            }
+            lastNameField.setOnFocusChangeListener { _, hasFocus ->
+                if(!hasFocus) {
+                    updateLastNameField()
+                }
+            }
+            shelterNameField.setOnFocusChangeListener { _, hasFocus ->
+                if(!hasFocus) {
+                    updateShelterNameField()
+                }
+            }
             /* clicking the login button does not make the password field lose focus
             so this method should be present to update the password field if the user instead presses done
             passwordField.setOnEditorActionListener { _, actionId, _ ->
@@ -93,7 +115,7 @@ class RegisterFragment : Fragment() {
                 false
             }*/
 
-            emailField.addTextChangedListener {
+            usernameField.addTextChangedListener {
                 registerButton.isEnabled = validateCredentials()
             }
             passwordField.addTextChangedListener {
@@ -102,54 +124,88 @@ class RegisterFragment : Fragment() {
             repeatPasswordField.addTextChangedListener {
                 registerButton.isEnabled = validateCredentials()
             }
-
+            emailField.addTextChangedListener {
+                registerButton.isEnabled = validateCredentials()
+            }
+            phoneField.addTextChangedListener {
+                registerButton.isEnabled = validateCredentials()
+            }
+            firstNameField.addTextChangedListener {
+                registerButton.isEnabled = validateCredentials()
+            }
+            lastNameField.addTextChangedListener {
+                registerButton.isEnabled = validateCredentials()
+            }
+            shelterNameField.addTextChangedListener {
+                registerButton.isEnabled = validateCredentials()
+            }
             registerButton.setOnClickListener {
-
                 //viewModel.registerUser(emailField.text.toString().trim(), passwordField.text.toString().trim())
             }
 
-            registerAsShelterCheckBox.setOnCheckedChangeListener { _, isChecked ->
+            registerTypeButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
                 if (isChecked) {
-                    shelterNameField.visibility = View.VISIBLE
-                } else
-                    shelterNameField.visibility = View.GONE
+                    if (checkedId == registerAsPersonButton.id) {
+                        shelterNameFieldLayout.visibility = View.GONE
+                        shelterNameField.visibility = View.GONE
+                        firstNameFieldLayout.visibility = View.VISIBLE
+                        lastNameFieldLayout.visibility = View.VISIBLE
+                    } else {
+                        shelterNameFieldLayout.visibility = View.VISIBLE
+                        shelterNameField.visibility = View.VISIBLE
+                        firstNameFieldLayout.visibility = View.GONE
+                        lastNameFieldLayout.visibility = View.GONE
+                    }
+                }
             }
         }
     }
 
-    private fun validateEmail(email: String): Boolean {
-        val emailRegex = Regex(EMAIL_REGEX)
-        return email.matches(emailRegex)
+    private fun validateUsername(username: String): Boolean {
+        return username.length in 5..50
     }
-
     private fun validatePassword(password: String): Boolean {/*Password must contain at least one digit, one lowercase letter, one uppercase letter, one special character and must be at least 6 characters long*/
         val passwordRegex = Regex(PASSWORD_REGEX)
         return password.matches(passwordRegex)
     }
-
     private fun checkPasswordsMatch(): Boolean {
         return binding.passwordField.text.toString().trim() == binding.repeatPasswordField.text.toString().trim()
     }
-
+    private fun validateEmail(email: String): Boolean {
+        val emailRegex = Regex(EMAIL_REGEX)
+        return email.matches(emailRegex)
+    }
+    private fun validatePhone(phone: String): Boolean {
+        return phone.isNotEmpty()
+    }
+    private fun validateFirstAndLastName(name: String): Boolean {
+        return name.length <= 50
+    }
+    private fun validateShelterName(shelterName: String): Boolean {
+        return shelterName.length <= 100
+    }
     private fun validateCredentials(): Boolean {
-        return validateEmail(binding.emailField.text.toString().trim()) && validatePassword(
-            binding.passwordField.text.toString().trim()
-        ) && checkPasswordsMatch()
+        return validateEmail(binding.emailField.text.toString().trim())
+                && validatePassword(binding.passwordField.text.toString().trim())
+                && checkPasswordsMatch()
+                && validateShelterName(binding.shelterNameField.text.toString().trim())
+                && validateFirstAndLastName(binding.firstNameField.text.toString().trim())
+                && validateFirstAndLastName(binding.lastNameField.text.toString().trim())
+                && validatePhone(binding.phoneField.text.toString().trim())
     }
 
-    private fun updateEmailField() {
+    private fun updateUsernameField() {
         with(binding) {
-            if (!validateEmail(emailField.text.toString().trim())) {
+            if (!validateUsername(usernameField.text.toString().trim())) {
 
-                emailFieldLayout.error = getString(R.string.email_error_message)
-                emailFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+                usernameFieldLayout.error = getString(R.string.username_error_message)
+                usernameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
 
             } else {
-                emailFieldLayout.error = null
+                usernameFieldLayout.error = null
             }
         }
     }
-
     private fun updatePasswordField() {
         with(binding) {
             if (!validatePassword(passwordField.text.toString().trim())) {
@@ -162,11 +218,10 @@ class RegisterFragment : Fragment() {
             }
         }
     }
-
     private fun updatePasswordsFields() {
         with(binding) {
             if (!checkPasswordsMatch()) {
-                repeatPasswordFieldLayout.error = getString(R.string.passwords_dont_match)
+                repeatPasswordFieldLayout.error = getString(R.string.passwords_do_not_match)
                 repeatPasswordFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
                 repeatPasswordField.setText("")
             } else {
@@ -174,5 +229,54 @@ class RegisterFragment : Fragment() {
             }
         }
     }
-
+    private fun updateEmailField() {
+        with(binding) {
+            if (!validateEmail(emailField.text.toString().trim())) {
+                emailFieldLayout.error = getString(R.string.email_error_message)
+                emailFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+            } else {
+                emailFieldLayout.error = null
+            }
+        }
+    }
+    private fun updatePhoneField() {
+        with(binding) {
+            if (!validatePhone(phoneField.text.toString().trim())) {
+                phoneFieldLayout.error = getString(R.string.phone_error_message)
+                phoneFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+            } else {
+                phoneFieldLayout.error = null
+            }
+        }
+    }
+    private fun updateFirstNameField() {
+        with(binding) {
+            if (!validateFirstAndLastName(firstNameField.text.toString().trim())) {
+                firstNameFieldLayout.error = getString(R.string.first_name_error_message)
+                firstNameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+            } else {
+                firstNameFieldLayout.error = null
+            }
+        }
+    }
+    private fun updateLastNameField() {
+        with(binding) {
+            if (!validateFirstAndLastName(lastNameField.text.toString().trim())) {
+                lastNameFieldLayout.error = getString(R.string.last_name_error_message)
+                lastNameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+            } else {
+                lastNameFieldLayout.error = null
+            }
+        }
+    }
+    private fun updateShelterNameField() {
+        with(binding) {
+            if (!validateShelterName(shelterNameField.text.toString().trim())) {
+                shelterNameFieldLayout.error = getString(R.string.shelter_name_error_message)
+                shelterNameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
+            } else {
+                shelterNameFieldLayout.error = null
+            }
+        }
+    }
 }

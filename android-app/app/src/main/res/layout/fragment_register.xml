@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -17,15 +16,44 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="0dp"
-            android:layout_marginEnd="0dp"
             android:layout_marginTop="100dp"
-            android:text="@string/registerText"
+            android:layout_marginEnd="0dp"
+            android:text="@string/register_text"
             android:textColor="@color/black"
             android:textSize="34sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/registerTypeButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            app:checkedButton="@id/registerAsPersonButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/registerText"
+            app:selectionRequired="true"
+            app:singleSelection="true">
+
+            <Button
+                android:id="@+id/registerAsPersonButton"
+                style="@style/RegisterTypeButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/register_type_button_color"
+                android:text="@string/register_as_person" />
+
+            <Button
+                android:id="@+id/registerAsShelterButton"
+                style="@style/RegisterTypeButtonStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/register_type_button_color"
+                android:text="@string/register_as_shelter" />
+        </com.google.android.material.button.MaterialButtonToggleGroup>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameFieldLayout"
@@ -34,13 +62,13 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="20dp"
-            android:hint="@string/usernameText"
+            android:hint="@string/username_text"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerText">
+            app:layout_constraintTop_toBottomOf="@id/registerTypeButton">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameField"
@@ -59,7 +87,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="20dp"
-            android:hint="@string/passwordText"
+            android:hint="@string/password_text"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:endIconMode="password_toggle"
@@ -86,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="20dp"
-            android:hint="@string/repeatPasswordText"
+            android:hint="@string/repeat_password_text"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:endIconMode="password_toggle"
@@ -138,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="20dp"
-            android:hint="@string/phoneText"
+            android:hint="@string/phone_text"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:hintTextColor="@color/black"
@@ -156,15 +184,55 @@
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <CheckBox
-            android:id="@+id/registerAsShelterCheckBox"
-            android:layout_width="match_parent"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/firstNameFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="4dp"
-            android:text="@string/registerAsShelterCheckBoxText"
-            app:layout_constraintTop_toBottomOf="@id/phoneFieldLayout"
-            tools:layout_editor_absoluteX="24dp" />
+            android:layout_marginTop="20dp"
+            android:hint="@string/first_name_text"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/phoneFieldLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/firstNameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/lastNameFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginTop="20dp"
+            android:hint="@string/last_name_text"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/firstNameFieldLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/lastNameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="textEmailAddress"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/shelterNameFieldLayout"
@@ -172,13 +240,14 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:hint="@string/shelterNameText"
+            android:layout_marginTop="20dp"
+            android:hint="@string/shelter_name_text"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerAsShelterCheckBox">
+            app:layout_constraintTop_toBottomOf="@id/lastNameFieldLayout">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/shelterNameField"
@@ -191,20 +260,20 @@
         </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            style="@style/Widget.MaterialComponents.Button"
             android:id="@+id/registerButton"
+            style="@style/Widget.MaterialComponents.Button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="28dp"
             android:layout_marginBottom="@dimen/size32dp"
-            android:text="@string/registerText"
+            android:background="@drawable/register_button"
+            android:text="@string/register_text"
             android:textColor="@color/colorPrimary"
-            android:background="@drawable/rounded_button"
             app:backgroundTint="@color/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout"/>
+            app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
