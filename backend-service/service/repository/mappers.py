@@ -24,7 +24,6 @@ class Pet(Base):
 class Message(Base):
     __tablename__ = "message"
 
-
 class Picture(Base):
     __tablename__ = "picture"
 
