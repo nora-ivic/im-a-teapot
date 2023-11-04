@@ -14,4 +14,4 @@ class UserSignup(UserLogin):
     shelter_name: Optional[str] = None
     email: str
     phone_number: str
-    adress: Optional[str] = None
+    address: Optional[str] = None
