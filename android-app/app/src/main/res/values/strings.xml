@@ -7,6 +7,8 @@
     <string name="phone_text">Phone number</string>
     <string name="shelter_name_text">Shelter name</string>
     <string name="register_text">Register</string>
+    <string name="logo_text">Nestali ljubimci</string>
+    <string name="cat_footprint_description">Cat footprint image</string>
     <string name="repeat_password_text">Repeat password</string>
     <string name="username_text">Username</string>
     <string name="first_name_text">First name</string>

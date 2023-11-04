@@ -161,15 +161,20 @@ class RegisterFragment : Fragment() {
             registerTypeButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
                 if (isChecked) {
                     if (checkedId == registerAsPersonButton.id) {
-                        shelterNameFieldLayout.visibility = View.GONE
                         shelterNameField.visibility = View.GONE
+                        shelterNameFieldLayout.visibility = View.GONE
                         firstNameFieldLayout.visibility = View.VISIBLE
                         lastNameFieldLayout.visibility = View.VISIBLE
+                        shelterNameField.text = null
+
                     } else {
-                        shelterNameFieldLayout.visibility = View.VISIBLE
                         shelterNameField.visibility = View.VISIBLE
+                        shelterNameFieldLayout.visibility = View.VISIBLE
                         firstNameFieldLayout.visibility = View.GONE
                         lastNameFieldLayout.visibility = View.GONE
+                        firstNameField.text = null
+                        lastNameField.text = null
+
                     }
                 }
             }
