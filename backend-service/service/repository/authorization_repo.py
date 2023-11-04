@@ -23,9 +23,13 @@ class AuthorizationRepository:
     def save_new_user(self, user_signup: UserSignup):
         new_custom_user = UserCustom(
             username=user_signup.username,
-            name=user_signup.name,
-            surname=user_signup.surname,
-            email=user_signup.email.lower()
+            is_shelter=user_signup.is_shelter,
+            first_name=user_signup.first_name,
+            last_name=user_signup.last_name,
+            shelter_name=user_signup.shelter_name,
+            email=user_signup.email.lower(),
+            phone_number=user_signup.phone_number,
+            address=user_signup.address
         )
 
         self.session.add(new_custom_user)
