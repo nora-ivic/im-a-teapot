@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from mappers import UserAuth, UserCustom
 from typing import Optional
 from service.repository.engine_manager import get_session
+from service.exceptions import InvalidLoginException
 
 
 class AuthorizationRepository:
