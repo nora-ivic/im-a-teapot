@@ -4,6 +4,7 @@ from mappers import UserAuth, UserCustom
 from typing import Optional
 from service.repository.engine_manager import get_session
 from service.exceptions import InvalidLoginException
+from service.api.authorization.models import UserLogin, UserSignup
 
 
 class AuthorizationRepository:
@@ -42,3 +43,5 @@ class AuthorizationRepository:
 
         if not self.pwd_context.verify(user_login.password, existing_user.password):
             raise InvalidLoginException
+
+        return existing_user
