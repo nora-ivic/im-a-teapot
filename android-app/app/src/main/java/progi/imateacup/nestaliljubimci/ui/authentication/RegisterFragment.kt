@@ -6,8 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.widget.addTextChangedListener
+import androidx.fragment.app.viewModels
+import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentRegisterBinding
+
 
 class RegisterFragment : Fragment() {
 
@@ -19,7 +22,7 @@ class RegisterFragment : Fragment() {
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
-    //private val viewModel by viewModels<RegisterViewModel>()
+    private val viewModel by viewModels<RegisterViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,26 +40,30 @@ class RegisterFragment : Fragment() {
         binding.shelterNameField.visibility = View.GONE
 
         super.onViewCreated(view, savedInstanceState)
-        //setOnRegistrationResultAction()
+        setOnRegistrationResultAction()
         initListeners()
     }
 
-    /*private fun setOnRegistrationResultAction() {
+    private fun setOnRegistrationResultAction() {
         viewModel.registrationResultLiveData.observe(viewLifecycleOwner) { isRegistrationSuccessful ->
             if (isRegistrationSuccessful) {
-                val direction = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(true)
-                findNavController().navigate(direction)
+                //val direction = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(true)
+                //findNavController().navigate(direction)
             } else {
-                Snackbar.make(binding.root, R.string.registration_unsuccessful, Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.root,
+                    R.string.registration_unsuccessful,
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
-    }*/
+    }
 
     private fun initListeners() {
         with(binding) {
 
             usernameField.setOnFocusChangeListener { _, hasFocus ->
-                if(!hasFocus) {
+                if (!hasFocus) {
                     updateUsernameField()
                 }
             }
@@ -79,17 +86,17 @@ class RegisterFragment : Fragment() {
                 }
             }
             firstNameField.setOnFocusChangeListener { _, hasFocus ->
-                if(!hasFocus) {
+                if (!hasFocus) {
                     updateFirstNameField()
                 }
             }
             lastNameField.setOnFocusChangeListener { _, hasFocus ->
-                if(!hasFocus) {
+                if (!hasFocus) {
                     updateLastNameField()
                 }
             }
             shelterNameField.setOnFocusChangeListener { _, hasFocus ->
-                if(!hasFocus) {
+                if (!hasFocus) {
                     updateShelterNameField()
                 }
             }
@@ -140,7 +147,15 @@ class RegisterFragment : Fragment() {
                 registerButton.isEnabled = validateCredentials()
             }
             registerButton.setOnClickListener {
-                //viewModel.registerUser(emailField.text.toString().trim(), passwordField.text.toString().trim())
+                viewModel.registerUser(
+                    usernameField.text.toString().trim(),
+                    passwordField.text.toString().trim(),
+                    emailField.text.toString().trim(),
+                    phoneField.text.toString().trim(),
+                    firstNameField.text.toString().trim(),
+                    lastNameField.text.toString().trim(),
+                    shelterNameField.text.toString().trim()
+                )
             }
 
             registerTypeButton.addOnButtonCheckedListener { _, checkedId, isChecked ->
@@ -164,26 +179,34 @@ class RegisterFragment : Fragment() {
     private fun validateUsername(username: String): Boolean {
         return username.length in 5..50
     }
-    private fun validatePassword(password: String): Boolean {/*Password must contain at least one digit, one lowercase letter, one uppercase letter, one special character and must be at least 6 characters long*/
+
+    private fun validatePassword(password: String): Boolean {
         val passwordRegex = Regex(PASSWORD_REGEX)
         return password.matches(passwordRegex)
     }
+
     private fun checkPasswordsMatch(): Boolean {
-        return binding.passwordField.text.toString().trim() == binding.repeatPasswordField.text.toString().trim()
+        return binding.passwordField.text.toString()
+            .trim() == binding.repeatPasswordField.text.toString().trim()
     }
+
     private fun validateEmail(email: String): Boolean {
         val emailRegex = Regex(EMAIL_REGEX)
         return email.matches(emailRegex)
     }
+
     private fun validatePhone(phone: String): Boolean {
         return phone.isNotEmpty()
     }
+
     private fun validateFirstAndLastName(name: String): Boolean {
         return name.length <= 50
     }
+
     private fun validateShelterName(shelterName: String): Boolean {
         return shelterName.length <= 100
     }
+
     private fun validateCredentials(): Boolean {
         return validateEmail(binding.emailField.text.toString().trim())
                 && validatePassword(binding.passwordField.text.toString().trim())
@@ -206,6 +229,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updatePasswordField() {
         with(binding) {
             if (!validatePassword(passwordField.text.toString().trim())) {
@@ -218,6 +242,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updatePasswordsFields() {
         with(binding) {
             if (!checkPasswordsMatch()) {
@@ -229,6 +254,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updateEmailField() {
         with(binding) {
             if (!validateEmail(emailField.text.toString().trim())) {
@@ -239,6 +265,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updatePhoneField() {
         with(binding) {
             if (!validatePhone(phoneField.text.toString().trim())) {
@@ -249,6 +276,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updateFirstNameField() {
         with(binding) {
             if (!validateFirstAndLastName(firstNameField.text.toString().trim())) {
@@ -259,6 +287,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updateLastNameField() {
         with(binding) {
             if (!validateFirstAndLastName(lastNameField.text.toString().trim())) {
@@ -269,6 +298,7 @@ class RegisterFragment : Fragment() {
             }
         }
     }
+
     private fun updateShelterNameField() {
         with(binding) {
             if (!validateShelterName(shelterNameField.text.toString().trim())) {
