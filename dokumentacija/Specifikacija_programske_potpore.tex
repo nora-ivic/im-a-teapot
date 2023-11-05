@@ -2,7 +2,6 @@
 		
 	\section{Funkcionalni zahtjevi}
 			
-			\textbf{\textit{dio 1. revizije}}\\
 			
 			\noindent \textbf{Dionici:}
 			
@@ -66,7 +65,6 @@
 				
 			\subsection{Obrasci uporabe}
 				
-				\textbf{\textit{dio 1. revizije}}
 				
 				\subsubsection{Opis obrazaca uporabe}
 					
@@ -399,14 +397,14 @@
 						\includegraphics[scale=0.45]{dijagrami/dijagrami obrazaca uporabe/uc dijagram 1} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 						\centering
 						\caption{Dijagram obrasca uporabe, funkcionalnost neregistriranog i registriranog korisnika}
-						\label{fig:ucDijagram}
+						\label{fig:ucDijagram1}
 					\end{figure}
 					
 					\begin{figure}[H]
 						\includegraphics[scale=0.63]{dijagrami/dijagrami obrazaca uporabe/uc dijagram 2} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 						\centering
 						\caption{Dijagram obrasca uporabe, funkcionalnost skloništa}
-						\label{fig:ucDijagram}
+						\label{fig:ucDijagram2}
 					\end{figure}
 					
 					\eject
@@ -414,9 +412,50 @@
 				
 			\subsection{Sekvencijski dijagrami}
 				
-				\textbf{\textit{dio 1. revizije}}\\
+				\textbf{Obrazac uporabe UC4 - Pretraživanje aktivnih oglasa}
+
+				Pokretanjem aplikacije korisnik šalje zahtjev za prikaz aktivnih oglasa. Poslužitelj vraća trenutno aktivne oglase i prikazuje ih. Zatim korisnik odabire opciju za pretraživanje pri čemu mu aplikacija otvara polja za unos filtera. Nakon unosa, korisnik šalje željene filtere poslužitelju koji zatim komunicira s bazom. Ukoliko postoje oglasi koji zadovoljavaju uvjete pretraživanja oni se prikazuju korisniku, a u suprotnom mu se ispisuje odgovarajuća poruka.
+
+					\begin{figure}[H]
+						\includegraphics[scale=0.65]{dijagrami/sekvencijskiDijagrami/sd4} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+						\centering
+						\caption{Sekvencijski dijagram - UC4}
+						\label{fig:sDijagram4}
+					\end{figure}
+
+				\textbf{Obrazac uporabe UC6 - Postavljanje oglasa}
+
+				Pokretanjem aplikacije korisnik šalje zahtjev za prikaz aktivnih oglasa. Poslužitelj vraća trenutno aktivne oglase i prikazuje ih. Zatim korisnik odabire opciju postavljanja novog oglasa i poslužitelj mu otvara prozor za unos informacija. Korisnik šalje podatke za novi oglas, te poslužitelj provjerava ispravnost unosa. Ako je sve ispravno uneseno, novi oglas se sprema u bazu i prikazuje korisniku. Inače poslužitelj korisnika obavještava o neispravnom unosu podataka.
+
+					\begin{figure}[H]
+						\includegraphics[scale=0.65]{dijagrami/sekvencijskiDijagrami/sd6} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+						\centering
+						\caption{Sekvencijski dijagram - UC6}
+						\label{fig:sDijagram6}
+					\end{figure}
+
+				\textbf{Obrazac uporabe UC7 - Komunikacija oko potrage}
+
+				Pokretanjem aplikacije korisnik šalje zahtjev za prikaz aktivnih oglasa. Poslužitelj vraća trenutno aktivne oglase i prikazuje ih. Korisnik odabire oglas, te mu poslužitelj iz baze podataka dohvaća sve informacije o tom oglasu i dosadašnju komunikaciju. Registrirani korisnik može sudjelovati u komunikaciji sve dok ne zatvori odabrani oglas. On unese poruku, šalje je poslužitelju koji je sprema u bazu podataka. Nakon spremanja poruka je vidljiva svim korisnicima.
+
+					\begin{figure}[H]
+						\includegraphics[scale=0.65]{dijagrami/sekvencijskiDijagrami/sd7} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+						\centering
+						\caption{Sekvencijski dijagram - UC7}
+						\label{fig:sDijagram7}
+					\end{figure}
+
+				\textbf{Obrazac uporabe UC10 - Izmjena vlastitih oglasa}
+
+				Pokretanjem aplikacije korisnik šalje zahtjev za prikaz aktivnih oglasa. Poslužitelj vraća trenutno aktivne oglase i prikazuje ih. Zatim korisnik traži prikaz njegovih vlastitih oglasa pa ih poslužitelj pokušava dohvatiti iz baze. Ukoliko postoje, prikazuju se u aplikaciji. Sada može odabrati opciju izmjene čime mu poslužitelj otvara prozor za izmjenu oglasa sa svim informacijama o odabranom oglasu iz baze. Registrirani korisnik unosi informacije i šalje ih poslužitelju koji ih zatim provjerava. Ako je sve ispravno uneseno, promjene se spremaju u bazu podataka i izmjenjeni oglas se prikazuje korisniku. Inače, ispisuje mu se poruka o neispravnom unosu. Ako korisnik nije do sada objavio nijedan oglas, ispisuje mu se odgovarajuća poruka.
+
+					\begin{figure}[H]
+						\includegraphics[scale=0.65]{dijagrami/sekvencijskiDijagrami/sd10} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+						\centering
+						\caption{Sekvencijski dijagram - UC10}
+						\label{fig:sDijagram10}
+					\end{figure}
 				
-				Dijagrami...
 				\eject
 	
 		\section{Ostali zahtjevi}
