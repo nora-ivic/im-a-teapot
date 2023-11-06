@@ -9,5 +9,6 @@
     <color name="colorSecondary">#9B442B</color>
     <color name="error_text_color">#FF0000</color>
     <color name="secondary_container">#FFDCC7</color>
+    <color name="button_disabled">#96908C</color>
     <color name="transparentColor">#00000000</color>
 </resources>

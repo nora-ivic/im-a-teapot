@@ -283,6 +283,7 @@
                 android:id="@+id/shelterNameField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:visibility="gone"
                 android:imeOptions="actionDone"
                 android:inputType="textEmailAddress"
                 android:textColor="@color/black"
@@ -291,7 +292,7 @@
 
         <Button
             android:id="@+id/registerButton"
-            style="@style/Widget.MaterialComponents.Button"
+            style="@style/CustomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
@@ -299,7 +300,6 @@
             android:background="@drawable/register_button"
             android:text="@string/register_text"
             android:textColor="@color/colorPrimary"
-            app:backgroundTint="@color/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout" />

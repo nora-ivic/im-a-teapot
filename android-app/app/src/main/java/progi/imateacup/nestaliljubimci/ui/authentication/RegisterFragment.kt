@@ -5,28 +5,24 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentRegisterBinding
 
-
 class RegisterFragment : Fragment() {
 
     companion object {
-        const val EMAIL_REGEX = "^[\\w-]+@([\\w-]+\\.)+[\\w-]{2,4}\$"
-        const val PASSWORD_REGEX = "^.{6,}$"
+        const val EMAIL_REGEX = "^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$"
+        const val PASSWORD_REGEX = "^.{7,}$"
     }
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
 
     private val viewModel by viewModels<RegisterViewModel>()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -37,8 +33,6 @@ class RegisterFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        binding.shelterNameField.visibility = View.GONE
-
         super.onViewCreated(view, savedInstanceState)
         setOnRegistrationResultAction()
         initListeners()
@@ -61,6 +55,8 @@ class RegisterFragment : Fragment() {
 
     private fun initListeners() {
         with(binding) {
+
+            registerButton.isEnabled = validateCredentials()
 
             usernameField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
@@ -100,14 +96,12 @@ class RegisterFragment : Fragment() {
                     updateShelterNameField()
                 }
             }
-            /* clicking the login button does not make the password field lose focus
-            so this method should be present to update the password field if the user instead presses done
             passwordField.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     updatePasswordField()
                 }
                 false
-            }*/
+            }
 
             repeatPasswordField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
@@ -115,12 +109,12 @@ class RegisterFragment : Fragment() {
                 }
             }
 
-            /*repeatPasswordField.setOnEditorActionListener { _, actionId, _ ->
+            repeatPasswordField.setOnEditorActionListener { _, actionId, _ ->
                 if (actionId == EditorInfo.IME_ACTION_DONE) {
                     updatePasswordsFields()
                 }
                 false
-            }*/
+            }
 
             usernameField.addTextChangedListener {
                 registerButton.isEnabled = validateCredentials()
@@ -201,7 +195,7 @@ class RegisterFragment : Fragment() {
     }
 
     private fun validatePhone(phone: String): Boolean {
-        return phone.isNotEmpty()
+        return phone.length in 6..15
     }
 
     private fun validateFirstAndLastName(name: String): Boolean {
