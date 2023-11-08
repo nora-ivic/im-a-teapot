@@ -235,7 +235,6 @@ class RegisterFragment : Fragment() {
 
                 passwordFieldLayout.error = getString(R.string.password_error_message)
                 passwordFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
-
             } else {
                 passwordFieldLayout.error = null
             }

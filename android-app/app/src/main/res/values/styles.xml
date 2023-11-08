@@ -25,7 +25,7 @@
         <item name="rippleColor">@color/transparentColor</item>
     </style>
 
-    <style name="CustomButtonStyle" parent="Widget.MaterialComponents.Button">
+    <style name="CustomButtonStyle" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/register_button_color</item>
     </style>
 </resources>
