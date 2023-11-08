@@ -148,7 +148,8 @@ class RegisterFragment : Fragment() {
                     phoneField.text.toString().trim(),
                     firstNameField.text.toString().trim(),
                     lastNameField.text.toString().trim(),
-                    shelterNameField.text.toString().trim()
+                    shelterNameField.text.toString().trim(),
+                    registerTypeButton.checkedButtonId == registerAsShelterButton.id
                 )
             }
 
@@ -198,21 +199,24 @@ class RegisterFragment : Fragment() {
         return phone.length in 6..15
     }
 
-    private fun validateFirstAndLastName(name: String): Boolean {
+    private fun validateFirstName(name: String): Boolean {
+        return name.length in 1..50
+    }
+    private fun validateLastName(name: String): Boolean {
         return name.length <= 50
     }
 
     private fun validateShelterName(shelterName: String): Boolean {
-        return shelterName.length <= 100
+        return shelterName.length in 1..100
     }
 
     private fun validateCredentials(): Boolean {
         return validateEmail(binding.emailField.text.toString().trim())
                 && validatePassword(binding.passwordField.text.toString().trim())
                 && checkPasswordsMatch()
-                && validateShelterName(binding.shelterNameField.text.toString().trim())
-                && validateFirstAndLastName(binding.firstNameField.text.toString().trim())
-                && validateFirstAndLastName(binding.lastNameField.text.toString().trim())
+                && (validateShelterName(binding.shelterNameField.text.toString().trim())
+                || (validateFirstName(binding.firstNameField.text.toString().trim())
+                && validateLastName(binding.lastNameField.text.toString().trim())))
                 && validatePhone(binding.phoneField.text.toString().trim())
     }
 
@@ -277,7 +281,7 @@ class RegisterFragment : Fragment() {
 
     private fun updateFirstNameField() {
         with(binding) {
-            if (!validateFirstAndLastName(firstNameField.text.toString().trim())) {
+            if (!validateFirstName(firstNameField.text.toString().trim())) {
                 firstNameFieldLayout.error = getString(R.string.first_name_error_message)
                 firstNameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
             } else {
@@ -288,7 +292,7 @@ class RegisterFragment : Fragment() {
 
     private fun updateLastNameField() {
         with(binding) {
-            if (!validateFirstAndLastName(lastNameField.text.toString().trim())) {
+            if (!validateLastName(lastNameField.text.toString().trim())) {
                 lastNameFieldLayout.error = getString(R.string.last_name_error_message)
                 lastNameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
             } else {

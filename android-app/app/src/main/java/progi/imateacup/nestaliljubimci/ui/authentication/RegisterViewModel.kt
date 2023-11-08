@@ -5,10 +5,10 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import java.io.IOException
 import kotlinx.coroutines.launch
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
 import progi.imateacup.nestaliljubimci.networking.ApiModule
+import java.io.IOException
 
 class RegisterViewModel : ViewModel() {
 
@@ -22,7 +22,8 @@ class RegisterViewModel : ViewModel() {
         phone: String,
         firstName: String,
         lastName: String,
-        shelterName: String
+        shelterName: String,
+        isShelter: Boolean
     ) {
         viewModelScope.launch {
             try {
@@ -33,7 +34,8 @@ class RegisterViewModel : ViewModel() {
                     phone,
                     firstName,
                     lastName,
-                    shelterName
+                    shelterName,
+                    isShelter
                 )
             } catch (err: Exception) {
                 Log.e("Exception", err.toString())
@@ -49,22 +51,41 @@ class RegisterViewModel : ViewModel() {
         phone: String,
         firstName: String,
         lastName: String,
-        shelterName: String
+        shelterName: String,
+        isShelter: Boolean
     ) {
-        val response = ApiModule.retrofit.register(
-            request = RegisterRequest(
-                username = username,
-                password = password,
-                email = email,
-                phone = phone,
-                firstName = firstName,
-                lastName = lastName,
-                shelterName = shelterName,
-                isShelter = shelterName.isNotEmpty()
+        if (isShelter) {
+            val response = ApiModule.retrofit.register(
+                request = RegisterRequest(
+                    username = username,
+                    password = password,
+                    email = email,
+                    phone = phone,
+                    firstName = null,
+                    lastName = null,
+                    shelterName = shelterName,
+                    isShelter = true
+                )
             )
-        )
-        if (!response.isSuccessful) {
-            throw IOException("Unsuccessful registration")
+            if (!response.isSuccessful) {
+                throw IOException("Unsuccessful shelter registration")
+            }
+        } else {
+            val response = ApiModule.retrofit.register(
+                request = RegisterRequest(
+                    username = username,
+                    password = password,
+                    email = email,
+                    phone = phone,
+                    firstName = firstName,
+                    lastName = lastName,
+                    shelterName = null,
+                    isShelter = false
+                )
+            )
+            if (!response.isSuccessful) {
+                throw IOException("Unsuccessful user registration")
+            }
         }
         _registrationResultLiveData.value = true
     }

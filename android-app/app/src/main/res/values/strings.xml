@@ -14,12 +14,12 @@
     <string name="first_name_text">First name</string>
     <string name="last_name_text">Last name</string>
     <string name="email_error_message">Invalid Email</string>
-    <string name="phone_error_message">Phone number should not be empty</string>
-    <string name="first_name_error_message">First name should be less than 50 characters long</string>
+    <string name="phone_error_message">Phone number should be between 6 and 15 digits long</string>
+    <string name="first_name_error_message">First name should be between 1 and 50 characters long</string>
     <string name="last_name_error_message">Last name should be less than 50 characters long</string>
-    <string name="shelter_name_error_message">Shelter name should be less than 100 characters long</string>
+    <string name="shelter_name_error_message">Shelter name should be between 1 and 100 characters long</string>
     <string name="username_error_message">Username must be between 5 and 50 characters long</string>
-    <string name="password_error_message">Password must be at least 6 characters long</string>
+    <string name="password_error_message">Password must be at least 7 characters long</string>
     <string name="passwords_do_not_match">Passwords don\'t match</string>
     <string name="registration_unsuccessful">Registration unsuccessful, please try again.</string>
 </resources>
