@@ -13,7 +13,7 @@ def run_migrations(database: str):
 
     cursor = conn.cursor()
 
-    cursor.execute("CREATE TYPE cat AS ENUM ('lost', 'found', 'abandoned', 'sheltered', 'dead')")
+    cursor.execute("CREATE TYPE category AS ENUM ('lost', 'found', 'abandoned', 'sheltered', 'dead')")
 
     cursor.execute("CREATE DOMAIN mail AS TEXT CHECK (VALUE ~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')")
 
@@ -51,7 +51,7 @@ def run_migrations(database: str):
 
     cursor.execute("CREATE TABLE IF NOT EXISTS advertisement ("
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-                   "category cat,"
+                   "category category,"
                    "deleted BOOLEAN DEFAULT FALSE,"
                    "user_id INTEGER,"
                    "pet_id INTEGER,"

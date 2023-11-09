@@ -1,23 +1,15 @@
 import timestamp
-from sqlalchemy import ForeignKey, create_engine, Engine,Null
+from sqlalchemy import ForeignKey, Null
 from sqlalchemy import String
-from sqlalchemy.orm import DeclarativeBase, Session
+from sqlalchemy.orm import DeclarativeBase
 from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import types
-import enum
+from service.enums import AdvertisementCategory
 
 
 class Base(DeclarativeBase):
     pass
-
-
-class Cat(enum.Enum):
-    LOST = 'lost'
-    FOUND = 'found'
-    ABANDONED = 'abandoned'
-    SHELTERED = 'sheltered'
-    DEAD = 'dead'
 
 
 class UserCustom(Base):
@@ -70,7 +62,7 @@ class Advertisement(Base):
     __tablename__ = "advertisement"
 
     id: Mapped[int] = mapped_column(types.Integer, primary_key=True)
-    category: Mapped[Cat] = mapped_column(types.Enum, nullable=False)
+    category: Mapped[AdvertisementCategory] = mapped_column(types.Enum, nullable=False)
     deleted: Mapped[bool] = mapped_column(types.Boolean, default=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_custom.id"))
     pet_id: Mapped[int] = mapped_column(ForeignKey("pet.id"))
