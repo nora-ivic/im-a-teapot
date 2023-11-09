@@ -109,3 +109,6 @@ class Picture(Base):
     def __repr__(self) -> str:
         return f"Picture(id={self.id!r}, advert_id={self.advert_id!r}, message_id={self.message_id!r}, link={self.link!r})"
 
+
+# engine = "postgresql://localhost:5432/postgres:postgres/baza"
+# Base.metadata.create_all()
