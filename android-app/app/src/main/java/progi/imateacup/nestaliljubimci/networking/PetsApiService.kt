@@ -4,6 +4,7 @@ import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginReques
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
 import progi.imateacup.nestaliljubimci.model.networking.response.ListPetsResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.LoginResponse
+import progi.imateacup.nestaliljubimci.model.networking.response.RegisterResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -20,7 +21,7 @@ interface PetsApiService {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("authorization/signup")
-    suspend fun register(@Body request: RegisterRequest)
+    suspend fun register(@Body request: RegisterRequest) : Response<RegisterResponse>
 
     @GET("/advert")
     suspend fun getPets(
