@@ -13,9 +13,17 @@ def run_migrations(database: str):
 
     cursor = conn.cursor()
 
-    cursor.execute("CREATE TYPE category AS ENUM ('lost', 'found', 'abandoned', 'sheltered', 'dead')")
+    cursor.execute("DO $$ BEGIN"
+                   "    IF to_regtype('category') IS NULL THEN"
+                   "        CREATE TYPE category AS ENUM ('lost', 'found', 'abandoned', 'sheltered', 'dead');"
+                   "    END IF;"
+                   "END $$;")
 
-    cursor.execute("CREATE DOMAIN mail AS TEXT CHECK (VALUE ~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$')")
+    cursor.execute("DO $$ BEGIN"
+                   "    IF to_regtype('mail') IS NULL THEN"
+                   "        CREATE DOMAIN mail AS TEXT CHECK (VALUE ~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$');"
+                   "    END IF;"
+                   "END $$;")
 
     cursor.execute("CREATE TABLE IF NOT EXISTS user_custom ("
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
