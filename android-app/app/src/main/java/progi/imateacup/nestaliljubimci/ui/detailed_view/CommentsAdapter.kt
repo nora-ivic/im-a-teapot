@@ -6,9 +6,9 @@ import androidx.recyclerview.widget.RecyclerView
 import progi.imateacup.nestaliljubimci.databinding.CommentCardBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 
-class DetailedViewAdapter(private var commentList: List<Comment>) : RecyclerView.Adapter<DetailedViewAdapter.ShowReviewsViewHolder>() {
+class CommentsAdapter(private var commentList: List<Comment>) : RecyclerView.Adapter<CommentsAdapter.AdvertCommentsViewHolder>() {
 
-    inner class ShowReviewsViewHolder(private var binding: CommentCardBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class AdvertCommentsViewHolder(private var binding: CommentCardBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(comment: Comment) {
             with(binding) {
                 /*
@@ -24,22 +24,22 @@ class DetailedViewAdapter(private var commentList: List<Comment>) : RecyclerView
         }
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShowReviewsViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdvertCommentsViewHolder {
         val commentBinding: CommentCardBinding = CommentCardBinding.inflate(LayoutInflater.from(parent.context), parent, false)
 
-        return ShowReviewsViewHolder(commentBinding)
+        return AdvertCommentsViewHolder(commentBinding)
     }
 
     override fun getItemCount(): Int {
         return commentList.size
     }
 
-    override fun onBindViewHolder(holder: ShowReviewsViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: AdvertCommentsViewHolder, position: Int) {
         holder.bind(commentList[position])
     }
 
-    fun updateData(newRevies: List<Comment>) {
-        commentList = newRevies
+    fun updateData(newComments: List<Comment>) {
+        commentList = newComments
         notifyDataSetChanged()
     }
 }

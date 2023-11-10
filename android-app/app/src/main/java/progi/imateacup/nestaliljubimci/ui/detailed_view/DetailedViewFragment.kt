@@ -23,7 +23,7 @@ import progi.imateacup.nestaliljubimci.model.networking.entities.Shelter
 
 class DetailedViewFragment : Fragment() {
 
-    private lateinit var adapter: DetailedViewAdapter
+    private lateinit var adapter: CommentsAdapter
 
     private var _binding: FragmentDetailedViewBinding? = null
     private val binding get() = _binding!!
@@ -152,37 +152,43 @@ class DetailedViewFragment : Fragment() {
 
     private fun setPetDisplayValues(pet: Pet) {
         with(binding) {
+            petSpeciesValue.text = pet.species
+            petNameValue.text = pet.name
+            petColorValue.text = pet.color
+            petAgeValue.text = pet.age
+            petDescriptionValue.text = pet.description
+
         }
     }
 
     private fun setShelterDisplayValues(shelter: Shelter) {
         with(binding) {
+            shelterValue.text = shelter.name
         }
     }
 
     private fun displayComments() {
         with(binding) {
-            adapter = DetailedViewAdapter(emptyList())
+            adapter = CommentsAdapter(emptyList())
 
-                detailedViewModel.commentsLiveData.observe(viewLifecycleOwner) { reviews ->
-                    if (!reviews.isNullOrEmpty()) {
-                        adapter.updateData(reviews)
-                        if (noCommentsMessage.isVisible) {
-                            commentsPresentDisplay.isVisible = true
-                            noCommentsMessage.isVisible = false
-                        }
-                    } else {
-                        commentsPresentDisplay.isVisible = false
-                        noCommentsMessage.isVisible = true
+            detailedViewModel.commentsLiveData.observe(viewLifecycleOwner) { comments ->
+                if (!comments.isNullOrEmpty()) {
+                    adapter.updateData(comments)
+                    if (noCommentsMessage.isVisible) {
+                        commentsPresentDisplay.isVisible = true
+                        noCommentsMessage.isVisible = false
                     }
+                } else {
+                    commentsPresentDisplay.isVisible = false
+                    noCommentsMessage.isVisible = true
                 }
-                detailedViewModel.commentAddedLiveData.observe(viewLifecycleOwner) { reviewAdded ->
-                    if (!reviewAdded) {
-                        Snackbar.make(binding.root, R.string.comment_post_fail, Snackbar.LENGTH_SHORT)
-                            .show()
-                    }
+            }
+            detailedViewModel.commentAddedLiveData.observe(viewLifecycleOwner) { reviewAdded ->
+                if (!reviewAdded) {
+                    Snackbar.make(binding.root, R.string.comment_post_fail, Snackbar.LENGTH_SHORT)
+                        .show()
                 }
-
+            }
         }
     }
 
@@ -196,7 +202,6 @@ class DetailedViewFragment : Fragment() {
         }
 
         dialogAddCommentBinding.submitButton.setOnClickListener {
-            val review = dialogAddCommentBinding.reviewInput.text.toString().trim()
             //detailedViewModel.advertComment(userId, advertId, text, pictureId, location)
             dialog.dismiss()
         }

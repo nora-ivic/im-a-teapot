@@ -36,7 +36,11 @@
     <string name="pet_fetch_fail">Neuspješno dohvaćanje ljubimca</string>
     <string name="shelter_fetch_fail">Neuspješno dohvaćanje skloništa</string>
     <string name="comment_post_fail">Neuspješno dodavanje komentara</string>
-
-
+    <string name="speciesText">Vrsta: </string>
+    <string name="nameText">Ime: </string>
+    <string name="colorText">Boja: </string>
+    <string name="ageText">Starost: </string>
+    <string name="descriptionText">Opis: </string>
+    <string name="shelterText">Sklonište: </string>
 
 </resources>
