@@ -1,10 +1,43 @@
 \chapter{Arhitektura i dizajn sustava}
 		
-		\textbf{\textit{dio 1. revizije}}\\
+		
+		Arhitekturu možemo podijeliti na tri podsustava (slika \ref{fig:arhitekturaSkica}):
 
-		Opis...
+		\begin{packed_item}
+			\item  Mobilna aplikacija
+			\item  Poslužitelj
+			\item  Baza podataka
+		\end{packed_item}
 
+		\begin{figure}[H]
+			\includegraphics[scale=0.63]{slike/arhitektura.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{Arhitektura sustava}
+			\label{fig:arhitekturaSkica}
+		\end{figure}
 	
+		\textit{\underbar{Korisničko sučelje}} aplikacije korisniku omogućuje pregled i unos podataka u aplikaciju. Sučelje je jednostavno i prilagođeno za jednostavnu uporabu svima. Korisnik preko sučelja šalje zahtjeve na poslužitelj.
+
+		\textit{\underbar{Poslužitelj}} služi za komunikaciju klijenta s aplikacijom. Komunikacija se odvija preko HTTP (engl. \textit{Hyper Text Transfer Protocol}) protokola, što je protokol u prijenosu informacija. Poslužitelj je onaj koji pokreće aplikaciju te joj prosljeđuje zahtjeve.
+
+		\textit{\underbar{Mobilna aplikacija}} obrađuje korisničke zahtjeve, te ovisno o zahtjevu pristupa bazi podataka i preko poslužitelja vraća odgovor korisniku preko .json dokumenta kojeg zatim sučelje prikazuje na način razumljiv svakom korisniku.
+
+		Arhitektura aplikacije temeljit će se na MVC (Model-View-Controller) konceptu (slika \ref{fig:mvcSkica}).
+
+		\begin{figure}[H]
+			\includegraphics[scale=0.7]{slike/mvc.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{MVC koncept}
+			\label{fig:mvcSkica}
+		\end{figure}
+
+		Koncept dijeli aplikaciju na tri sloja – model, view i controller. Svaki sloj izvršava određeni skup zadataka, a svi slojevi djeluju zajedno kako bi ostvarili traženu funkcionalnost aplikacije. Omogućen je nezavisan razvoj pojedinih dijelova čime se pojednostavljuje razvoj i testiranje. 
+
+		\underbar{\textit{Model}} je središnja komponenta ovog koncepta. Upravlja podacima i logikom aplikacije, komunicira s bazom te nema dodira sa sučeljem. Prima zahtjeve od upravljača da se ažurira.
+
+		\underbar{\textit{View}} sadrži komponente aplikacije vidljive korisniku. Omogućuje vizualizaciju podataka spremljenih u modelu i nudi interakciju  korisnikom.
+
+		\underbar{\textit{Controller}}  prima unesene podatke i prevodi ih u naredbe za model i view. Upravlja zahtjevima korisnika i prenosi ih ostalim elementima.
 				
 		\section{Baza podataka}
 			
