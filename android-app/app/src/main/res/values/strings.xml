@@ -1,25 +1,42 @@
 <resources>
     <string name="app_name">Nestali Ljubimci</string>
     <string name="email_text">Email</string>
-    <string name="register_as_person">Person</string>
-    <string name="register_as_shelter">Shelter</string>
-    <string name="password_text">Password</string>
-    <string name="phone_text">Phone number</string>
-    <string name="shelter_name_text">Shelter name</string>
-    <string name="register_text">Register</string>
+    <string name="register_as_person">Osoba</string>
+    <string name="register_as_shelter">Sklonište</string>
+    <string name="password_text">Lozinka</string>
+    <string name="phone_text">Broj telefona</string>
+    <string name="shelter_name_text">Ime skloništa</string>
+    <string name="register_text">Registracija</string>
     <string name="logo_text">Nestali ljubimci</string>
-    <string name="cat_footprint_description">Cat footprint image</string>
-    <string name="repeat_password_text">Repeat password</string>
-    <string name="username_text">Username</string>
-    <string name="first_name_text">First name</string>
-    <string name="last_name_text">Last name</string>
-    <string name="email_error_message">Invalid Email</string>
-    <string name="phone_error_message">Phone number should be between 6 and 15 digits long</string>
-    <string name="first_name_error_message">First name should be between 1 and 50 characters long</string>
-    <string name="last_name_error_message">Last name should be less than 50 characters long</string>
-    <string name="shelter_name_error_message">Shelter name should be between 1 and 100 characters long</string>
-    <string name="username_error_message">Username must be between 5 and 50 characters long</string>
-    <string name="password_error_message">Password must be at least 7 characters long</string>
-    <string name="passwords_do_not_match">Passwords don\'t match</string>
-    <string name="registration_unsuccessful">Registration unsuccessful, please try again.</string>
+    <string name="cat_footprint_description">Slika mačje šape</string>
+    <string name="repeat_password_text">Ponovi lozinku</string>
+    <string name="username_text">Korisnično ime</string>
+    <string name="first_name_text">Ime</string>
+    <string name="last_name_text">Prezime</string>
+    <string name="email_error_message">Neispravnan email</string>
+    <string name="phone_error_message">Duljina broja telefonaa treba biti između 6 i 15 znamenka</string>
+    <string name="first_name_error_message">Duljina imena treba biti između 1 i 50 slova</string>
+    <string name="last_name_error_message">Prezime treba biti kraće od 50 znamenka</string>
+    <string name="shelter_name_error_message">Duljina imena skloništa treba biti između 1 i 100 slova</string>
+    <string name="username_error_message">Duljina korisničkog imena treba biti između 5 i 50 slova</string>
+    <string name="password_error_message">Duljina lozinke treba biti veća od 7 znaka</string>
+    <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
+    <string name="registration_unsuccessful">Neuspješna registracija. Probajte ponovo!</string>
+    <string name="comments">Komentari</string>
+    <string name="no_comments_yet">Za sada ne postoji niti jedan komentar.</string>
+    <string name="write_a_comment">Napiši komentar</string>
+    <string name="add_image">Slika oglasa</string>
+    <string name="profile_picture">Slika profila</string>
+    <string name="comment_add_fail">Failed to add a comment</string>
+    <string name="adds_fetch_fail">Failed to get adds</string>
+    <string name="add_comment">Dodaj komentar:</string>
+    <string name="comment">Upiši komentar...</string>
+    <string name="comment_submit">Pošalji komentar...</string>
+    <string name="advert_fetch_fail">Neuspješno dohvaćanje oglasa</string>
+    <string name="pet_fetch_fail">Neuspješno dohvaćanje ljubimca</string>
+    <string name="shelter_fetch_fail">Neuspješno dohvaćanje skloništa</string>
+    <string name="comment_post_fail">Neuspješno dodavanje komentara</string>
+
+
+
 </resources>

@@ -1,9 +1,9 @@
 package progi.imateacup.nestaliljubimci.model.networking.response
 
 import kotlinx.serialization.SerialName
-import progi.imateacup.nestaliljubimci.model.networking.entities.Pet
+import progi.imateacup.nestaliljubimci.model.networking.entities.Advert
 
 @kotlinx.serialization.Serializable
-data class ListPetsResponse(
-    @SerialName("pets") val pets: List<Pet>
+data class AdvertResponse(
+    @SerialName("add") val advert: Advert
 )

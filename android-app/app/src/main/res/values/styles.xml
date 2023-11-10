@@ -27,5 +27,10 @@
 
     <style name="CustomButtonStyle" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/register_button_color</item>
+        <item name="android:textSize">@dimen/size16dp</item>
+    </style>
+
+    <style name="CornerSize50Percent" >
+        <item name="cornerSize">50%</item>
     </style>
 </resources>
