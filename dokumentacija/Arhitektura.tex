@@ -8,9 +8,7 @@
 				
 		\section{Baza podataka}
 			
-			\textbf{\textit{dio 1. revizije}}\\
-			
-		Za potrebe našeg sustava, odabrali smo relacijsku bazu podataka zbog njezine strukture koja olakšava modeliranje stvarnog svijeta. Osnovna građevna jedinica baze je relacija, odnosno tablica koja je identificirana imenom i skupom atributa. Glavna funkcija baze podataka je brza i jednostavna pohrana, izmjena i dohvat podataka za daljnju obradu. Baza podataka naše aplikacije uključuje sljedeće entitete:
+		 Za potrebe našeg sustava, odabrali smo relacijsku bazu podataka zbog njezine strukture koja olakšava modeliranje stvarnog svijeta. Osnovna građevna jedinica baze je relacija, odnosno tablica koja je identificirana imenom i skupom atributa. Glavna funkcija baze podataka je brza i jednostavna pohrana, izmjena i dohvat podataka za daljnju obradu. Baza podataka naše aplikacije uključuje sljedeće entitete:
 		
 		\begin{packed_item}
 			\item  UserCustom		\textit{~ (korisnik)}
@@ -47,7 +45,7 @@
 					firstName & VARCHAR	&  ime korisnika	\\ \hline
 					lastName & VARCHAR	&  prezime korisnika	\\ \hline
 					shelterName & VARCHAR	&  ime skloništa	\\ \hline
-					email & VARCHAR	&  e-mail adresa korisnika	\\ \hline
+					email & EMAIL \textit{(definirano u bazi podataka)}	&  e-mail adresa korisnika	\\ \hline
 					phoneNumber & VARCHAR	&  broj telefona korisnika	\\ \hline
 				\end{longtblr}
 				
@@ -86,7 +84,7 @@
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Advertisement}}	 \\ \hline[3pt]
 					\SetCell{LightGreen}	id & INT &  jedinstveni brojčani identifikator oglasa	\\ \hline
-					category & ENUM	&  kategorije: lost, found, abandoned, sheltered, dead)	\\ \hline
+					category & ENUM	&  kategorije: lost, found, abandoned, sheltered, dead	\\ \hline
 					deleted & BOOLEAN	&  oznaka je li oglas izbrisan	\\ \hline
 					dateTimeAdv & TIMESTAMP	&  vrijeme postavljanja oglasa	\\ \hline
 					isInShelter & BOOLEAN	&  oznaka je li ljubimac smješten u sklonište	\\ \hline
@@ -96,8 +94,78 @@
 				\end{longtblr}
 				
 				
+			\textbf{Pet}\hspace{10pt}Ovaj entitet sadržava sve važne informacije o nestalom ljubimcu koje će biti od pomoći pri potrazi.
+			Sadrži atribute: id (identifikacijski broj ljubimca), species (vrsta ljubimca), name (ime), color (boja), dateTimeLost (vrijeme kad je ljubimac izgubljen), locationLost (lokacija na kojoj je izgubljen) i description (opis).
+			Ovaj entitet je u vezi
+			\textit{One-to-Many} s entitetom Advertisement  preko atributa identifikacijskog broja ljubimca.
 			
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \SetCell[c=3]{c}{\textbf{Pet}}	 \\ \hline[3pt]
+					\SetCell{LightGreen} id & INT &  jedinstveni brojčani identifikator ljubimca	\\ \hline
+					species & VARCHAR	& vrsta životinje	\\ \hline
+					name & VARCHAR	&  ime ljubimca	\\ \hline
+					color & VARCHAR	&  boja ljubimca	\\ \hline
+					age & INT	&  starost ljubimca	\\ \hline
+					dateTimeLost & TIMESTAMP	&  vrijeme kad je ljubimac izgubljen	\\ \hline
+					locationLost & VARCHAR	&  opisuje lokaciju na kojoj je ljubimac izgubljen	\\ \hline
+					description & TEXT	&  sve dodatne informacije o ljubimcu	\\ \hline
+				\end{longtblr}
 				
+			
+			\textbf{Picture}\hspace{10pt}Ovaj entitet omogućava pohranu i korištenje slika koje se koriste pri potrazi za ljubimcima.
+			Sadrži atribute: id (identifikacijski broj slike), link, advertId (identifikacijski broj oglasa) i messageId (identifikacijski broj poruke)
+			Ovaj entitet je u vezi
+			\textit{Many-to-One} s entitetom Advertisement preko atributa identifikacijskog broja ljubimca te je u vezi
+			\textit{One-to-One} s entitetom Message preko ID-a poruke.
+			
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \SetCell[c=3]{c}{\textbf{Picture}}	 \\ \hline[3pt]
+					\SetCell{LightGreen} id & INT &  jedinstveni brojčani identifikator slike	\\ \hline
+					link & VARCHAR	& poveznica prema slici	\\ \hline
+					\SetCell{LightBlue} advertId & INT	&  jedinstveni brojčani identifikator oglasa \\ \hline
+					\SetCell{LightBlue} messageId & INT	&  jedinstveni brojčani identifikator poruke \\ \hline
+				\end{longtblr}
+				
+				
+			\textbf{Message}\hspace{10pt}Ovaj entitet sadržava sve važne informacije tijekom komunikacije korisnika prilikom potrage za nestalim ljubimcima.
+			Sadrži atribute: id (identifikacijski broj poruke), text, location (lokaciju), dateTimeMess (vrijeme slanja poruke), advertId (ID oglasa) i userId (ID korisnika koji je poslao poruku).
+			Ovaj entitet je u vezi
+			\textit{Many-to-One} s entitetom UserCustom preko atributa identifikacijskog broja korisnika, u vezi
+			\textit{Many-to-One} s entitetom Advertisement preko ID-a oglasa te je u vezi
+			\textit{One-to-One} s entitetom Picture preko identifikacijskog broja poruke.
+			
+				\begin{longtblr}[
+					label=none,
+					entry=none
+					]{
+						width = \textwidth,
+						colspec={|X[6,l]|X[6, l]|X[20, l]|}, 
+						rowhead = 1,
+					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
+					\hline \SetCell[c=3]{c}{\textbf{Message}}	 \\ \hline[3pt]
+					\SetCell{LightGreen} id & INT &  jedinstveni brojčani identifikator poruke	\\ \hline
+					text & TEXT	& tekstualni dio poruke	\\ \hline
+					location & VARCHAR	& lokacija koju korisnik može poslati	\\ \hline
+					dateTimeMess & TIMESTAMP	& vrijeme slanja poruke	\\ \hline
+					\SetCell{LightBlue} advertId & INT	&  jedinstveni brojčani identifikator oglasa \\ \hline
+					\SetCell{LightBlue} userId & INT	&  jedinstveni brojčani identifikator korisnika \\ \hline
+				\end{longtblr}
+			
+			
 				
 			
 			\subsection{Dijagram baze podataka}
