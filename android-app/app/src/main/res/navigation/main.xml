@@ -2,7 +2,7 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/main"
-    app:startDestination="@id/loginFragment">
+    app:startDestination="@id/petsFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -12,7 +12,9 @@
         <action
             android:id="@+id/actionLoginFragmentToRegisterFragment"
             app:destination="@id/registerFragment"/>
-
+        <action
+            android:id="@+id/actionLoginFragmentToPetsFragment"
+            app:destination="@id/petsFragment"/>
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -21,6 +23,20 @@
         >
         <action
             android:id="@+id/actionRegisterFragmentToLoginFragment"
+            app:destination="@id/loginFragment"
+            app:popUpTo="@id/loginFragment"
+            app:popUpToInclusive="true"/>
+    </fragment>
+    <fragment
+        android:id="@+id/petsFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.pets.PetsFragment"
+        android:label="PetsFragment">
+        <argument
+            android:name="isGuest"
+            app:argType="boolean"
+            android:defaultValue="True"/>
+        <action
+            android:id="@+id/actionPetsFragmentToLoginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>

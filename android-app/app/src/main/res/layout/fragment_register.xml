@@ -34,7 +34,7 @@
                 android:layout_alignTop="@id/logoImage"
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/logoImage"
-                android:text="@string/logo_text"
+                android:text="@string/nestali_ljubimci"
                 android:textColor="@color/black"
                 android:textSize="34sp"
                 android:textStyle="bold" />

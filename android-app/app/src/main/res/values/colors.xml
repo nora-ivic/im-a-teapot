@@ -11,4 +11,8 @@
     <color name="secondary_container">#FFDCC7</color>
     <color name="button_disabled">#96908C</color>
     <color name="transparentColor">#00000000</color>
+    <color name="surface_container">#F5ECE4</color>
+    <color name="primary_container">#FFDBD1</color>
+    <color name="onPrimaryContainer">#3B0900</color>
+    <color name="surface">#FFF8F3</color>
 </resources>
