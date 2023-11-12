@@ -1,6 +1,6 @@
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
-from mappers import UserAuth, UserCustom
+from service.repository.mappers import UserAuth, UserCustom
 from typing import Optional
 from service.repository.engine_manager import get_session
 from service.exceptions import InvalidLoginException
