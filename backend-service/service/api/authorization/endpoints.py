@@ -19,7 +19,7 @@ def log_in(user_login: UserLogin):
 
     token = generate_token(current_user)
 
-    return Response(status_code=200, content={"token": token, "is_shelter": current_user.is_shelter})
+    return {"token": token, "is_shelter": current_user.is_shelter}
 
 
 @auth_router.post("/signup")

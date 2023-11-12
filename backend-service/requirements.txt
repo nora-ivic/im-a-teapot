@@ -4,4 +4,5 @@ sqlalchemy
 psycopg2
 pydantic
 passlib
+bcrypt
 pyjwt

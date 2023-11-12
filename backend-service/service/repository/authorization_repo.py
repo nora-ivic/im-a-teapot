@@ -31,8 +31,7 @@ class AuthorizationRepository:
             last_name=user_signup.last_name,
             shelter_name=user_signup.shelter_name,
             email=user_signup.email.lower(),
-            phone_number=user_signup.phone_number,
-            address=user_signup.address
+            phone_number=user_signup.phone_number
         )
 
         self.session.add(new_custom_user)
