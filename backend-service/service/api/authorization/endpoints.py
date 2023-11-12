@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Response
 from service.api.authorization.models import UserLogin, UserSignup
-from service.api.authorization.utils import generate_token
+from service.api.authorization.utils import generate_token, validate_signup
 from service.exceptions import InvalidLoginException
 from service.repository.authorization_repo import AuthorizationRepository
 
@@ -24,6 +24,8 @@ def log_in(user_login: UserLogin):
 
 @auth_router.post("/signup")
 def sign_up(user_signup: UserSignup):
+    validate_signup(user_signup)
+
     repo = AuthorizationRepository()
 
     if repo.check_existing_user(user_signup.username):
