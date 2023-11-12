@@ -49,4 +49,8 @@ class PetsAdapter(
         pets = newPetPosts
         notifyDataSetChanged()
     }
+
+    fun getPetsList(): List<Pet> {
+        return pets
+    }
 }
