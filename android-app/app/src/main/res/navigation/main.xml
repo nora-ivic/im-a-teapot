@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/petsFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.pets.PetsFragment"
-        android:label="PetsFragment">
+        android:label="LoginFragment">
         <action
             android:id="@+id/actionPetsFragmentToLoginFragment"
             app:destination="@id/loginFragment"
