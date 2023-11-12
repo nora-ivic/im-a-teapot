@@ -15,6 +15,9 @@ class AuthorizationRepository:
     def _get_existing_user(self, username: str):
         return self.session.query(UserAuth).filter(UserAuth.username == username).first()
 
+    def _get_user_custom(self, username: str):
+        return self.session.query(UserCustom).filter(UserCustom.username == username).first()
+
     def check_existing_user(self, username: str):
         if self._get_existing_user(username):
             return True
@@ -48,4 +51,4 @@ class AuthorizationRepository:
         if not self.pwd_context.verify(user_login.password, existing_user.password):
             raise InvalidLoginException
 
-        return existing_user
+        return self._get_user_custom(existing_user.username)
