@@ -8,7 +8,7 @@ from service.api.authorization.models import UserLogin, UserSignup
 
 
 class AuthorizationRepository:
-    def __init__(self, session: Optional[Session]):
+    def __init__(self, session: Optional[Session] = None):
         self.pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
         self.session = session if session else get_session()
 
