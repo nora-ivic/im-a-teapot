@@ -37,6 +37,9 @@ def generate_token(user: UserCustom):
 
 
 def validate_token(authorization: Annotated[str, Header()]):
+    if not authorization:
+        return None, None
+
     try:
         decoded = jwt.decode(authorization, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         token_username: str = decoded.get("username")
@@ -51,4 +54,4 @@ def validate_token(authorization: Annotated[str, Header()]):
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    return decoded["user_id"], decoded["username"]
+    return decoded["user_id"]
