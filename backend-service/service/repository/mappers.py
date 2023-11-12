@@ -25,7 +25,7 @@ class UserCustom(Base):
     email: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String(15), nullable=False)
 
-    login_info: Mapped["UserAuth"] = relationship(back_populates="user_info", foreign_keys=[username])
+    login_info: Mapped["UserAuth"] = relationship(back_populates="user_info", foreign_keys="UserAuth.username")
     messages_sent: Mapped[List["Message"]] = relationship(back_populates="user_sent", foreign_keys="Message.user_id")
     adverts_posted: Mapped[List["Advertisement"]] = relationship(back_populates="user_posted", foreign_keys="Advertisement.user_id")
 
@@ -41,7 +41,7 @@ class UserAuth(Base):
     username: Mapped[str] = mapped_column(ForeignKey("user_custom.id"), primary_key=True)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
 
-    user_info: Mapped["UserCustom"] = relationship(back_populates="login_info", foreign_keys="UserCustom.username")
+    user_info: Mapped["UserCustom"] = relationship(back_populates="login_info", foreign_keys=[username])
 
     def __repr__(self) -> str:
         return f"UserAuth(username={self.username!r})"
@@ -101,7 +101,7 @@ class Message(Base):
     date_time_mess: Mapped[datetime] = mapped_column(DateTime(timezone=False), insert_default=datetime.now())
 
     picture_posted: Mapped[List["Picture"]] = relationship(back_populates="message_posted", foreign_keys="Picture.message_id")
-    user_sent: Mapped["UserCustom"] = relationship(back_populates="message_sent", foreign_keys=[user_id])
+    user_sent: Mapped["UserCustom"] = relationship(back_populates="messages_sent", foreign_keys=[user_id])
     advert_posted: Mapped["Advertisement"] = relationship(back_populates="communication", foreign_keys=[advert_id])
 
     def __repr__(self) -> str:

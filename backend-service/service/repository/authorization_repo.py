@@ -47,6 +47,8 @@ class AuthorizationRepository:
 
     def login_user(self, user_login: UserLogin):
         existing_user = self._get_existing_user(user_login.username)
+        if not existing_user:
+            raise InvalidLoginException
 
         if not self.pwd_context.verify(user_login.password, existing_user.password):
             raise InvalidLoginException
