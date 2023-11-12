@@ -46,9 +46,11 @@
         app:layout_anchorGravity="bottom|center"
         android:backgroundTint="@color/surface_container"
         app:menu="@menu/bottom_app_bar"
+        app:hideOnScroll="true"
         />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/dodaj_oglas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:icon="@drawable/pen"

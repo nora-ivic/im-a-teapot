@@ -31,14 +31,21 @@
         android:id="@+id/petsFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.pets.PetsFragment"
         android:label="PetsFragment">
-        <argument
-            android:name="isGuest"
-            app:argType="boolean"
-            android:defaultValue="True"/>
         <action
             android:id="@+id/actionPetsFragmentToLoginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
             app:popUpToInclusive="true"/>
+        <argument
+            android:name="filter1"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <argument
+            android:name="filter2"
+            app:argType="string"
+            android:defaultValue=""
+            />
+        <!--itd...-->
     </fragment>
 </navigation>

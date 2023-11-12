@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/fav"
+        android:id="@+id/moji_oglasi"
         android:icon="@drawable/inventory"
         android:title="@string/moji_oglasi"
         android:contentDescription="@string/content_description_pretrazi"
