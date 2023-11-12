@@ -25,9 +25,9 @@ class UserCustom(Base):
     email: Mapped[str] = mapped_column(String, nullable=False)
     phone_number: Mapped[str] = mapped_column(String(15), nullable=False)
 
-    login_info: Mapped["UserAuth"] = relationship(back_populates="user_info")
-    messages_sent: Mapped[List["Message"]] = relationship(back_populates="user_sent")
-    adverts_posted: Mapped[List["Advertisement"]] = relationship(back_populates="user_posted")
+    login_info: Mapped["UserAuth"] = relationship(back_populates="user_info", foreign_keys=[username])
+    messages_sent: Mapped[List["Message"]] = relationship(back_populates="user_sent", foreign_keys="Message.user_id")
+    adverts_posted: Mapped[List["Advertisement"]] = relationship(back_populates="user_posted", foreign_keys="Advertisement.user_id")
 
     def __repr__(self) -> str:
         return (f"UserCustom(id={self.id!r}, username={self.username!r}, is_shelter={self.is_shelter!r}, "
@@ -41,7 +41,7 @@ class UserAuth(Base):
     username: Mapped[str] = mapped_column(ForeignKey("user_custom.id"), primary_key=True)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
 
-    user_info: Mapped["UserCustom"] = relationship(back_populates="login_info")
+    user_info: Mapped["UserCustom"] = relationship(back_populates="login_info", foreign_keys="UserCustom.username")
 
     def __repr__(self) -> str:
         return f"UserAuth(username={self.username!r})"
@@ -59,7 +59,7 @@ class Pet(Base):
     location_lost: Mapped[str] = mapped_column(String(256), nullable=True)
     description: Mapped[str] = mapped_column(String, nullable=True)
 
-    advert_posted: Mapped[List["Advertisement"]] = relationship(back_populates="pet_posted")
+    advert_posted: Mapped[List["Advertisement"]] = relationship(back_populates="pet_posted", foreign_keys="Advertisement.pet_id")
 
     def __repr__(self) -> str:
         return (f"Pet(id={self.id!r}, species={self.species!r}, name={self.name!r}, "
@@ -79,10 +79,10 @@ class Advertisement(Base):
     is_in_shelter: Mapped[bool] = mapped_column(types.Boolean, insert_default=False)
     shelter_id: Mapped[int] = mapped_column(types.Integer, nullable=True)
 
-    pet_posted: Mapped["Pet"] = relationship(back_populates="advert_posted")
-    picture_posted: Mapped[List["Picture"]] = relationship(back_populates="advert_posted")
-    communication: Mapped[List["Message"]] = relationship(back_populates="advert_posted")
-    user_posted: Mapped["UserCustom"] = relationship(back_populates="adverts_posted")
+    pet_posted: Mapped["Pet"] = relationship(back_populates="advert_posted", foreign_keys=[pet_id])
+    picture_posted: Mapped[List["Picture"]] = relationship(back_populates="advert_posted", foreign_keys="Picture.advert_id")
+    communication: Mapped[List["Message"]] = relationship(back_populates="advert_posted", foreign_keys="Message.advert_id")
+    user_posted: Mapped["UserCustom"] = relationship(back_populates="adverts_posted", foreign_keys=[user_id])
 
     def __repr__(self) -> str:
         return (f"Advertisement(id={self.id!r}, category={self.category!r}, deleted={self.deleted!r}, "
@@ -100,9 +100,9 @@ class Message(Base):
     location: Mapped[str] = mapped_column(String(256), nullable=True)
     date_time_mess: Mapped[datetime] = mapped_column(DateTime(timezone=False), insert_default=datetime.now())
 
-    picture_posted: Mapped[List["Picture"]] = relationship(back_populates="message_posted")
-    user_sent: Mapped["UserCustom"] = relationship(back_populates="message_sent")
-    advert_posted: Mapped["Advertisement"] = relationship(back_populates="communication")
+    picture_posted: Mapped[List["Picture"]] = relationship(back_populates="message_posted", foreign_keys="Picture.message_id")
+    user_sent: Mapped["UserCustom"] = relationship(back_populates="message_sent", foreign_keys=[user_id])
+    advert_posted: Mapped["Advertisement"] = relationship(back_populates="communication", foreign_keys=[advert_id])
 
     def __repr__(self) -> str:
         return (f"Message(id={self.id!r}, user_id={self.user_id!r}, advert_id={self.advert_id!r}, "
@@ -117,8 +117,8 @@ class Picture(Base):
     message_id: Mapped[int] = mapped_column(ForeignKey("message.id"), nullable=True)
     link: Mapped[str] = mapped_column(String(256), nullable=False)
 
-    advert_posted: Mapped["Advertisement"] = relationship(back_populates="picture_posted")
-    message_posted: Mapped["Message"] = relationship(back_populates="picture_posted")
+    advert_posted: Mapped["Advertisement"] = relationship(back_populates="picture_posted", foreign_keys=[advert_id])
+    message_posted: Mapped["Message"] = relationship(back_populates="picture_posted", foreign_keys=[message_id])
 
     def __repr__(self) -> str:
         return (f"Picture(id={self.id!r}, advert_id={self.advert_id!r}, "
