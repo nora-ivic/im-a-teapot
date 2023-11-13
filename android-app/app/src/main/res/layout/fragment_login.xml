@@ -161,7 +161,7 @@
             tools:layout_editor_absoluteY="540dp"
             tools:ignore="MissingConstraints" />
         <Button
-            android:id="@+id/registerationButton"
+            android:id="@+id/registrationButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

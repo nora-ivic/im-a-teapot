@@ -23,6 +23,10 @@ class LoginFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
 
+
+
+
+
     //TODO
     // nakon sto se uspjesno napravi login i dobije se response sa tokenom
     // pozvati ApiModule.setSessionInfo(token), nakon toga ako sve radi
