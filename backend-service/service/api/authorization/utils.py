@@ -29,7 +29,7 @@ def generate_token(user: UserCustom):
     to_encode = {
         "id": user.id,
         "username": user.username,
-        "exp": str(expire)
+        "expire": str(expire)
     }
     encoded_jwt = jwt.encode(payload=to_encode, key=settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
@@ -47,10 +47,13 @@ def validate_token(authentication: Annotated[str, Header()] = None):
         if not repo.check_existing_user(token_username):
             raise jwt.InvalidTokenError
 
+        if datetime.strptime(decoded["expire"], "%Y-%m-%d %H:%M:%S.%f") < datetime.now():
+            raise jwt.ExpiredSignatureError
+
     except jwt.ExpiredSignatureError:
         raise HTTPException(status_code=401, detail="Expired token")
 
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
-    return decoded["user_id"]
+    return decoded["id"]
