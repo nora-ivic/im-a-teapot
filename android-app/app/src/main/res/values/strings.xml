@@ -25,4 +25,7 @@
     <string name="username_error_message">Korisničko ime mora biti dugo između 5 i 50 znakova</string>
     <string name="password_error_message">Lozinka mora biti duga barem 6 znakova</string>
     <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
+    <string name="logo_text">Nestali ljubimci</string>
+    <string name="cat_footprint_description">Cat footprint image</string>
+    <string name="registration_unsuccessful">Registration unsuccessful, please try again.</string>
 </resources>
