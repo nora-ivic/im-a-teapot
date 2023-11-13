@@ -14,14 +14,15 @@ advert_router = APIRouter()
 def home_page(
         user_id: Annotated[int, Depends(validate_token)],
         # filter: Annotated[AdvertisementFilter, Query()] = None,
-        page: Annotated[int, Query(gt=0, le=1000)] = 1,
+        page: Annotated[int, Query(gt=0, le=100)] = 1,
         page_size: Annotated[int, Query(gt=0, le=100)] = 5
 ) -> List[AdvertisementOutputShort]:
+
     repo = AdvertisementRepository()
-    adverts = repo.get_adverts(user_id, page, page_size)
-    return_adverts = []
+    db_adverts = repo.get_adverts(user_id, page, page_size)
+    output_adverts = []
 
-    #for advert in adverts:
-       # return_adverts.append(map_to_output_advert_short(advert))
+    for db_advert in db_adverts:
+        output_adverts.append(map_to_output_advert_short(db_advert))
 
-    return adverts
+    return output_adverts
