@@ -31,19 +31,18 @@ def generate_token(user: UserCustom):
         "username": user.username,
         "exp": str(expire)
     }
-    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=settings.ALGORITHM)
+    encoded_jwt = jwt.encode(payload=to_encode, key=settings.SECRET_KEY, algorithm=settings.ALGORITHM)
 
     return encoded_jwt
 
 
-def validate_token(authorization: Annotated[str, Header()]):
-    if not authorization:
-        return None, None
+def validate_token(authentication: Annotated[str, Header()] = None):
+    if not authentication:
+        return None
 
     try:
-        decoded = jwt.decode(authorization, settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
+        decoded = jwt.decode(jwt=authentication, key=settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         token_username: str = decoded.get("username")
-
         repo = AuthorizationRepository()
         if not repo.check_existing_user(token_username):
             raise jwt.InvalidTokenError

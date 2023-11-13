@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
 
-class AdvertisementFilter(BaseModel):
-    pass
+class AdvertisementOutputShort(BaseModel):
+    pet_name: str
+    username: str
+    picture: str
+
