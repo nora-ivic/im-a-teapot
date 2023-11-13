@@ -10,6 +10,7 @@ def map_to_output_advert_short(db_advert: Advertisement):
     pictures: List[Picture] = db_advert.picture_posted
 
     return AdvertisementOutputShort(
+        advert_id=db_advert.id,
         username=user.username,
         pet_name=pet.name,
         picture_link=pictures[0].link if pictures[0] else None
