@@ -20,6 +20,12 @@ def run_migrations(database: str):
                    "END $$;")
 
     cursor.execute("DO $$ BEGIN"
+                   "    IF to_regtype('pet_species') IS NULL THEN"
+                   "        CREATE TYPE pet_species AS ENUM ('bird', 'cat', 'dog', 'lizard', 'other', 'rabbit', 'rodent', 'snake');"
+                   "    END IF;"
+                   "END $$;")
+
+    cursor.execute("DO $$ BEGIN"
                    "    IF to_regtype('mail') IS NULL THEN"
                    "        CREATE DOMAIN mail AS TEXT CHECK (VALUE ~* '^[A-Za-z0-9._+%-]+@[A-Za-z0-9.-]+[.][A-Za-z]+$');"
                    "    END IF;"
@@ -48,7 +54,7 @@ def run_migrations(database: str):
 
     cursor.execute("CREATE TABLE IF NOT EXISTS pet ("
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-                   "species VARCHAR(100),"
+                   "species pet_species,"
                    "name VARCHAR(100),"
                    "color VARCHAR(100),"
                    "age INTEGER,"
@@ -66,7 +72,7 @@ def run_migrations(database: str):
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
                    "category category DEFAULT 'lost',"
                    "deleted BOOLEAN DEFAULT FALSE,"
-                   "user_id INTEGER,"
+                   "user_id INTEGER NOT NULL,"
                    "pet_id INTEGER NOT NULL,"
                    "date_time_adv TIMESTAMP DEFAULT NOW()::TIMESTAMP,"
                    "is_in_shelter BOOLEAN DEFAULT FALSE,"

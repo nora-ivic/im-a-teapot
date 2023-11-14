@@ -6,3 +6,5 @@ pydantic
 passlib
 bcrypt
 pyjwt
+pytest
+python-dotenv

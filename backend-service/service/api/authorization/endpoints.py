@@ -29,7 +29,7 @@ def sign_up(user_signup: UserSignup):
     repo = AuthorizationRepository()
 
     if repo.check_existing_user(user_signup.username):
-        return HTTPException(status_code=400, detail="Username already exists")
+        raise HTTPException(status_code=400, detail="Username already exists")
 
     repo.save_new_user(user_signup)
 
