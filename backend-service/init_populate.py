@@ -40,16 +40,16 @@ def init_populate(database: str):
                    "                            AND password = '$2b$12$2treiQzaesvIRv5o8ePBbOEy5qGHG30Y8tr6tAiJqtKLHbc1lMhxS')")
 
     cursor.execute("INSERT INTO pet (species, name, color, age, date_time_lost, description)"
-                   "    SELECT 'sibirski haski', 'Aska', 'bijela', 6, '2023-11-14 10:06:09.916916', 'Krzno ima primjese crne.'"
+                   "    SELECT 'dog', 'Aska', 'bijela', 6, '2023-11-14 10:06:09.916916', 'Krzno ima primjese crne.'"
                    "    WHERE NOT EXISTS (SELECT * FROM pet"
-                   "                        WHERE species = 'sibirski haski' AND name = 'Aska' AND color = 'bijela'"
+                   "                        WHERE species = 'dog' AND name = 'Aska' AND color = 'bijela'"
                    "                            AND age = 6 AND date_time_lost = '2023-11-14 10:06:09.916916'"
                    "                            AND description = 'Krzno ima primjese crne.')")
 
     cursor.execute("INSERT INTO pet (species, color, description)"
-                   "    SELECT 'britanska kratkodlaka', 'siva', 'Nije čipirana, šepa.'"
+                   "    SELECT 'cat', 'siva', 'Nije čipirana, šepa.'"
                    "    WHERE NOT EXISTS (SELECT * FROM pet"
-                   "                        WHERE species = 'britanska kratkodlaka' AND color = 'siva'"
+                   "                        WHERE species = 'cat' AND color = 'siva'"
                    "                            AND description = 'Nije čipirana, šepa.')")
 
     cursor.execute("INSERT INTO advertisement (user_id, pet_id, date_time_adv)"
@@ -58,10 +58,10 @@ def init_populate(database: str):
                    "                        WHERE user_id = 1 AND pet_id = 1"
                    "                            AND date_time_adv = '2023-11-14 10:28:10.834651')")
 
-    cursor.execute("INSERT INTO advertisement (category, pet_id, date_time_adv, is_in_shelter, shelter_id)"
-                   "    SELECT 'sheltered', 2, '2023-11-14 10:40:07.527194', TRUE, 2"
+    cursor.execute("INSERT INTO advertisement (category, user_id, pet_id, date_time_adv, is_in_shelter, shelter_id)"
+                   "    SELECT 'sheltered', 2, 2, '2023-11-14 10:40:07.527194', TRUE, 2"
                    "    WHERE NOT EXISTS (SELECT * FROM advertisement"
-                   "                        WHERE category = 'sheltered' AND pet_id = 2"
+                   "                        WHERE category = 'sheltered' AND user_id = 2 AND pet_id = 2"
                    "                            AND date_time_adv = '2023-11-14 10:40:07.527194'"
                    "                            AND is_in_shelter = TRUE AND shelter_id = 2)")
 
