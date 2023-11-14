@@ -11,7 +11,8 @@ def map_to_output_advert_short(db_advert: Advertisement):
 
     return AdvertisementOutputShort(
         advert_id=db_advert.id,
+        advert_category=db_advert.category,
         username=user.username,
-        pet_name=pet.name,
+        pet_name=pet.name if pet.name else '?',
         picture_link=pictures[0].link if pictures[0] else None
     )
