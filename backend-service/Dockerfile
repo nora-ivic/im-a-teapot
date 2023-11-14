@@ -4,6 +4,7 @@ WORKDIR /src
 
 COPY ./requirements.txt /src/requirements.txt
 COPY ./settings.py /src/settings.py
+COPY ./.env /src/.env
 
 RUN pip install --no-cache-dir --upgrade -r /src/requirements.txt
 
