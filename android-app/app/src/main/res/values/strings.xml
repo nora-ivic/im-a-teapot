@@ -12,7 +12,7 @@
     <string name="register_text">Registracija</string>
     <string name="login_text">Prijava</string>
     <string name="guest_text">Nastavi kao gost</string>
-    <string name="message_text">Da nastavite, molimo vas da se prijavite</string>
+    <string name="message_text">Kako bi ste nastavili, molimo Vas da se prijavite</string>
     <string name="repeat_password_text">Ponovi lozinku</string>
     <string name="username_text">Korisničko ime</string>
     <string name="first_name_text">Ime</string>
@@ -27,5 +27,6 @@
     <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
     <string name="logo_text">Nestali ljubimci</string>
     <string name="cat_footprint_description">Cat footprint image</string>
-    <string name="registration_unsuccessful">Registration unsuccessful, please try again.</string>
+    <string name="registration_unsuccessful">Registracija neuspješna, molimo Vas pokušajte ponovno.</string>
+    <string name="login_unsuccessful">Prijava neuspješna, molimo Vas pokušajte ponovno.</string>
 </resources>

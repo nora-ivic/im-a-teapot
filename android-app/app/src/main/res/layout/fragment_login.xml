@@ -3,26 +3,38 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment"
+        android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        tools:context=".ui.authentication/LoginFragment">
+        android:paddingVertical="32dp"
+        tools:context=".ui.authentication/LoginAsUserFragment">
+
+        <ImageView
+            android:id="@+id/logoImage"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:contentDescription="@string/cat_footprint_description"
+            android:src="@drawable/cat_footprint"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="72dp"
+            tools:layout_editor_absoluteY="16dp" />
 
         <TextView
             android:id="@+id/loginText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="156dp"
+            android:layout_marginTop="152dp"
             android:text="@string/login_text"
             android:textColor="@color/black"
-            android:textSize="38sp"
-            android:textStyle="normal"
+            android:textSize="44sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.148"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -30,13 +42,12 @@
             android:id="@+id/messageText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="260dp"
+            android:layout_marginTop="272dp"
             android:text="@string/message_text"
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="normal"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.412"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,13 +55,13 @@
             android:id="@+id/name1Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="60dp"
+            android:layout_marginTop="16dp"
             android:text="@string/missing"
             android:textColor="@color/black"
             android:textSize="38sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.814"
+            app:layout_constraintHorizontal_bias="0.735"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -58,26 +69,15 @@
             android:id="@+id/name2Text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="108dp"
+            android:layout_marginTop="64dp"
             android:text="@string/pets"
             android:textColor="@color/black"
             android:textSize="38sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.856"
+            app:layout_constraintHorizontal_bias="0.777"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/loginTypeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="80dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginText"
-            app:selectionRequired="true"
-            app:singleSelection="true"/>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/usernameFieldLayout"
@@ -92,7 +92,7 @@
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/loginTypeButton">
+            app:layout_constraintTop_toBottomOf="@id/messageText">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/usernameField"
@@ -131,49 +131,55 @@
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-
         <Button
             android:id="@+id/loginButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginTop="472dp"
             android:background="@drawable/login_button"
             android:text="@string/login_text"
             android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/size16dp"
             app:backgroundTint="@color/secondary_container"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.453"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="480dp"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/guestButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:background="@drawable/login_button"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/guest_button"
             android:text="@string/guest_text"
             android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/size16dp"
             app:backgroundTint="@color/secondary_container"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="540dp"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toBottomOf="@id/loginButton" />
+
         <Button
             android:id="@+id/registrationButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:background="@drawable/login_button"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/register_button"
             android:text="@string/register_text"
             android:textColor="@color/colorPrimary"
+            android:textSize="@dimen/size16dp"
             app:backgroundTint="@color/colorSecondary"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            tools:layout_editor_absoluteY="600dp"
-            tools:ignore="MissingConstraints" />
+            app:layout_constraintTop_toBottomOf="@id/guestButton" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
