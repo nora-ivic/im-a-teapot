@@ -7,3 +7,13 @@ class AdvertisementCategory(enum.Enum):
     ABANDONED = 'abandoned'
     SHELTERED = 'sheltered'
     DEAD = 'dead'
+
+class PetSpecies(enum.Enum):
+    BIRD = 'bird'
+    CAT = 'cat'
+    DOG = 'dog'
+    LIZARD = 'lizard'
+    OTHER = 'other'
+    RABBIT = 'rabbit'
+    RODENT = 'rodent'
+    SNAKE = 'snake'

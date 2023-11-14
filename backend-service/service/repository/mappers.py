@@ -6,7 +6,7 @@ from sqlalchemy.orm import Mapped
 from sqlalchemy.orm import mapped_column
 from sqlalchemy import types
 from datetime import datetime
-from service.enums import AdvertisementCategory
+from service.enums import AdvertisementCategory, PetSpecies
 
 
 class Base(DeclarativeBase):
@@ -51,7 +51,7 @@ class Pet(Base):
     __tablename__ = "pet"
 
     id: Mapped[int] = mapped_column(types.Integer, primary_key=True)
-    species: Mapped[str] = mapped_column(String(100), nullable=True)
+    species: Mapped[PetSpecies] = mapped_column(types.Enum('bird', 'cat', 'dog', 'lizard', 'other', 'rabbit', 'rodent', 'snake', name="pet_species"), nullable=True)
     name: Mapped[str] = mapped_column(String(100), nullable=True)
     color: Mapped[str] = mapped_column(String(100), nullable=True)
     age: Mapped[int] = mapped_column(types.Integer, nullable=True)
