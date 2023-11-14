@@ -1,8 +1,8 @@
 from fastapi import FastAPI, Request, Response
 from fastapi.exceptions import RequestValidationError
 
-from migrations import run_migrations
-from init_populate import init_populate
+from service.migrations import run_migrations
+from service.init_populate import init_populate
 from service.api.advertisement.endpoints import advert_router
 from service.api.authorization.endpoints import auth_router
 from settings import DEFAULT_DATABASE
