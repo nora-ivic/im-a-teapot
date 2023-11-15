@@ -17,4 +17,5 @@
     <color name="onPrimaryContainer">#3B0900</color>
     <color name="surface">#FFF8F3</color>
     <color name="inverse_on_surface">#F8EFE7</color>
+    <color name="seed">#884A39</color>
 </resources>
