@@ -9,7 +9,11 @@ data class ListPetsResponse(
 
 @kotlinx.serialization.Serializable
 data class Pet(
-    @SerialName("temp") val temp: String
-    //TODO
-    // implement correct fields
+    /*TODO
+    *  zamijeni serial names sa ispravnima
+    *  nakon sto se definira api endpoint
+    * */
+    @SerialName("img") val imageUri: String,
+    @SerialName("petname") val PetName: String,
+    @SerialName("username") val OwnerUsername: String
 )

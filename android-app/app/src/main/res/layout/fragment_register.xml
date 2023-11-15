@@ -34,7 +34,7 @@
                 android:layout_alignTop="@id/logoImage"
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/logoImage"
-                android:text="@string/logo_text"
+                android:text="@string/nestali_ljubimci"
                 android:textColor="@color/black"
                 android:textSize="34sp"
                 android:textStyle="bold" />
@@ -300,7 +300,7 @@
             android:background="@drawable/register_button"
             android:text="@string/register_text"
             android:textColor="@color/colorPrimary"
-            android:textSize="@dimen/size16dp"
+            android:textSize="@dimen/text16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout" />

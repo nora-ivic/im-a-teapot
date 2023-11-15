@@ -1,5 +1,8 @@
+import json
+
 from fastapi import FastAPI, Request, Response
-from fastapi.exceptions import RequestValidationError
+from fastapi.exceptions import RequestValidationError, HTTPException
+from starlette.responses import JSONResponse
 
 from service.migrations import run_migrations
 from service.init_populate import init_populate
@@ -21,4 +24,4 @@ async def startup_event():
 
 @app.exception_handler(RequestValidationError)
 def validation_exception_handler(request: Request, exc: RequestValidationError):
-    return Response(status_code=400, content=str(exc))
+    return JSONResponse(status_code=400, content={"detail": str(exc)})

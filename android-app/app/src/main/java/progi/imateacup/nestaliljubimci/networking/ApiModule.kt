@@ -9,7 +9,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiModule {
-    private const val BASE_URL = "http://localhost:3000/"
+    private const val BASE_URL = "https://localhost:3000/"
 
     lateinit var retrofit: PetsApiService
 
@@ -20,7 +20,7 @@ object ApiModule {
     fun setSessionInfo (accessToken: String){
         this.accessToken = accessToken
     }
-    fun initRetrofit(context: Context) {
+    fun initRetrofit() {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
