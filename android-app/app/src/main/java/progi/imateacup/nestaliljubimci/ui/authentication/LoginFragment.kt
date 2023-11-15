@@ -32,6 +32,9 @@ class LoginFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences = requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        sharedPreferences.edit {
+            putString(ACCESS_TOKEN, null)
+        }
         ApiModule.initRetrofit()
     }
 

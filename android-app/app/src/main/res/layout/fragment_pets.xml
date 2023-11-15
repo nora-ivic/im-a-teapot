@@ -30,6 +30,7 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:paddingBottom="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         android:backgroundTint="@color/surface"
         android:background="@color/surface"
@@ -45,7 +46,6 @@
         app:layout_anchorGravity="bottom|center"
         android:backgroundTint="@color/surface_container"
         app:menu="@menu/bottom_app_bar"
-        app:hideOnScroll="true"
         />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
