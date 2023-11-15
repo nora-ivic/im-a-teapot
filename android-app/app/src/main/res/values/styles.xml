@@ -28,4 +28,8 @@
     <style name="CustomButtonStyle" parent="Widget.Material3.Button.OutlinedButton">
         <item name="backgroundTint">@color/register_button_color</item>
     </style>
+
+    <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>

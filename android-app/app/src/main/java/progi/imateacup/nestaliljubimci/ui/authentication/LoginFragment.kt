@@ -60,9 +60,8 @@ class LoginFragment : Fragment() {
     private fun setOnLoginResultAction() {
         viewModel.loginResultLiveData.observe(viewLifecycleOwner) { isLoginSuccessful ->
             if (isLoginSuccessful) {
-                //val direction = LoginFragmentDirections.
-                //gore treba dodati pet fragment
-                //findNavController().navigate(direction)
+                val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment()
+                findNavController().navigate(direction)
             } else {
                 Snackbar.make(
                     binding.root,
@@ -110,9 +109,8 @@ class LoginFragment : Fragment() {
                 )
             }
             guestButton.setOnClickListener {
-                //val direction = LoginFragmentDirections.
-                //gore treba dodati pet fragment
-                //findNavController().navigate(direction)
+                val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment()
+                findNavController().navigate(direction)
             }
             registrationButton.setOnClickListener {
                 val direction = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()

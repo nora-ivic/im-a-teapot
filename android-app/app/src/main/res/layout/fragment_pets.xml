@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/surface_container"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/login_icon_with_text"
+            app:title="@string/nestali_ljubimci"
+            app:titleTextColor="@color/black"
+            app:titleCentered="true"
+            app:menu="@menu/top_app_bar"
+            />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:backgroundTint="@color/surface"
+        android:background="@color/surface"
+        tools:listitem="@layout/missing_pet_post"/>
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottomAppBar"
+        style="@style/Widget.Material3.BottomAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        app:layout_anchor="@+id/recyclerView"
+        app:layout_anchorGravity="bottom|center"
+        android:backgroundTint="@color/surface_container"
+        app:menu="@menu/bottom_app_bar"
+        app:hideOnScroll="true"
+        />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/dodaj_oglas"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:icon="@drawable/pen"
+        app:iconTint="@color/onPrimaryContainer"
+        android:text="@string/dodaj_oglas"
+        android:textColor="@color/onPrimaryContainer"
+        android:textAllCaps="false"
+        app:layout_anchor="@id/bottomAppBar"
+        app:backgroundTint="@color/primary_container"
+        />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
