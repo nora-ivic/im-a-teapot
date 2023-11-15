@@ -35,4 +35,4 @@ def sign_up(user_signup: UserSignup):
 
     repo.save_new_user(user_signup)
 
-    return Response(status_code=201, content={"detail": "User successfully saved"})
+    return Response(status_code=201, content=json.dumps({"detail": "User successfully saved"}))
