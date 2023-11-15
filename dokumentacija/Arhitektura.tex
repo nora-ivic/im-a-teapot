@@ -107,7 +107,7 @@
 			\textit{Many-to-One} s entitetom UserCustom preko atributa userId i shelterId,
 			u vezi \textit{One-to-Many} s entitetom Message preko identifikacijskog broja oglasa,
 			u vezi \textit{One-to-Many} s entitetom Picture također preko identifikacijskog broja oglasa
-			te u vezi \textit{Many-to-One} s entitetom Pet (ljubimcem) preko identifikacijskog broja ljubimca.
+			te u vezi \textit{One-to-One} s entitetom Pet (ljubimcem) preko identifikacijskog broja ljubimca.
 			
 				\begin{longtblr}[
 					label=none,
@@ -132,7 +132,7 @@
 			\textbf{Pet}\hspace{10pt}Ovaj entitet sadržava sve važne informacije o nestalom ljubimcu koje će biti od pomoći pri potrazi.
 			Sadrži atribute: id (identifikacijski broj ljubimca), species (vrsta ljubimca), name (ime), color (boja), dateTimeLost (vrijeme kad je ljubimac izgubljen), locationLost (lokacija na kojoj je izgubljen) i description (opis).
 			Ovaj entitet je u vezi
-			\textit{One-to-Many} s entitetom Advertisement  preko atributa identifikacijskog broja ljubimca.
+			\textit{One-to-One} s entitetom Advertisement  preko atributa identifikacijskog broja ljubimca.
 			
 				\begin{longtblr}[
 					label=none,
@@ -144,7 +144,7 @@
 					} %definicija širine tablice, širine stupaca, poravnanje i broja redaka naslova tablice
 					\hline \SetCell[c=3]{c}{\textbf{Pet}}	 \\ \hline[3pt]
 					\SetCell{LightGreen} id & INT &  jedinstveni brojčani identifikator ljubimca	\\ \hline
-					species & VARCHAR	& vrsta životinje	\\ \hline
+					species & ENUM	& vrsta životinje	\\ \hline
 					name & VARCHAR	&  ime ljubimca	\\ \hline
 					color & VARCHAR	&  boja ljubimca	\\ \hline
 					age & INT	&  starost ljubimca	\\ \hline
@@ -158,7 +158,7 @@
 			Sadrži atribute: id (identifikacijski broj slike), link, advertId (identifikacijski broj oglasa) i messageId (identifikacijski broj poruke)
 			Ovaj entitet je u vezi
 			\textit{Many-to-One} s entitetom Advertisement preko atributa identifikacijskog broja ljubimca te je u vezi
-			\textit{One-to-One} s entitetom Message preko ID-a poruke.
+			\textit{Many-to-One} s entitetom Message preko ID-a poruke.
 			
 				\begin{longtblr}[
 					label=none,
@@ -181,7 +181,7 @@
 			Ovaj entitet je u vezi
 			\textit{Many-to-One} s entitetom UserCustom preko atributa identifikacijskog broja korisnika, u vezi
 			\textit{Many-to-One} s entitetom Advertisement preko ID-a oglasa te je u vezi
-			\textit{One-to-One} s entitetom Picture preko identifikacijskog broja poruke.
+			\textit{Many-to-One} s entitetom Picture preko identifikacijskog broja poruke.
 			
 				\begin{longtblr}[
 					label=none,
