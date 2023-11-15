@@ -59,7 +59,7 @@ class PetsViewModel: ViewModel() {
             throw IOException("Failed to get missing pets adds")
         }
         else {
-            return response.body()?.pets
+            return response.body()
         }
     }
 }

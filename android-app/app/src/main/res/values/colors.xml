@@ -4,7 +4,7 @@
     <color name="black">#FF000000</color>
     <color name="authButtonsTextColor">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="colorPrimary">#FFF8F3</color>
+    <color name="colorPrimary">#9B442B</color>
     <color name="colorPrimaryVariant">#FBF2E9</color>
     <color name="colorSecondary">#9B442B</color>
     <color name="error_text_color">#FF0000</color>

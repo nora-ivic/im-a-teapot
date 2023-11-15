@@ -1,6 +1,5 @@
 package progi.imateacup.nestaliljubimci.networking
 
-import android.content.Context
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
@@ -9,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiModule {
-    private const val BASE_URL = "https://localhost:3000/"
+    private const val BASE_URL = "https://lost-pets-progi-backend-2023-2024.onrender.com/"
 
     lateinit var retrofit: PetsApiService
 
@@ -26,7 +25,7 @@ object ApiModule {
                 val originalRequest = chain.request()
 
                 val newRequest = originalRequest.newBuilder()
-                    .header("Authorization", accessToken)
+                    .header("Authentication", accessToken)
                     .build()
 
                 chain.proceed(newRequest)

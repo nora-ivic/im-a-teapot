@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentRegisterBinding
@@ -41,8 +42,8 @@ class RegisterFragment : Fragment() {
     private fun setOnRegistrationResultAction() {
         viewModel.registrationResultLiveData.observe(viewLifecycleOwner) { isRegistrationSuccessful ->
             if (isRegistrationSuccessful) {
-                //val direction = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(true)
-                //findNavController().navigate(direction)
+                val direction = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment()
+                findNavController().navigate(direction)
             } else {
                 Snackbar.make(
                     binding.root,

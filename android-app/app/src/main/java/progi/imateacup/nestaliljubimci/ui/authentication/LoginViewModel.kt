@@ -18,7 +18,6 @@ class LoginViewModel : ViewModel() {
 
     private val _accessTokenLiveData = MutableLiveData<String>()
     var accessTokenLiveData : LiveData<String> = _accessTokenLiveData
-
     fun loginUser( username: String, password: String) {
         viewModelScope.launch {
             try {

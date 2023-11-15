@@ -36,6 +36,8 @@
         <action
             android:id="@+id/actionPetsFragmentToLoginFragment"
             app:destination="@id/loginFragment"
+            app:popUpTo="@id/petsFragment"
+            app:popUpToInclusive="true"
             />
         <argument
             android:name="filter1"
