@@ -23,7 +23,7 @@
     <string name="last_name_error_message">Prezime mora biti manje od 50 znakova</string>
     <string name="shelter_name_error_message">Ime skloništa mora biti manje od 100 znakova</string>
     <string name="username_error_message">Korisničko ime mora biti dugo između 5 i 50 znakova</string>
-    <string name="password_error_message">Lozinka mora biti duga barem 6 znakova</string>
+    <string name="password_error_message">Lozinka mora biti duga barem 7 znakova</string>
     <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
     <string name="logo_text">Nestali ljubimci</string>
     <string name="cat_footprint_description">Cat footprint image</string>

@@ -1,10 +1,13 @@
 package progi.imateacup.nestaliljubimci.ui.authentication
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -13,15 +16,23 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentLoginBinding
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 
+const val PREFERENCES_NAME = "Pets"
+
 class LoginFragment : Fragment() {
+
+    companion object {
+        const val ACCESS_TOKEN = "ACCESS_TOKEN"
+    }
+
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
-
     private val viewModel by viewModels<LoginViewModel>()
+    private lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        ApiModule.initRetrofit(requireContext())
+        sharedPreferences = requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        ApiModule.initRetrofit()
     }
 
     override fun onCreateView(
@@ -33,8 +44,17 @@ class LoginFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setAccessTokenObserver()
         setOnLoginResultAction()
         initListeners()
+    }
+
+    private fun setAccessTokenObserver() {
+        viewModel.accessTokenLiveData.observe(viewLifecycleOwner) { accessToken ->
+            sharedPreferences.edit {
+                putString(ACCESS_TOKEN, accessToken)
+            }
+        }
     }
 
     private fun setOnLoginResultAction() {
@@ -57,8 +77,6 @@ class LoginFragment : Fragment() {
         with(binding) {
 
             loginButton.isEnabled = validateCredentials()
-            registrationButton.isEnabled
-            guestButton.isEnabled = isGuest()
 
             usernameField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
@@ -101,15 +119,6 @@ class LoginFragment : Fragment() {
                 findNavController().navigate(direction)
             }
         }
-        //TODO
-        // nakon sto se uspjesno napravi login i dobije se response sa tokenom
-        // pozvati ApiModule.setSessionInfo(token), nakon toga ako sve radi
-        // kak se spada o tokenu se vise nebi morali brinuti sljedeca 2 sata,
-        // token istekne nakon 2 sata i kada se dobije response koji govori da
-        // je istekao token preusmjeriti na login gdje ce se opet pozvati setSessionInfo
-    }
-    private fun isGuest(): Boolean{
-        return true
     }
     private fun updateUsernameField() {
         with(binding) {
@@ -127,15 +136,13 @@ class LoginFragment : Fragment() {
         with(binding) {
             if (!validatePassword(passwordField.text.toString().trim())) {
                 passwordFieldLayout.error =
-                    getString(progi.imateacup.nestaliljubimci.R.string.password_error_message)
-                passwordFieldLayout.setErrorTextAppearance(progi.imateacup.nestaliljubimci.R.style.ErrorTextAppearance)
+                    getString(R.string.password_error_message)
+                passwordFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
             } else {
                 passwordFieldLayout.error = null
             }
         }
     }
-
-
 
     private fun validateUsername(username: String): Boolean {
         return username.length in 5..50
