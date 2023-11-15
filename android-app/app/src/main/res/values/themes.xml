@@ -1,13 +1,12 @@
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.NestaliLjubimci" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.NestaliLjubimci" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
         <item name="colorOnPrimary">@color/black</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorSecondary</item>
-        <item name="colorSecondaryVariant">@color/colorSecondary</item>
+        <item name="colorSecondaryVariant">@color/secondary_container</item>
         <item name="colorOnSecondary">@color/white</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>

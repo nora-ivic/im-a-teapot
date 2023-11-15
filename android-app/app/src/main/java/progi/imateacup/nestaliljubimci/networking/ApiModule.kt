@@ -20,7 +20,7 @@ object ApiModule {
     fun setSessionInfo (accessToken: String){
         this.accessToken = accessToken
     }
-    fun initRetrofit(context: Context) {
+    fun initRetrofit() {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor { chain ->
                 val originalRequest = chain.request()
