@@ -225,7 +225,9 @@
 			
 		\section{Dijagram razreda}
 		
-			Treba kad se dodaju svi dijagrami još dodat malo teksta...
+			Na slikama \ref{fig:drModels}, \ref{fig:drDataTransferObjects} i (dodaj referencu za repo) su prikazani razredi koji pripadaju \textit{backend} dijelu MVC arhitekture. Na slici \ref{fig:drView} prikazani su razredi \textit{frontend} dijela arhitekture. Razredi prikazani na slici (dodaj referencu za repo) prikazuju \textit{Repository}. Metode implementirane u tim razredima manipuliraju s DTO \textit{(Data transfer object)}, a oni su dohvaćeni pomoću metoda implementiranih u Model razredima.
+
+			Zbog lakše organizacije, razredi su podijeljeni logički po pravu pristupa metodama određenih aktora. Prikazane su isključivo ovisnosti između razreda koji pripadaju istom dijelu dijagrama. Ostale ovisnosti mogu se zaključiti iz naziva i tipova atributa u razredima.
 
 			\begin{figure}[H]
 				\includegraphics[scale=0.45]{dijagrami/dijagramiRazreda/View.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -233,6 +235,8 @@
 				\caption{Dijagram razreda - dio View}
 				\label{fig:drView}
 			\end{figure}
+
+			Model razredi preslikavaju strukturu baze podataka u aplikaciji. Implementirane metode direktno komuniciraju s bazom podataka te vraćaju tražene podatke. Razred UserCustom predstavlja registriranog korisnika koji ima pristup svim stavkama aplikacije. Razred UserAuth predstavlja podatke za prijavu registriranog korisnika. Razred Advertisement predstavlja objavljeni oglas. Pet je razred koji sadrži unesene podatke o nestalom ljubimcu. Razred message predstavlja poruke vezane za komunikaciju o potrazi. Razred Picture predstavlja sliku koja se nalazi ili u oglasu ili u poruci. PetSpecies je enumeracija s mogućim vrstama ljubimca, a AdvertisementCategory enumeracija s kategorijama oglasa.
 
 			\begin{figure}[H]
 				\includegraphics[scale=0.55]{dijagrami/dijagramiRazreda/Models.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
@@ -255,7 +259,7 @@
 			
 			\textbf{\textit{dio 2. revizije}}\\
 			
-			Ne sad...
+			...
 			
 			
 			\eject 
@@ -264,11 +268,11 @@
 			
 			\textbf{\textit{dio 2. revizije}}\\
 			
-			Ne sad...
+			...
 			
 			\eject
 		\section{Dijagram komponenti}
 		
 			\textbf{\textit{dio 2. revizije}}\\
 		
-			Ne sad...
+			...
