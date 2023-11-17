@@ -225,7 +225,7 @@
 			
 		\section{Dijagram razreda}
 		
-			Na slikama \ref{fig:drModels}, \ref{fig:drDataTransferObjects} i (dodaj referencu za repo) su prikazani razredi koji pripadaju \textit{backend} dijelu MVC arhitekture. Na slici \ref{fig:drView} prikazani su razredi \textit{frontend} dijela arhitekture. Razredi prikazani na slici (dodaj referencu za repo) prikazuju \textit{Repository}. Metode implementirane u tim razredima manipuliraju s DTO \textit{(Data transfer object)}, a oni su dohvaćeni pomoću metoda implementiranih u Model razredima.
+			Na slikama \ref{fig:drModels}, \ref{fig:drDataTransferObjects} i \ref{fig:drRepository} su prikazani razredi koji pripadaju \textit{backend} dijelu MVC arhitekture. Na slici \ref{fig:drView} prikazani su razredi \textit{frontend} dijela arhitekture. Razredi prikazani na slici (dodaj referencu za repo) prikazuju \textit{Repository}. Metode implementirane u tim razredima manipuliraju s DTO \textit{(Data transfer object)}, a oni su dohvaćeni pomoću metoda implementiranih u Model razredima.
 
 			Zbog lakše organizacije, razredi su podijeljeni logički po pravu pristupa metodama određenih aktora. Prikazane su isključivo ovisnosti između razreda koji pripadaju istom dijelu dijagrama. Ostale ovisnosti mogu se zaključiti iz naziva i tipova atributa u razredima.
 
@@ -250,6 +250,13 @@
 				\centering
 				\caption{Dijagram razreda - dio Data transfer objects}
 				\label{fig:drDataTransferObjects}
+			\end{figure}
+			
+			\begin{figure}[H]
+				\includegraphics[scale=0.55]{dijagrami/dijagramiRazreda/repo.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Repository}
+				\label{fig:drRepository}
 			\end{figure}
 			
 			\eject
