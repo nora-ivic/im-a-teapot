@@ -7,6 +7,31 @@
     <string name="phone_text">Broj telefona</string>
     <string name="shelter_name_text">Ime skloništa</string>
     <string name="register_text">Registracija</string>
+    <string name="register_as_person">Osoba</string>
+    <string name="register_as_shelter">Sklonište</string>
+    <string name="password_text">Lozinka</string>
+    <string name="phone_text">Broj mobitela</string>
+    <string name="shelter_name_text">Naziv skloništa</string>
+    <string name="register_text">Registriraj se</string>
+    <string name="nestali_ljubimci">Nestali ljubimci</string>
+    <string name="cat_footprint_description">Slika šape</string>
+    <string name="repeat_password_text">Ponovi lozinku</string>
+    <string name="message_text">Kako biste nastavili, molimo Vas prijavite se</string>
+    <string name="login_text">Prijava</string>
+    <string name="guest_text">Nastavi kao gost</string>
+    <string name="username_text">Korisničko ime</string>
+    <string name="first_name_text">Ime</string>
+    <string name="last_name_text">Prezime</string>
+    <string name="email_error_message">Neispravan email</string>
+    <string name="phone_error_message">Telefonski broj treba imati između 6 i 15 znamenki</string>
+    <string name="first_name_error_message">Ime treba imati između 1 i 50 znakova</string>
+    <string name="last_name_error_message">Prezime treba biti kraće od 50 znakova</string>
+    <string name="shelter_name_error_message">Naziv skloništa treba imati između 1 i 100 znakova</string>
+    <string name="username_error_message">Korisničko ime mora biti između 5 i 50 znakova dugo 100 znakova</string>
+    <string name="password_error_message">Lozinka mora imati najmanje 7 znakova</string>
+    <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
+    <string name="registration_unsuccessful">Registracija nije uspjela, pokušajte ponovno.</string>
+    <string name="login_unsuccessful">Prijava neuspješna, molimo Vas pokušajte ponovno.</string>
     <string name="logo_text">Nestali ljubimci</string>
     <string name="cat_footprint_description">Slika mačje šape</string>
     <string name="repeat_password_text">Ponovi lozinku</string>
@@ -42,5 +67,9 @@
     <string name="ageText">Starost: </string>
     <string name="descriptionText">Opis: </string>
     <string name="shelterText">Sklonište: </string>
-
+    <string name="pretrazi">Pretraži</string>
+    <string name="content_description_pretrazi">Pretraži oglase o nestalim ljubimcima</string>
+    <string name="dodaj_oglas">Dodaj oglas</string>
+    <string name="moji_oglasi">Moji oglasi</string>
+    <string name="get_pets_failed">Neuspješno dohvaćanje oglasa</string>
 </resources>

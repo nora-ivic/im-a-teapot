@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="32dp"
-        android:background="@color/colorPrimary"
+        android:background="@color/surface"
         tools:context=".ui.authentication/RegisterAsUserFragment">
 
         <RelativeLayout
@@ -34,7 +34,7 @@
                 android:layout_alignTop="@id/logoImage"
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/logoImage"
-                android:text="@string/logo_text"
+                android:text="@string/nestali_ljubimci"
                 android:textColor="@color/black"
                 android:textSize="34sp"
                 android:textStyle="bold" />
@@ -299,7 +299,8 @@
             android:layout_marginTop="28dp"
             android:background="@drawable/register_button"
             android:text="@string/register_text"
-            android:textColor="@color/colorPrimary"
+            android:textColor="@color/surface"
+            android:textSize="@dimen/text16sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout" />

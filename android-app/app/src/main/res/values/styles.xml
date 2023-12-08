@@ -33,4 +33,8 @@
     <style name="CornerSize50Percent" >
         <item name="cornerSize">50%</item>
     </style>
+
+    <style name="AppTheme.Widget.ActionButton" parent="@style/Widget.AppCompat.ActionButton">
+        <item name="textAllCaps">false</item>
+    </style>
 </resources>

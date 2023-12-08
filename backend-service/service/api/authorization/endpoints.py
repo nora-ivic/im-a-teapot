@@ -1,3 +1,5 @@
+import json
+
 from fastapi import APIRouter, HTTPException, Response
 from service.api.authorization.models import UserLogin, UserSignup
 from service.api.authorization.utils import generate_token, validate_signup
@@ -29,8 +31,8 @@ def sign_up(user_signup: UserSignup):
     repo = AuthorizationRepository()
 
     if repo.check_existing_user(user_signup.username):
-        return HTTPException(status_code=400, detail="Username already exists")
+        raise HTTPException(status_code=400, detail="Username already exists")
 
     repo.save_new_user(user_signup)
 
-    return Response(status_code=201, content="User successfully saved")
+    return Response(status_code=201, content=json.dumps({"detail": "User successfully saved"}))
