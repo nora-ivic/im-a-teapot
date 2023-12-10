@@ -38,3 +38,14 @@ class AdvertisementRepository:
             .limit(page_size).offset((page - 1) * page_size)
             .all()
         )
+
+    def get_advert_by_id(self, advert_id: int):
+        query = (
+            self.session.query(Advertisement)
+            .options(joinedload(Advertisement.user_posted), joinedload(Advertisement.pet_posted))
+            .filter(Advertisement.id == advert_id)
+        )
+
+        return (
+            query.first()
+        )
