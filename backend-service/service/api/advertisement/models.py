@@ -27,3 +27,7 @@ class AdvertisementOutputFull(BaseModel):
     is_in_shelter: bool = False
     username: str
     picture_links: List[str] = []
+    shelter_name: Optional[str] = None
+    shelter_username: Optional[str] = None
+    shelter_email: Optional[str] = None
+    shelter_phone_number: Optional[str] = None
