@@ -42,7 +42,7 @@ class AdvertisementRepository:
     def get_advert_by_id(self, advert_id: int):
         query = (
             self.session.query(Advertisement)
-            .options(joinedload(Advertisement.user_posted), joinedload(Advertisement.pet_posted))
+            .options(joinedload(Advertisement.user_posted), joinedload(Advertisement.pet_posted), joinedload(Advertisement.shelter))
             .filter(Advertisement.id == advert_id)
         )
 
