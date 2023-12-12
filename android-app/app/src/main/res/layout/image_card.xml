@@ -15,10 +15,10 @@
         android:layout_height="match_parent"
         android:transitionName="image"
         android:scaleType="centerCrop"
-        android:src="@drawable/download"/>
+        android:contentDescription="@string/petImageDescription" />
     <ProgressBar
-        android:id="@+id/loadingSpinner"
         style="?android:attr/progressBarStyleLarge"
+        android:id="@+id/loadingSpinner"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"/>

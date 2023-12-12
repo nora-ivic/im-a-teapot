@@ -5,12 +5,9 @@ import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterReq
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
 import progi.imateacup.nestaliljubimci.model.networking.response.LoginResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.RegisterResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.AdvertResponse
+import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.ListCommentsResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.ListPetsResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.ShelterResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.PetResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
 import retrofit2.http.Body
@@ -37,25 +34,17 @@ interface PetsApiService {
         @Query("page_size") items: Int = PAGE_SIZE
     ): Response<List<Pet>>
 
-    @GET("/advert/{id}")
-    suspend fun getDetailedAdvert(
-        @Path("id") advertId: String,
-    ): AdvertResponse
+    @GET("api/advert/{advert_id}/details")
+    suspend fun getAdvertDetails(
+        @Path("advert_id") advertId: Int,
+    ): Response<Advert>
 
-    @GET("/advert/{id}/comments")
+    @GET("api/messages/{advert_id}/fetch")
     suspend fun getComments(
-        @Path("id") advertId: String,
+        @Path("advert_id") advertId: Int,
+        @Query("page") page: Int = PAGE,
+        @Query("page_size") items: Int = PAGE_SIZE,
     ): Response<ListCommentsResponse>
-
-    @GET("/pet/{id}")
-    suspend fun getPet(
-        @Path("id") petId: String,
-    ): PetResponse
-
-    @GET("/shelter/{id}")
-    suspend fun getShelter(
-        @Path("id") shelterId: String,
-    ): ShelterResponse
 
     @POST("/comment")
     suspend fun addComment(

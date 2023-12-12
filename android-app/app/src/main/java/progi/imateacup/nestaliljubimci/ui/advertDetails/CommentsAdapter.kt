@@ -1,4 +1,4 @@
-package progi.imateacup.nestaliljubimci.ui.detailed_view
+package progi.imateacup.nestaliljubimci.ui.advertDetails
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
