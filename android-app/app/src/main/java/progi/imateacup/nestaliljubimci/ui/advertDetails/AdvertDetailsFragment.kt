@@ -15,6 +15,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
+import org.threeten.bp.LocalDateTime
+import org.threeten.bp.format.DateTimeFormatter
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
@@ -109,15 +111,22 @@ class AdvertDetailsFragment : Fragment() {
     }
 
     private fun setAdvertDisplayValues(advert: Advert) {
+        val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")
         with(binding) {
-            petSpeciesValue.text = advert.petSpecies.toString()
-            petNameValue.text = advert.petName
-            petColorValue.text = advert.petColor
-            petAgeValue.text = advert.petAge.toString()
-            petDescriptionValue.text = advert.description
-            shelterNameValue.text = advert.shelterName
-            shelterEmailValue.text = advert.shelterEmail
-            shelterPhoneValue.text = advert.shelterPhone
+            petSpeciesValue.text =
+                if (advert.petSpecies != null) advert.petSpecies.toString() else "Nepoznato"
+            petNameValue.text = advert.petName ?: "Nepoznato"
+            petColorValue.text = advert.petColor ?: "Nepoznato"
+            petAgeValue.text = if (advert.petAge != null) advert.petAge.toString() else "Nepoznato"
+            petDescriptionValue.text = advert.description ?: "Nepoznato"
+            shelterNameValue.text = advert.shelterName ?: "Nepoznato"
+            shelterEmailValue.text = advert.shelterEmail ?: "Nepoznato"
+            shelterPhoneValue.text = advert.shelterPhone ?: "Nepoznato"
+            locationLostValue.text = advert.locationLost ?: "Nepoznato"
+            timeLostValue.text = if (advert.dateTimeLost != null)
+                LocalDateTime.parse(advert.dateTimeLost, oldTimeFormat)
+                    .format(newTimeFormat) else "Nepoznato"
         }
     }
 

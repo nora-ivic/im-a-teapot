@@ -28,7 +28,8 @@
     <string name="passwords_do_not_match">Lozinke se ne podudaraju</string>
     <string name="registration_unsuccessful">Neuspješna registracija. Probajte ponovo!</string>
     <string name="comments">Komentari</string>
-    <string name="basic_info">Osnovne informacije</string>
+    <string name="basicInfo">Osnovne informacije</string>
+    <string name="missingPetInfo">Informacije o nestanku</string>
     <string name="no_comments_yet">Za sada ne postoji niti jedan komentar.</string>
     <string name="write_a_comment">Napiši komentar</string>
     <string name="add_image">Slika oglasa</string>
@@ -46,6 +47,8 @@
     <string name="nameText">Ime: </string>
     <string name="colorText">Boja: </string>
     <string name="ageText">Starost: </string>
+    <string name="locationLostText">Lokacija: </string>
+    <string name="timeLostText">Vrijeme: </string>
     <string name="descriptionText">Opis: </string>
     <string name="shelterNameText">Naziv: </string>
     <string name="shelterText">Sklonište </string>
