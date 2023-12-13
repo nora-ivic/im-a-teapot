@@ -48,7 +48,7 @@ class AdvertDetailsViewModel : ViewModel() {
             return response.body()
     }
 
-    fun getComments(advertId: Int) {
+    private fun getComments(advertId: Int) {
         viewModelScope.launch {
             try {
                 val comments = fetchComments(advertId)
