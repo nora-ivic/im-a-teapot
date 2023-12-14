@@ -49,7 +49,6 @@
         <action
             android:id="@+id/actionPetsFragmentToDetailedViewFragment"
             app:destination="@id/advertDetailsView"
-            app:popUpToInclusive="false"
             />
         <argument
             android:name="filter1"
