@@ -1,6 +1,8 @@
 package progi.imateacup.nestaliljubimci.model.networking.response
 
 import kotlinx.serialization.SerialName
+import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 
 @kotlinx.serialization.Serializable
 data class Advert(
@@ -21,22 +23,3 @@ data class Advert(
     @SerialName("shelter_email") val shelterEmail: String?,
     @SerialName("shelter_phone_number") val shelterPhone: String?,
     )
-
-enum class AdvertisementCategory {
-    lost,
-    found,
-    abandoned,
-    sheltered,
-    dead
-}
-
-enum class PetSpecies {
-    bird,
-    cat,
-    dog,
-    lizard,
-    other,
-    rabbit,
-    rodent,
-    snake
-}
