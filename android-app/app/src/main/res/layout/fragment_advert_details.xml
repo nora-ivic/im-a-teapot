@@ -212,6 +212,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_marginVertical="4dp"
                 android:layout_marginTop="24dp">
 
                 <TextView
@@ -279,7 +280,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
-                    android:layout_marginBottom="4dp"
                     android:paddingVertical="4dp"
                     android:background="@drawable/info_bacground"
                     android:orientation="horizontal">
