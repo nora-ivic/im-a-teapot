@@ -49,13 +49,13 @@ dependencies {
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
     // Fragment
-    implementation("androidx.fragment:fragment:1.6.1")
-    implementation("androidx.fragment:fragment-ktx:1.6.1")
+    implementation("androidx.fragment:fragment:1.6.2")
+    implementation("androidx.fragment:fragment-ktx:1.6.2")
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.7.4")
-    implementation("androidx.navigation:navigation-ui-ktx:2.7.4")
-    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.4")
-    androidTestImplementation("androidx.navigation:navigation-testing:2.7.4")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.5")
+    implementation("androidx.navigation:navigation-dynamic-features-fragment:2.7.5")
+    androidTestImplementation("androidx.navigation:navigation-testing:2.7.5")
     // Coroutines
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.2")
     // Serialization
@@ -68,7 +68,9 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
     // Glide
     implementation("com.github.bumptech.glide:glide:4.15.1")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.14.2")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
     // Mapbox
     implementation("com.mapbox.maps:android:10.16.3")
+    // ThreeTenABP
+    implementation("org.threeten:threetenbp:1.4.1")
 }
