@@ -7,11 +7,10 @@
     <fragment
         android:id="@+id/loginFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment"
-        android:label="LoginFragment"
-        >
+        android:label="LoginFragment">
         <action
             android:id="@+id/actionLoginFragmentToRegisterFragment"
-            app:destination="@id/registerFragment"/>
+            app:destination="@id/registerFragment" />
         <action
             android:id="@+id/actionLoginFragmentToPetsFragment"
             app:destination="@id/petsFragment"
@@ -21,13 +20,21 @@
     <fragment
         android:id="@+id/registerFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.authentication.RegisterFragment"
-        android:label="RegisterFragment"
-        >
+        android:label="RegisterFragment">
         <action
             android:id="@+id/actionRegisterFragmentToLoginFragment"
             app:destination="@id/loginFragment"
             app:popUpTo="@id/loginFragment"
-            app:popUpToInclusive="true"/>
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/advertDetailsView"
+        android:name="progi.imateacup.nestaliljubimci.ui.advertDetails.AdvertDetailsFragment"
+        android:label="AdvertDetails">
+        <argument
+            android:name="advertId"
+            app:argType="integer"
+            android:defaultValue="-1"/>
     </fragment>
     <fragment
         android:id="@+id/petsFragment"
@@ -38,6 +45,10 @@
             app:destination="@id/loginFragment"
             app:popUpTo="@id/petsFragment"
             app:popUpToInclusive="true"
+            />
+        <action
+            android:id="@+id/actionPetsFragmentToDetailedViewFragment"
+            app:destination="@id/advertDetailsView"
             />
         <argument
             android:name="filter1"

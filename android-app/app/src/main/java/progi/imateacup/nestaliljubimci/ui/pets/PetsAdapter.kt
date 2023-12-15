@@ -19,8 +19,8 @@ class PetsAdapter(
                 petPostCard.setOnClickListener{
                     onShowClickCallback.invoke(pet)
                 }
-                petName.text = pet.PetName
-                OwnerUsername.text = pet.OwnerUsername
+                petName.text = pet.petName
+                OwnerUsername.text = pet.ownerUsername
 
                 Glide
                     .with(itemView.context)
