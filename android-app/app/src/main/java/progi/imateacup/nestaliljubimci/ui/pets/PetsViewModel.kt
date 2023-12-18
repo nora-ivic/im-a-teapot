@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import java.io.IOException
 import kotlinx.coroutines.launch
+import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 
@@ -20,7 +21,7 @@ class PetsViewModel: ViewModel() {
     private val _getPetsSuccessLiveData = MutableLiveData<Boolean>()
     val getPetsSuccessLiveData: LiveData<Boolean> = _getPetsSuccessLiveData
     
-    fun getPets(networkAvailable: Boolean) {
+    fun getPets(networkAvailable: Boolean, filter: SearchFilter) {
         if (networkAvailable) {
             if (fetching) {
                 return

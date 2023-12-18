@@ -7,10 +7,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentSearchBinding
+import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.ui.pets.PetsFragment
 
 class SearchFragment : Fragment() {
@@ -18,6 +22,7 @@ class SearchFragment : Fragment() {
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var sharedPreferences: SharedPreferences
     private var _binding: FragmentSearchBinding? = null
+    private var age: Int? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +40,6 @@ class SearchFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initListeners()
-        val bundle = Bundle().apply {
-            putString("key", "yourData")
-        }
-        findNavController().popBackStack()
     }
 
     private fun initDatePicker() {
@@ -52,22 +53,54 @@ class SearchFragment : Fragment() {
         with(binding) {
             searchButton.setOnClickListener {
                 val navController = findNavController()
-                navController.previousBackStackEntry?.savedStateHandle?.set("filter", fillFilter())
+                navController.previousBackStackEntry?.savedStateHandle?.set("filter", Json.encodeToString(fillFilter()))
+                navController.popBackStack()
             }
             calendarIcon.setOnClickListener {
                 datePicker.show(parentFragmentManager, "datePicker")
             }
+            datePicker.addOnPositiveButtonClickListener {
+                chosenDatumDisplay.text = datePicker.headerText
+            }
+            starostSlider.addOnChangeListener { _, value, _ ->
+                age = value.toInt()
+                ageTextField.setText(age.toString())
+            }
+            ageTextField.addTextChangedListener(onTextChanged = { text, _, _, _ ->
+                val textInput = text.toString()
+                if (textInput.isNotEmpty()) {
+                    if (textInput.toInt() > 75) {
+                        age = 75
+                        ageTextField.setText(75.toString())
+                    } else {
+                        age = textInput.toInt()
+                        starostSlider.setValues(text.toString().toFloat())
+                    }
+                }
+            })
         }
     }
 
-    private fun fillFilter(): Any {
-
+    private fun fillFilter(): SearchFilter {
+        with(binding) {
+            return SearchFilter(
+                ime = textInputEditTextIme.text.toString(),
+                vrsta = autocompleteTextVrsta.text.toString(),
+                boja = autocompleteTextBoja.text.toString(),
+                starost = age,
+                datum_nestanka = chosenDatumDisplay.text.toString(),
+                description = textInputEditTextOpis.text.toString(),
+            )
+        }
     }
 }
 
 /**TODO
- * Kad ces povezivat age slider i text box ne zaboravi stavit ogranicenje za max input na 75 il
- * koliko vec
+ * IMPROVEMENT: - Dodat kruzic sa bojom pokraj odabira boje
+ *              - Pomaknut pretrazi gumb u bottom app bar
+ *
+ * REQUIRED: Promijeni format datuma nestanka
+ *           Fix starost edit text cursor jumps
  */
 
 // Pretrazivanje oglasa po:

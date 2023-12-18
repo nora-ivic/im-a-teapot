@@ -14,8 +14,10 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
+import kotlinx.serialization.json.Json
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
+import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -54,7 +56,7 @@ class PetsFragment : Fragment() {
         }
         initRecyclerViewAdapter()
         setLiveDataObservers()
-        viewModel.getPets(isInternetAvailable(requireContext()))
+        viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
         initListeners()
     }
     private fun initListeners() {
@@ -108,7 +110,7 @@ class PetsFragment : Fragment() {
                         && firstVisibleItemPosition >= 0
                     ) {
                         if (isInternetAvailable(requireContext())) {
-                            viewModel.getPets(isInternetAvailable(requireContext()))
+                            viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
                         }
                     }
                 }
@@ -136,8 +138,10 @@ class PetsFragment : Fragment() {
         }
         val navController = findNavController();
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("filter")?.observe(
-            viewLifecycleOwner) { filter ->
-            // Do something with the result.
+            viewLifecycleOwner) { filterJson ->
+            val filter: SearchFilter = Json.decodeFromString(filterJson)
+            println(filterJson)
+            viewModel.getPets(isInternetAvailable(requireContext()), filter)
         }
     }
 }
