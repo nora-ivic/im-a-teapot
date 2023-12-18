@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="simple_items">
+        <item>Ptica</item>
+        <item>Mačka</item>
+        <item>Pas</item>
+        <item>Gušter</item>
+        <item>Zec</item>
+        <item>Glodavac</item>
+        <item>Zmija</item>
+        <item>Drugo</item>
+    </string-array>
+    <string-array name="colors">
+        <item>Plava</item>
+        <item>Zelena</item>
+        <item>Žuta</item>
+        <item>Narančasta</item>
+        <item>Crvena</item>
+        <item>Ljubičasta</item>
+        <item>Roza</item>
+        <item>Smeđa</item>
+        <item>Crna</item>
+        <item>Bijela</item>
+        <item>Siva</item>
+        <item>Bež</item>
+        <item>Drugo</item>
+    </string-array>
+</resources>

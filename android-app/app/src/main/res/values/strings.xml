@@ -56,9 +56,23 @@
     <string name="petImageDescription">Slika ljubimca</string>
     <string name="shelterEmail">E-mail: </string>
     <string name="pretrazi">Pretraži</string>
-    <string name="content_description_pretrazi">Pretraži oglase o nestalim ljubimcima</string>
+    <string name="content_description_pretrazi">Pretraži oglase po ljubimcima</string>
     <string name="dodaj_oglas">Dodaj oglas</string>
     <string name="closeButtonImageDescription">Gumb za izlaženje</string>
     <string name="moji_oglasi">Moji oglasi</string>
     <string name="get_pets_failed">Neuspješno dohvaćanje oglasa</string>
+    <string name="izgubljeni">Izgubljeni</string>
+    <string name="content_description_izgubljeni">Prikaži samo izgubljene ljubimce</string>
+    <string name="pojedini_ljubimci">Pojedini Ljubimci</string>
+    <string name="pretrazi_ljubimce">Pretraži ljubimce</string>
+    <string name="pretrazi_korisnike">Ljubimci korisnika</string>
+    <string name="pronadeni">Pronađeni</string>
+    <string name="unesite_podatke_o_zeljenom_ljubimcu">Unesite podatke o željenom ljubimcu</string>
+    <string name="ime">Ime</string>
+    <string name="vrsta">Vrsta</string>
+    <string name="boja">Boja</string>
+    <string name="cat_paw">Cat paw</string>
+    <string name="starost">Starost</string>
+    <string name="_0">0</string>
+    <string name="izgubljen_od">Odaberite datum nestanka</string>
 </resources>

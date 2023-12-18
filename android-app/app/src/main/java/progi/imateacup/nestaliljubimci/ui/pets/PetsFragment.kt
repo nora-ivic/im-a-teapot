@@ -5,6 +5,8 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
@@ -17,6 +19,10 @@ import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
+
+/**TODO
+ * Dodaj gumb za čišćenje filtera pretrage
+ **/
 
 class PetsFragment : Fragment() {
 
@@ -59,9 +65,21 @@ class PetsFragment : Fragment() {
             }
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
-                    R.id.search -> {
-                        /*val direction = PetsFragmentDirections.actionPetsFragmentTo<ime_search_fragmenta>Fragment()
-                        findNavController().navigate(direction)*/
+                    R.id.izgubljeni -> {
+                        println("izgubljeni")
+                        true
+                    }
+                    R.id.pronadeni -> {
+                        println("pronadeni")
+                        true
+                    }
+                    R.id.pojedini_ljubimci -> {
+                        val direction = PetsFragmentDirections.actionPetsFragmentToSearchFragment()
+                        findNavController().navigate(direction)
+                        true
+                    }
+                    R.id.trazi_po_korisniku -> {
+                        println("trazi po korisniku")
                         true
                     }
                     else -> false
@@ -115,6 +133,11 @@ class PetsFragment : Fragment() {
             if (!success) {
                 Snackbar.make(binding.recyclerView, getString(R.string.get_pets_failed), Snackbar.LENGTH_SHORT).show()
             }
+        }
+        val navController = findNavController();
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("filter")?.observe(
+            viewLifecycleOwner) { filter ->
+            // Do something with the result.
         }
     }
 }
