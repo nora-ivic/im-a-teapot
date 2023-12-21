@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:layout_height="match_parent">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutPets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/surface_container"
@@ -14,27 +14,26 @@
         android:paddingBottom="5dp">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/topAppBarPets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar_pets"
             app:navigationIcon="@drawable/login_icon_with_text"
             app:title="@string/nestali_ljubimci"
-            app:titleTextColor="@color/black"
             app:titleCentered="true"
-            app:menu="@menu/top_app_bar"
-            />
+            app:titleTextColor="@color/black" />
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/surface"
+        android:backgroundTint="@color/surface"
         android:paddingBottom="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:backgroundTint="@color/surface"
-        android:background="@color/surface"
-        tools:listitem="@layout/missing_pet_post"/>
+        tools:listitem="@layout/missing_pet_post" />
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -42,23 +41,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:backgroundTint="@color/surface_container"
         app:layout_anchor="@+id/recyclerView"
         app:layout_anchorGravity="bottom|center"
-        android:backgroundTint="@color/surface_container"
-        app:menu="@menu/bottom_app_bar"
-        />
+        app:menu="@menu/bottom_app_bar" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/dodaj_oglas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/dodaj_oglas"
+        android:textAllCaps="false"
+        android:textColor="@color/onPrimaryContainer"
+        app:backgroundTint="@color/primary_container"
         app:icon="@drawable/pen"
         app:iconTint="@color/onPrimaryContainer"
-        android:text="@string/dodaj_oglas"
-        android:textColor="@color/onPrimaryContainer"
-        android:textAllCaps="false"
-        app:layout_anchor="@id/bottomAppBar"
-        app:backgroundTint="@color/primary_container"
-        />
+        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

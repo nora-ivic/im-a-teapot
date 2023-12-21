@@ -11,8 +11,10 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
+import progi.imateacup.nestaliljubimci.databinding.DialogProfileBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
@@ -27,9 +29,12 @@ class PetsFragment : Fragment() {
     private var _binding: FragmentPetsBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<PetsViewModel>()
+    private var profileDialogClosed = true
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        sharedPreferences =
+            requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         accessToken = sharedPreferences.getString(ACCESS_TOKEN, null)
     }
 
@@ -43,28 +48,27 @@ class PetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(accessToken != null) {
-            binding.topAppBar.navigationIcon = null
-        }
         initRecyclerViewAdapter()
         setLiveDataObservers()
         viewModel.getPets(isInternetAvailable(requireContext()))
         initListeners()
     }
+
     private fun initListeners() {
         with(binding) {
-            topAppBar.setNavigationOnClickListener {
-                val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                findNavController().navigate(direction)
-            }
-            topAppBar.setOnMenuItemClickListener { menuItem ->
-                when (menuItem.itemId) {
-                    R.id.search -> {
-                        /*val direction = PetsFragmentDirections.actionPetsFragmentTo<ime_search_fragmenta>Fragment()
-                        findNavController().navigate(direction)*/
-                        true
+            if (accessToken != null) {
+                topAppBarPets.setNavigationIcon(R.drawable.icons_user)
+                topAppBarPets.setNavigationOnClickListener {
+                    val dialog = buildUserInfoDialog()
+                    if (profileDialogClosed) {
+                        profileDialogClosed = false
+                        dialog.show()
                     }
-                    else -> false
+                }
+            } else {
+                topAppBarPets.setNavigationOnClickListener {
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                    findNavController().navigate(direction)
                 }
             }
 
@@ -97,9 +101,30 @@ class PetsFragment : Fragment() {
             })
         }
     }
+
+    private fun buildUserInfoDialog(): BottomSheetDialog {
+        val dialog = BottomSheetDialog(requireContext())
+        val dialogProfileBinding = DialogProfileBinding.inflate(layoutInflater)
+        dialog.setContentView(dialogProfileBinding.root)
+
+        dialog.setOnDismissListener {
+            profileDialogClosed = true
+        }
+
+        with(dialogProfileBinding) {
+
+            logoutButton.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
+
+        return dialog
+    }
+
     private fun initRecyclerViewAdapter() {
-        adapter = PetsAdapter(emptyList()) {post ->
-            val direction = PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = post.postId)
+        adapter = PetsAdapter(emptyList()) { post ->
+            val direction =
+                PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = post.postId)
             findNavController().navigate(direction)
         }
         binding.recyclerView.adapter = adapter
@@ -113,7 +138,11 @@ class PetsFragment : Fragment() {
         }
         viewModel.getPetsSuccessLiveData.observe(viewLifecycleOwner) { success ->
             if (!success) {
-                Snackbar.make(binding.recyclerView, getString(R.string.get_pets_failed), Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    binding.recyclerView,
+                    getString(R.string.get_pets_failed),
+                    Snackbar.LENGTH_SHORT
+                ).show()
             }
         }
     }
