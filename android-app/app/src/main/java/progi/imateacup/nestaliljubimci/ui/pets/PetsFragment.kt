@@ -14,7 +14,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
-import progi.imateacup.nestaliljubimci.networking.ApiModule
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -68,6 +67,7 @@ class PetsFragment : Fragment() {
                     else -> false
                 }
             }
+
             bottomAppBar.setNavigationOnClickListener {
                 /*val direction = PetsFragmentDirections.actionPetsFragmentToMyPetsFragment()
                 findNavController().navigate(direction)*/
@@ -98,9 +98,9 @@ class PetsFragment : Fragment() {
         }
     }
     private fun initRecyclerViewAdapter() {
-        adapter = PetsAdapter(emptyList()) {
-            /*val direction = PetsFragmentDirections.actionPetsFragmentToPetDetailsFragment()
-            findNavController().navigate(direction)*/
+        adapter = PetsAdapter(emptyList()) {post ->
+            val direction = PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = post.postId)
+            findNavController().navigate(direction)
         }
         binding.recyclerView.adapter = adapter
     }
