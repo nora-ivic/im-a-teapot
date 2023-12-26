@@ -18,11 +18,11 @@ class AdvertisementRepository:
         if filter_.advert_category:
             query = query.filter(Advertisement.category == filter_.advert_category.value)
         if filter_.pet_name:
-            query = query.filter(Pet.name == filter_.pet_name)
+            query = query.filter(Pet.name.ilike(filter_.pet_name))
         if filter_.pet_species:
             query = query.filter(Pet.species == filter_.pet_species.value)
         if filter_.pet_color:
-            query = query.filter(Pet.color == filter_.pet_color)
+            query = query.filter(Pet.color.ilike(filter_.pet_color))
         if filter_.pet_age:
             query = query.filter(Pet.age == filter_.pet_age)
         if filter_.date_time_lost:
@@ -31,13 +31,13 @@ class AdvertisementRepository:
             # TODO maybe filter by location
             pass
         if filter_.description:
-            query = query.filter(Pet.description.contains(filter_.description))
+            query = query.filter(Pet.description.icontains(filter_.description))
         if filter_.is_in_shelter is not None:
             query = query.filter(Advertisement.is_in_shelter == filter_.is_in_shelter)
         if filter_.username:
-            query = query.filter(UserCustom.username == filter_.username)
+            query = query.filter(UserCustom.username.ilike(filter_.username))
         if filter_.shelter_name:
-            query = query.filter(UserCustom.shelter_name == filter_.shelter_name)
+            query = query.filter(UserCustom.shelter_name.ilike(filter_.shelter_name))
 
         return query
 
