@@ -1,3 +1,4 @@
+from sqlalchemy import Date
 from sqlalchemy import desc
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
@@ -5,7 +6,7 @@ from datetime import date
 
 from service.api.advertisement.filters import AdvertisementFilter
 from service.repository.engine_manager import get_session
-from service.repository.mappers import Advertisement
+from service.repository.mappers import Advertisement, Pet, UserCustom
 from service.enums import AdvertisementCategory
 
 
@@ -17,26 +18,26 @@ class AdvertisementRepository:
         if filter_.advert_category:
             query = query.filter(Advertisement.category == filter_.advert_category.value)
         if filter_.pet_name:
-            query = query.filter(Advertisement.pet_posted.name.lower() == filter_.pet_name.lower())
+            query = query.filter(Pet.name == filter_.pet_name)
         if filter_.pet_species:
-            query = query.filter(Advertisement.pet_posted.species == filter_.pet_species.value)
+            query = query.filter(Pet.species == filter_.pet_species.value)
         if filter_.pet_color:
-            query = query.filter(Advertisement.pet_posted.color.lower() == filter_.pet_color.lower())
+            query = query.filter(Pet.color == filter_.pet_color)
         if filter_.pet_age:
-            query = query.filter(Advertisement.pet_posted.age == filter_.pet_age)
+            query = query.filter(Pet.age == filter_.pet_age)
         if filter_.date_time_lost:
-            query = query.filter(Advertisement.pet_posted.date_time_lost.date() == filter_.date_time_lost)
+            query = query.filter(Pet.date_time_lost.cast(Date) == filter_.date_time_lost)
         if filter_.location_lost:
             # TODO maybe filter by location
             pass
         if filter_.description:
-            query = query.filter(filter_.description.lower() in Advertisement.pet_posted.description.lower())
+            query = query.filter(Pet.description.contains(filter_.description))
         if filter_.is_in_shelter is not None:
             query = query.filter(Advertisement.is_in_shelter == filter_.is_in_shelter)
         if filter_.username:
-            query = query.filter(Advertisement.user_posted.username == filter_.username)
+            query = query.filter(UserCustom.username == filter_.username)
         if filter_.shelter_name:
-            query = query.filter(Advertisement.shelter.shelter_name.lower() == filter_.shelter_name.lower())
+            query = query.filter(UserCustom.shelter_name == filter_.shelter_name)
 
         return query
 
