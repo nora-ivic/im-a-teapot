@@ -92,8 +92,7 @@ def run_migrations(database: str):
                    "location VARCHAR(256),"
                    "date_time_mess TIMESTAMP DEFAULT NOW()::TIMESTAMP,"
                    "FOREIGN KEY (user_id) REFERENCES user_custom(id),"
-                   "FOREIGN KEY (advert_id) REFERENCES advertisement(id),"
-                   "CONSTRAINT chk_content_not_empty CHECK (text IS NOT NULL OR location IS NOT NULL)"
+                   "FOREIGN KEY (advert_id) REFERENCES advertisement(id)"
                    ")")
 
     cursor.execute("CREATE TABLE IF NOT EXISTS picture ("
