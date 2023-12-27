@@ -86,8 +86,8 @@ def run_migrations(database: str):
 
     cursor.execute("CREATE TABLE IF NOT EXISTS message ("
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-                   "user_id INTEGER,"
-                   "advert_id INTEGER,"
+                   "user_id INTEGER NOT NULL,"
+                   "advert_id INTEGER NOT NULL,"
                    "text TEXT,"
                    "location VARCHAR(256),"
                    "date_time_mess TIMESTAMP DEFAULT NOW()::TIMESTAMP,"
