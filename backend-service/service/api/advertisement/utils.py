@@ -42,3 +42,6 @@ def map_to_output_advert_full(db_advert: Advertisement):
         shelter_email=shelter.email if shelter else None,
         shelter_phone_number=shelter.phone_number if shelter else None
     )
+
+def validate_advert_input():
+    pass

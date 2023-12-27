@@ -1,10 +1,11 @@
 from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Annotated, Optional, List
 
-from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull
+from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull, AdvertisementInput
 from service.api.advertisement.filters import AdvertisementFilter, get_advert_filter
-from service.api.advertisement.utils import map_to_output_advert_short, map_to_output_advert_full
+from service.api.advertisement.utils import map_to_output_advert_short, map_to_output_advert_full, validate_advert_input
 from service.api.authorization.utils import validate_token
+from service.exceptions import PermissionDeniedException, AdvertNotFoundException
 from service.repository.advertisement_repo import AdvertisementRepository
 
 advert_router = APIRouter()
@@ -41,3 +42,49 @@ def details(
     output_advert = map_to_output_advert_full(db_advert)
 
     return output_advert
+
+
+@advert_router.post('/create')
+def create_advert(
+        user_id: Annotated[int, Depends(validate_token)],
+        advert_input: Depends(validate_advert_input),
+):
+    repo = AdvertisementRepository()
+
+    db_advert = repo.create_advert(advert_input, user_id)
+    return map_to_output_advert_full(db_advert)
+
+
+@advert_router.put('/{advert_id}/edit')
+def edit_advert(
+        user_id: Annotated[int, Depends(validate_token)],
+        advert_id: int,
+        advert_input: Depends(validate_advert_input),
+):
+    repo = AdvertisementRepository()
+
+    try:
+        db_advert = repo.edit_advert(advert_input, advert_id, user_id)
+    except PermissionDeniedException:
+        raise HTTPException(status_code=403, detail="Cannot edit other user's advertisement")
+    except AdvertNotFoundException:
+        raise HTTPException(status_code=404, detail="Advert not found")
+
+    return map_to_output_advert_full(db_advert)
+
+
+@advert_router.delete('/{advert_id}/delete')
+def delete_advert(
+        user_id: Annotated[int, Depends(validate_token)],
+        advert_id: int,
+):
+    repo = AdvertisementRepository()
+
+    try:
+        repo.delete_advert(advert_id, user_id)
+    except PermissionDeniedException:
+        raise HTTPException(status_code=403, detail="Cannot delete other user's advertisement")
+    except AdvertNotFoundException:
+        raise HTTPException(status_code=404, detail="Advert not found")
+
+    return {'detail': 'Advert deleted successfully.'}
