@@ -15,13 +15,9 @@ def map_to_output_message(db_message: Message):
     user: UserCustom = db_message.user_sent
     pictures: List[Picture] = db_message.picture_posted
 
-    links = []
-    for picture in pictures:
-        links.append(picture.link)
-
     return MessageOutput(
         username=user.username,
         text=db_message.text,
         location=db_message.location,
-        picture_links=links
+        picture_links=[picture.link for picture in pictures]
     )

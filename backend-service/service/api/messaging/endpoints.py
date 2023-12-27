@@ -38,7 +38,6 @@ def fetch_messages(
         page: Annotated[int, Query(gt=0, le=100)] = 1,
         page_size: Annotated[int, Query(gt=0, le=100)] = 5
 ) -> List[MessageOutput]:
-    print("tu san!!!")
     repo = MessagingRepository()
 
     db_messages = repo.get_messages(advert_id, page, page_size)
