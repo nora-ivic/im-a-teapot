@@ -8,53 +8,79 @@ import androidx.lifecycle.viewModelScope
 import java.io.IOException
 import kotlinx.coroutines.launch
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
+import progi.imateacup.nestaliljubimci.model.networking.entities.toQueryMap
+import progi.imateacup.nestaliljubimci.model.networking.enums.AppState
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 
 class PetsViewModel: ViewModel() {
     private var page = 0
     private var fetching = false
+    private var lastFilter: SearchFilter? = null
     
     private val _petsLiveData = MutableLiveData<List<Pet>?>()
     val petsLiveData: LiveData<List<Pet>?> = _petsLiveData
 
-    private val _getPetsSuccessLiveData = MutableLiveData<Boolean>()
-    val getPetsSuccessLiveData: LiveData<Boolean> = _getPetsSuccessLiveData
+    private val _appStateLiveData = MutableLiveData<AppState>()
+    val appStateLiveData: LiveData<AppState> = _appStateLiveData
     
     fun getPets(networkAvailable: Boolean, filter: SearchFilter) {
+        Log.d("PetsViewModel", "Getting pets")
         if (networkAvailable) {
             if (fetching) {
+                Log.d("PetsViewModel", "Already fetching")
                 return
             }
+            if (lastFilter != filter) {
+                Log.d("PetsViewModel", "Filter changed")
+                lastFilter = filter
+                page = 0
+                _petsLiveData.value = null
+            }
+            _appStateLiveData.value = AppState.LOADING
             fetching = true
             page++
             
             viewModelScope.launch { 
                 try {
-                    val newPosts = sendGetPetsRequest()
+                    Log.d("PetsViewModel", "In try block")
+                    val newPosts = sendGetPetsRequest(filter)
                     if (_petsLiveData.value == null) {
                         _petsLiveData.value = listOf<Pet>()
                     }
+                    val oldPosts = _petsLiveData.value
                     if (!newPosts.isNullOrEmpty()) {
-                        val oldPosts = _petsLiveData.value
                         _petsLiveData.value = oldPosts!! + newPosts
-                        _getPetsSuccessLiveData.value = true
+                        _appStateLiveData.value = AppState.SUCCESS
+
                     }
-                } catch (err: Exception) {
-                    _getPetsSuccessLiveData.value = false
+                    else {
+                        if (oldPosts!!.isNotEmpty()) {
+                            _appStateLiveData.value = AppState.SUCCESS
+                        }
+                        else {
+                            _appStateLiveData.value = AppState.ERROR
+                        }
+                    }
                     fetching = false
-                    Log.d("DEBUG", err.message?:"no message")
-                    Log.d( "DEBUG", err.stackTraceToString())
+                } catch (err: Exception) {
+                    Log.d("PetsViewModel", "Failed to get pets: ${err.message}")
+                    Log.d("PetsViewModel", err.stackTraceToString())
+                    _appStateLiveData.value = AppState.ERROR
+                    fetching = false
                 }
             }
         }
         else {
-            _getPetsSuccessLiveData.value = false
+            Log.d("PetsViewModel", "No internet connection")
+            fetching = false
+            _appStateLiveData.value = AppState.ERROR
         }
     }
 
-    private suspend fun sendGetPetsRequest(): List<Pet>? {
-        val response = ApiModule.retrofit.getPets(page)
+    private suspend fun sendGetPetsRequest(filter: SearchFilter): List<Pet>? {
+        Log.d("PetsViewModel", "Sending request for page $page")
+        val response = ApiModule.retrofit.getPets(page = page, filter = filter.toQueryMap())
 
         if (!response.isSuccessful) {
             throw IOException("Failed to get missing pets adds")

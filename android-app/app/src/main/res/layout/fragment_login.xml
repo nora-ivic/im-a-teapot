@@ -129,7 +129,7 @@
             android:text="@string/login_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondary_container"
+            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordFieldLayout" />
@@ -145,7 +145,7 @@
             android:text="@string/guest_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondary_container"
+            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginButton" />

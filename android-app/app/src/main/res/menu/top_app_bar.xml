@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
-    <group android:id="@+id/kategorije">
+    android:background="@color/secondaryContainer">
+    <group
+        android:id="@+id/kategorije"
+        >
         <item
             android:id="@+id/izgubljeni"
             android:title="@string/izgubljeni"
@@ -11,11 +13,18 @@
         <item
             android:id="@+id/pronadeni"
             android:title="@string/pronadeni"
+            android:contentDescription="@string/content_description_pronadeni"
             />
-        <!--*
-        * Prekinuto traženje
-        * U skloništu
-        * Uginuli-->
+        <item
+            android:id="@+id/prekinutoTrazenje"
+            android:title="@string/prekinutoTrazenje"
+            android:contentDescription="@string/prekinutoTrazenje"
+            />
+        <item
+            android:id="@+id/uSklonistu"
+            android:title="@string/uSklonistu"
+            android:contentDescription="@string/uSklonistu"
+            />
     </group>
 
     <group
@@ -27,15 +36,20 @@
             <menu>
                     <!--android:icon="@drawable/cat_footprint"-->
                 <item
-                    android:id="@+id/pojedini_ljubimci"
-                    android:title="@string/pojedini_ljubimci"
+                    android:id="@+id/po_ljubimcu"
+                    android:title="@string/po_ljubimcu"
                     android:contentDescription="@string/content_description_pretrazi"
                     />
                     <!--android:icon="@drawable/icons_user"-->
                 <item
                     android:id="@+id/trazi_po_korisniku"
-                    android:title="@string/pretrazi_korisnike"
-                    android:contentDescription="@string/content_description_pretrazi"
+                    android:title="@string/pretrazi_po_korisniku"
+                    android:contentDescription="@string/pretrazi_po_korisniku"
+                    />
+                <item
+                    android:id="@+id/trazi_po_sklonistu"
+                    android:title="@string/pretrazi_po_sklonistu"
+                    android:contentDescription="@string/pretrazi_po_sklonistu"
                     />
             </menu>
         </item>

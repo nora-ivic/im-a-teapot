@@ -3,14 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/moji_oglasi"
+        android:id="@+id/mojiOglasi"
         android:icon="@drawable/inventory"
-        android:title="@string/moji_oglasi"
+        android:title="@string/mojiOglasi"
         android:contentDescription="@string/content_description_pretrazi"
         app:showAsAction="ifRoom"
         android:enabled="true"
         />
     <item
-        android:title="@string/moji_oglasi"
+        android:title="@string/mojiOglasi"
         app:showAsAction="ifRoom"/>
 </menu>
