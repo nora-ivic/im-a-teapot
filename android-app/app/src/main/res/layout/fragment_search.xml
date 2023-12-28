@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/surface"
-    android:background="@color/surface">
+    android:background="@color/surface"
+    android:backgroundTint="@color/surface">
 
     <com.google.android.material.appbar.AppBarLayout
         android:layout_width="match_parent"
@@ -168,12 +168,12 @@
                         android:id="@+id/ageTextField"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:minWidth="46dp"
-                        android:minHeight="46dp"
                         android:layout_marginStart="@dimen/margin_32dp"
                         android:background="@drawable/surface_highest_with_border"
                         android:inputType="number"
                         android:maxLength="2"
+                        android:minWidth="46dp"
+                        android:minHeight="46dp"
                         android:text="@string/_0"
                         android:textAlignment="center"
                         android:textSize="@dimen/text24sp"

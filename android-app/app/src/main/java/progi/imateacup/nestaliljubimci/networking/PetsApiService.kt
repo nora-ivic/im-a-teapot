@@ -27,7 +27,7 @@ interface PetsApiService {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("api/authorization/signup")
-    suspend fun register(@Body request: RegisterRequest) : Response<RegisterResponse>
+    suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @GET("api/advert/")
     suspend fun getPets(

@@ -65,7 +65,10 @@ class SearchFragment : Fragment() {
             }
             searchButton.setOnClickListener {
                 val navController = findNavController()
-                navController.previousBackStackEntry?.savedStateHandle?.set("filter", Json.encodeToString(fillFilter()))
+                navController.previousBackStackEntry?.savedStateHandle?.set(
+                    "filter",
+                    Json.encodeToString(fillFilter())
+                )
                 navController.popBackStack()
             }
             calendarIcon.setOnClickListener {
@@ -106,12 +109,9 @@ class SearchFragment : Fragment() {
             try {
                 date = inputFormat.parse(chosenDatumDisplay.text.toString())
                 formattedDate = outputFormat.format(date!!)
-            }
-            catch (e: ParseException) {
+            } catch (e: ParseException) {
                 date = null
             }
-
-            println(formattedDate)
 
             return SearchFilter(
                 ime = textInputEditTextIme.text.toString(),
@@ -128,33 +128,4 @@ class SearchFragment : Fragment() {
 /**TODO
  * IMPROVEMENT: - Dodat kruzic sa bojom pokraj odabira boje
  *              - Pomaknut pretrazi gumb u bottom app bar
- *
- */
-
-// Pretrazivanje oglasa po:
-//  - Ime
-//  - Vrsta
-//  - Boja
-//  - Starost
-//  - Datum nestanka
-//  - Description
-//  - (opcionalno Lokacija)
-
-//  - Username
-
-//  - Kategorija oglasa
-
-//  - Shelter name
-
-/**
- * Menu
- * Izgubljeni
- * Prondađeni
- * Prekinuto traženje
- * U skloništu
- * Uginuli
- * -------------
- * Search -> submenu: Pretraži ljubimce
- *                    Ljubimci korisnika
- *                    Ljubimci u skloništu
  */

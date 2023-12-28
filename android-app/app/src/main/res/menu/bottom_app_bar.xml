@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/mojiOglasi"
+        android:contentDescription="@string/content_description_pretrazi"
+        android:enabled="true"
         android:icon="@drawable/inventory"
         android:title="@string/mojiOglasi"
-        android:contentDescription="@string/content_description_pretrazi"
-        app:showAsAction="ifRoom"
-        android:enabled="true"
-        />
+        app:showAsAction="ifRoom" />
     <item
         android:title="@string/mojiOglasi"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="ifRoom" />
 </menu>

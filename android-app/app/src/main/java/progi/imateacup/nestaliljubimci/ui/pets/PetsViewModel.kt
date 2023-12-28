@@ -13,17 +13,17 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.AppState
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 
-class PetsViewModel: ViewModel() {
+class PetsViewModel : ViewModel() {
     private var page = 0
     private var fetching = false
     private var lastFilter: SearchFilter? = null
-    
+
     private val _petsLiveData = MutableLiveData<List<Pet>?>()
     val petsLiveData: LiveData<List<Pet>?> = _petsLiveData
 
     private val _appStateLiveData = MutableLiveData<AppState>()
     val appStateLiveData: LiveData<AppState> = _appStateLiveData
-    
+
     fun getPets(networkAvailable: Boolean, filter: SearchFilter) {
         Log.d("PetsViewModel", "Getting pets")
         if (networkAvailable) {
@@ -40,8 +40,8 @@ class PetsViewModel: ViewModel() {
             _appStateLiveData.value = AppState.LOADING
             fetching = true
             page++
-            
-            viewModelScope.launch { 
+
+            viewModelScope.launch {
                 try {
                     Log.d("PetsViewModel", "In try block")
                     val newPosts = sendGetPetsRequest(filter)
@@ -53,12 +53,10 @@ class PetsViewModel: ViewModel() {
                         _petsLiveData.value = oldPosts!! + newPosts
                         _appStateLiveData.value = AppState.SUCCESS
 
-                    }
-                    else {
+                    } else {
                         if (oldPosts!!.isNotEmpty()) {
                             _appStateLiveData.value = AppState.SUCCESS
-                        }
-                        else {
+                        } else {
                             _appStateLiveData.value = AppState.ERROR
                         }
                     }
@@ -70,8 +68,7 @@ class PetsViewModel: ViewModel() {
                     fetching = false
                 }
             }
-        }
-        else {
+        } else {
             Log.d("PetsViewModel", "No internet connection")
             fetching = false
             _appStateLiveData.value = AppState.ERROR
@@ -84,8 +81,7 @@ class PetsViewModel: ViewModel() {
 
         if (!response.isSuccessful) {
             throw IOException("Failed to get missing pets adds")
-        }
-        else {
+        } else {
             return response.body()
         }
     }

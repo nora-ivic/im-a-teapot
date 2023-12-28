@@ -181,6 +181,7 @@ class PetsFragment : Fragment() {
             }
         }
     }
+
     private fun filterAndGetForCategory(category: String) {
         filter = SearchFilter(kategorijaOglasa = category)
         viewModel.getPets(isInternetAvailable(requireContext()), filter!!)

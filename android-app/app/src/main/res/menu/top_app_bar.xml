@@ -1,56 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@color/secondaryContainer">
-    <group
-        android:id="@+id/kategorije"
-        >
+    <group android:id="@+id/kategorije">
         <item
             android:id="@+id/izgubljeni"
-            android:title="@string/izgubljeni"
             android:contentDescription="@string/content_description_izgubljeni"
-            />
+            android:title="@string/izgubljeni" />
         <item
             android:id="@+id/pronadeni"
-            android:title="@string/pronadeni"
             android:contentDescription="@string/content_description_pronadeni"
-            />
+            android:title="@string/pronadeni" />
         <item
             android:id="@+id/prekinutoTrazenje"
-            android:title="@string/prekinutoTrazenje"
             android:contentDescription="@string/prekinutoTrazenje"
-            />
+            android:title="@string/prekinutoTrazenje" />
         <item
             android:id="@+id/uSklonistu"
-            android:title="@string/uSklonistu"
             android:contentDescription="@string/uSklonistu"
-            />
+            android:title="@string/uSklonistu" />
     </group>
 
-    <group
-        android:id="@+id/search_group">
+    <group android:id="@+id/search_group">
         <item
             android:id="@+id/serach_submenu"
-            android:title="@string/pretrazi"
-            android:icon="@drawable/search_icon">
+            android:icon="@drawable/search_icon"
+            android:title="@string/pretrazi">
             <menu>
-                    <!--android:icon="@drawable/cat_footprint"-->
+                <!--android:icon="@drawable/cat_footprint"-->
                 <item
                     android:id="@+id/po_ljubimcu"
-                    android:title="@string/po_ljubimcu"
                     android:contentDescription="@string/content_description_pretrazi"
-                    />
-                    <!--android:icon="@drawable/icons_user"-->
+                    android:title="@string/po_ljubimcu" />
+                <!--android:icon="@drawable/icons_user"-->
                 <item
                     android:id="@+id/trazi_po_korisniku"
-                    android:title="@string/pretrazi_po_korisniku"
                     android:contentDescription="@string/pretrazi_po_korisniku"
-                    />
+                    android:title="@string/pretrazi_po_korisniku" />
                 <item
                     android:id="@+id/trazi_po_sklonistu"
-                    android:title="@string/pretrazi_po_sklonistu"
                     android:contentDescription="@string/pretrazi_po_sklonistu"
-                    />
+                    android:title="@string/pretrazi_po_sklonistu" />
             </menu>
         </item>
     </group>

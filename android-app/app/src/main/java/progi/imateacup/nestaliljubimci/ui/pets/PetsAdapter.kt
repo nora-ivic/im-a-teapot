@@ -13,10 +13,11 @@ class PetsAdapter(
     private var pets: List<Pet>, private val onShowClickCallback: (Pet) -> Unit
 ) : RecyclerView.Adapter<PetsAdapter.PetsViewHolder>() {
 
-    inner class PetsViewHolder(private val binding: MissingPetPostBinding) : RecyclerView.ViewHolder(binding.root) {
+    inner class PetsViewHolder(private val binding: MissingPetPostBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         fun bind(pet: Pet) {
             with(binding) {
-                petPostCard.setOnClickListener{
+                petPostCard.setOnClickListener {
                     onShowClickCallback.invoke(pet)
                 }
                 petName.text = pet.petName
@@ -33,7 +34,8 @@ class PetsAdapter(
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): PetsViewHolder {
-        val binding = MissingPetPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        val binding =
+            MissingPetPostBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return PetsViewHolder(binding)
     }
 
