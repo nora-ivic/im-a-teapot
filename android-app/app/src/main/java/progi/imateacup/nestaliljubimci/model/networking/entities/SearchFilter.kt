@@ -4,30 +4,30 @@ import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
 data class SearchFilter(
-    @SerialName("ime") val ime: String? = null,
-    @SerialName("vrsta") val vrsta: String? = null,
-    @SerialName("boja") val boja: String? = null,
-    @SerialName("starost") val starost: String? = null,
-    @SerialName("datumNestanka") val datumNestanka: String? = null,
-    @SerialName("opis") val description: String? = null,
-    @SerialName("lokacija") val lokacija: String? = null,
-    @SerialName("korisnickoIme") val korisnickoIme: String? = null,
-    @SerialName("imeSklonista") val imeSklonista: String? = null,
-    @SerialName("kategorijaOglasa") val kategorijaOglasa: String? = null
+    @SerialName("pet_name") val ime: String? = null,
+    @SerialName("pet_species") val vrsta: String? = null,
+    @SerialName("pet_color") val boja: String? = null,
+    @SerialName("pet_age") val starost: String? = null,
+    @SerialName("date_time_lost") val datumNestanka: String? = null,
+    @SerialName("description") val description: String? = null,
+    @SerialName("location_lost") val lokacija: String? = null,
+    @SerialName("username") val korisnickoIme: String? = null,
+    @SerialName("shelter_name") val imeSklonista: String? = null,
+    @SerialName("advert_category") val kategorijaOglasa: String? = null
 )
 
 //Extension function
 fun SearchFilter.toQueryMap(): Map<String, String> {
     val map = mutableMapOf<String, String>()
-    map["ime"] = ime ?: ""
-    map["vrsta"] = vrsta ?: ""
-    map["boja"] = boja ?: ""
-    map["starost"] = starost ?: ""
-    map["datumNestanka"] = datumNestanka ?: ""
-    map["opis"] = description ?: ""
-    map["lokacija"] = lokacija ?: ""
-    map["korisnickoIme"] = korisnickoIme ?: ""
-    map["imeSklonista"] = imeSklonista ?: ""
-    map["kategorijaOglasa"] = kategorijaOglasa ?: ""
+    map["pet_name"] = ime ?: ""
+    map["pet_species"] = vrsta ?: ""
+    map["pet_color"] = boja ?: ""
+    map["pet_age"] = starost ?: ""
+    map["date_time_lost"] = datumNestanka ?: ""
+    map["description"] = description ?: ""
+    map["location_lost"] = lokacija ?: ""
+    map["username"] = korisnickoIme ?: ""
+    map["shelter_name"] = imeSklonista ?: ""
+    map["advert_category"] = kategorijaOglasa ?: ""
     return map
 }
