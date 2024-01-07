@@ -84,3 +84,26 @@ class AdvertisementRepository:
         return (
             query.first()
         )
+
+    def is_shelter(self, user_id: int):
+        query = (
+            self.session.query(UserCustom)
+            .filter(UserCustom.id == user_id, UserCustom.is_shelter == True)
+        )
+
+        return (
+            query.first()
+        )
+
+    def edit_advert(
+            self,
+            advert_id: int,
+            user_id: int
+    ):
+        (self.session.query(Advertisement)
+         .filter(Advertisement.id == advert_id)
+         .update({Advertisement.category: 'sheltered',
+                  Advertisement.is_in_shelter: True,
+                  Advertisement.shelter_id: user_id}, synchronize_session=False))
+
+        self.session.commit()
