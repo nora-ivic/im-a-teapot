@@ -31,6 +31,25 @@ def home_page(
     return output_adverts
 
 
+@advert_router.get('/my_adverts')
+def user_adverts(
+        user_id: Annotated[int, Depends(validate_token)],
+        page: Annotated[int, Query(gt=0, le=100)] = 1,
+        page_size: Annotated[int, Query(gt=0, le=100)] = 5
+) -> List[AdvertisementOutputShort]:
+    if not user_id:
+        raise HTTPException(status_code=403, detail='Only registered users have this option!')
+
+    repo = AdvertisementRepository()
+    db_user_adverts = repo.get_user_adverts(user_id, page, page_size)
+    output_user_adverts = []
+
+    for db_user_advert in db_user_adverts:
+        output_user_adverts.append(map_to_output_advert_short(db_user_advert))
+
+    return output_user_adverts
+
+
 @advert_router.get('/{advert_id}/details')
 def details(
         advert_id: int,
