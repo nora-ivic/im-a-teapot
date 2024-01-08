@@ -162,6 +162,14 @@ class AdvertisementRepository:
         advert.is_in_shelter = True if user.is_shelter and advert_input.is_in_shelter else False
         advert.shelter_id = user.id if user.is_shelter and advert_input.is_in_shelter else None
 
+        for picture_link in advert_input.picture_links:
+            existing = self.session.query(Picture).filter(Picture.link == picture_link).first()
+            if existing:
+                continue
+            else:
+                new_picture = Picture(advert_id=advert.id, link=picture_link)
+                self.session.add(new_picture)
+
         self._save_advert(advert, pet)
         return advert
 
