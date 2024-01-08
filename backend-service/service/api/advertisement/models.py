@@ -35,7 +35,7 @@ class AdvertisementOutputFull(BaseModel):
 
 class AdvertisementInput(BaseModel):
     advert_category: AdvertisementCategory
-    pet_name: str
+    pet_name: Optional[str] = None
     pet_species: Optional[PetSpecies] = None
     pet_color: Optional[str] = None
     pet_age: Optional[int] = None

@@ -8,8 +8,9 @@ from datetime import date
 from service.api.advertisement.filters import AdvertisementFilter
 from service.api.advertisement.models import AdvertisementInput
 from service.exceptions import PermissionDeniedException, AdvertNotFoundException
+from service.repository.authorization_repo import AuthorizationRepository
 from service.repository.engine_manager import get_session
-from service.repository.mappers import Advertisement, Pet, UserCustom
+from service.repository.mappers import Advertisement, Pet, UserCustom, Picture
 from service.enums import AdvertisementCategory
 
 
@@ -50,7 +51,6 @@ class AdvertisementRepository:
         if pet:
             self.session.add(pet)
         self.session.commit()
-
 
     def get_adverts(
             self,
@@ -109,13 +109,26 @@ class AdvertisementRepository:
         self.session.add(new_pet)
         self.session.flush()
 
+        auth_repo = AuthorizationRepository(session=self.session)
+        is_shelter = auth_repo.check_is_shelter(user_id=user_id)
+
         new_advert = Advertisement(
             category=advert_input.advert_category,
             deleted=False,
             user_id=user_id,
             pet_id=new_pet.id,
-            is_in_shelter=advert_input.is_in_shelter,
+            is_in_shelter=True if is_shelter and advert_input.is_in_shelter else False,
+            shelter_id=advert_input.user_id if is_shelter and advert_input.is_in_shelter else None,
         )
+        self.session.add(new_advert)
+        self.session.flush()
+
+        for picture_link in advert_input.picture_links:
+            new_picture = Picture(
+                advert_id=new_advert.id,
+                link=picture_link,
+            )
+            self.session.add(new_picture)
 
         self._save_advert(new_advert, new_pet)
         return new_advert
@@ -123,7 +136,7 @@ class AdvertisementRepository:
     def edit_advert(self, advert_input: AdvertisementInput, advert_id: int, user_id: int):
         advert = (
             self.session.query(Advertisement)
-            .options(joinedload(Advertisement.pet_posted))
+            .options(joinedload(Advertisement.pet_posted), joinedload(Advertisement.user_posted))
             .filter(Advertisement.id == advert_id).first()
         )
         if not advert:
@@ -133,8 +146,19 @@ class AdvertisementRepository:
             raise PermissionDeniedException
 
         pet = advert.pet_posted
+        user = advert.user_posted
 
-        # TODO editing
+        pet.species = advert_input.pet_species
+        pet.name = advert_input.pet_name
+        pet.color = advert_input.pet_color
+        pet.age = advert_input.pet_age
+        pet.date_time_lost = advert_input.date_time_lost
+        pet.location_lost = advert_input.location_lost
+        pet.description = advert_input.description
+
+        advert.category = advert_input.advert_category,
+        advert.is_in_shelter = True if user.is_shelter and advert_input.is_in_shelter else False
+        advert.shelter_id = user.id if user.is_shelter and advert_input.is_in_shelter else None
 
         self._save_advert(advert, pet)
         return advert
