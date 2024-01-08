@@ -106,4 +106,9 @@ def run_migrations(database: str):
                    "                            OR (advert_id IS NOT NULL AND message_id IS NULL))"
                    ")")
 
+    cursor.execute("ALTER TABLE IF EXISTS message "
+                   "ALTER COLUMN user_id SET NOT NULL,"
+                   "ALTER COLUMN advert_id SET NOT NULL,"
+                   "DROP CONSTRAINT IF EXISTS chk_content_not_empty;")
+
     conn.commit()
