@@ -46,6 +46,7 @@ class AdvertisementRepository:
         return query
 
     def _save_advert(self, advert: Advertisement = None, pet: Pet = None):
+        print(advert)
         if advert:
             self.session.add(advert)
         if pet:
@@ -98,7 +99,7 @@ class AdvertisementRepository:
 
     def create_advert(self, advert_input: AdvertisementInput, user_id: int):
         new_pet = Pet(
-            species=advert_input.pet_species,
+            species=advert_input.pet_species.value,
             name=advert_input.pet_name,
             color=advert_input.pet_color,
             age=advert_input.pet_age,
@@ -113,7 +114,7 @@ class AdvertisementRepository:
         is_shelter = auth_repo.check_is_shelter(user_id=user_id)
 
         new_advert = Advertisement(
-            category=advert_input.advert_category,
+            category=advert_input.advert_category.value,
             deleted=False,
             user_id=user_id,
             pet_id=new_pet.id,
@@ -139,6 +140,7 @@ class AdvertisementRepository:
             .options(joinedload(Advertisement.pet_posted), joinedload(Advertisement.user_posted))
             .filter(Advertisement.id == advert_id).first()
         )
+
         if not advert:
             raise AdvertNotFoundException
 
@@ -148,7 +150,7 @@ class AdvertisementRepository:
         pet = advert.pet_posted
         user = advert.user_posted
 
-        pet.species = advert_input.pet_species
+        pet.species = advert_input.pet_species.value
         pet.name = advert_input.pet_name
         pet.color = advert_input.pet_color
         pet.age = advert_input.pet_age
@@ -156,7 +158,7 @@ class AdvertisementRepository:
         pet.location_lost = advert_input.location_lost
         pet.description = advert_input.description
 
-        advert.category = advert_input.advert_category,
+        advert.category = advert_input.advert_category.value
         advert.is_in_shelter = True if user.is_shelter and advert_input.is_in_shelter else False
         advert.shelter_id = user.id if user.is_shelter and advert_input.is_in_shelter else None
 

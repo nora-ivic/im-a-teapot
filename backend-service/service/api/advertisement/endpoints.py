@@ -47,7 +47,7 @@ def details(
 @advert_router.post('/create')
 def create_advert(
         user_id: Annotated[int, Depends(validate_token)],
-        advert_input: Depends(validate_advert_input),
+        advert_input: Annotated[AdvertisementInput, Depends(validate_advert_input)],
 ):
     repo = AdvertisementRepository()
 
@@ -59,7 +59,7 @@ def create_advert(
 def edit_advert(
         user_id: Annotated[int, Depends(validate_token)],
         advert_id: int,
-        advert_input: Depends(validate_advert_input),
+        advert_input: Annotated[AdvertisementInput, Depends(validate_advert_input)],
 ):
     repo = AdvertisementRepository()
 
