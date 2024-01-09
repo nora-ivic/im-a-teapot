@@ -15,13 +15,22 @@ class AuthorizationRepository:
     def _get_existing_user(self, username: str):
         return self.session.query(UserAuth).filter(UserAuth.username == username).first()
 
-    def _get_user_custom(self, username: str):
-        return self.session.query(UserCustom).filter(UserCustom.username == username).first()
+    def _get_user_custom(self, username: Optional[str] = None, user_id: Optional[int] = None):
+        query = self.session.query(UserCustom)
+        if username:
+            query = query.filter(UserCustom.username == username)
+        if user_id:
+            query = query.filter(UserCustom.id == user_id)
+        return query.first()
 
     def check_existing_user(self, username: str):
-        if self._get_existing_user(username):
+        if self._get_existing_user(username=username):
             return True
         return False
+
+    def check_is_shelter(self, user_id):
+        user = self._get_user_custom(user_id=user_id)
+        return user.is_shelter
 
     def save_new_user(self, user_signup: UserSignup):
         new_custom_user = UserCustom(
@@ -52,4 +61,4 @@ class AuthorizationRepository:
         if not self.pwd_context.verify(user_login.password, existing_user.password):
             raise InvalidLoginException
 
-        return self._get_user_custom(existing_user.username)
+        return self._get_user_custom(username=existing_user.username)

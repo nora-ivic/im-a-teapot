@@ -1,12 +1,16 @@
 from sqlalchemy import Date
 from sqlalchemy import desc
+from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
 from datetime import date
 
 from service.api.advertisement.filters import AdvertisementFilter
+from service.api.advertisement.models import AdvertisementInput
+from service.exceptions import PermissionDeniedException, AdvertNotFoundException
+from service.repository.authorization_repo import AuthorizationRepository
 from service.repository.engine_manager import get_session
-from service.repository.mappers import Advertisement, Pet, UserCustom
+from service.repository.mappers import Advertisement, Pet, UserCustom, Picture
 from service.enums import AdvertisementCategory
 
 
@@ -40,6 +44,13 @@ class AdvertisementRepository:
             query = query.filter(UserCustom.shelter_name.ilike(filter_.shelter_name))
 
         return query
+
+    def _save_advert(self, advert: Advertisement = None, pet: Pet = None):
+        if advert:
+            self.session.add(advert)
+        if pet:
+            self.session.add(pet)
+        self.session.commit()
 
     def get_adverts(
             self,
@@ -109,24 +120,113 @@ class AdvertisementRepository:
         )
 
     def is_shelter(self, user_id: int):
-        query = (
-            self.session.query(UserCustom)
-            .filter(UserCustom.id == user_id, UserCustom.is_shelter == True)
-        )
+        auth_repo = AuthorizationRepository(session=self.session)
+        is_shelter = auth_repo.check_is_shelter(user_id=user_id)
+        return is_shelter
 
-        return (
-            query.first()
-        )
-
-    def edit_advert(
+    def make_sheltered(
             self,
             advert_id: int,
             user_id: int
     ):
-        (self.session.query(Advertisement)
-         .filter(Advertisement.id == advert_id)
-         .update({Advertisement.category: 'sheltered',
-                  Advertisement.is_in_shelter: True,
-                  Advertisement.shelter_id: user_id}, synchronize_session=False))
+        advert = (
+            self.session.query(Advertisement)
+            .filter(Advertisement.id == advert_id)
+            .first()
+        )
 
-        self.session.commit()
+        if not advert:
+            raise AdvertNotFoundException
+
+        advert.category = 'sheltered'
+        advert.is_in_shelter = True
+        advert.shelter_id = user_id
+
+        self._save_advert(advert)
+        return advert
+
+    def create_advert(self, advert_input: AdvertisementInput, user_id: int):
+        new_pet = Pet(
+            species=advert_input.pet_species.value,
+            name=advert_input.pet_name,
+            color=advert_input.pet_color,
+            age=advert_input.pet_age,
+            date_time_lost=advert_input.date_time_lost,
+            location_lost=advert_input.location_lost,
+            description=advert_input.description,
+        )
+        self.session.add(new_pet)
+        self.session.flush()
+
+        auth_repo = AuthorizationRepository(session=self.session)
+        is_shelter = auth_repo.check_is_shelter(user_id=user_id)
+
+        new_advert = Advertisement(
+            category=advert_input.advert_category.value,
+            deleted=False,
+            user_id=user_id,
+            pet_id=new_pet.id,
+            is_in_shelter=True if is_shelter and advert_input.is_in_shelter else False,
+            shelter_id=advert_input.user_id if is_shelter and advert_input.is_in_shelter else None,
+        )
+        self.session.add(new_advert)
+        self.session.flush()
+
+        for picture_link in advert_input.picture_links:
+            new_picture = Picture(
+                advert_id=new_advert.id,
+                link=picture_link,
+            )
+            self.session.add(new_picture)
+
+        self._save_advert(new_advert, new_pet)
+        return new_advert
+
+    def edit_advert(self, advert_input: AdvertisementInput, advert_id: int, user_id: int):
+        advert = (
+            self.session.query(Advertisement)
+            .options(joinedload(Advertisement.pet_posted), joinedload(Advertisement.user_posted))
+            .filter(Advertisement.id == advert_id).first()
+        )
+
+        if not advert:
+            raise AdvertNotFoundException
+
+        if advert.user_id != user_id:
+            raise PermissionDeniedException
+
+        pet = advert.pet_posted
+        user = advert.user_posted
+
+        pet.species = advert_input.pet_species.value
+        pet.name = advert_input.pet_name
+        pet.color = advert_input.pet_color
+        pet.age = advert_input.pet_age
+        pet.date_time_lost = advert_input.date_time_lost
+        pet.location_lost = advert_input.location_lost
+        pet.description = advert_input.description
+
+        advert.category = advert_input.advert_category.value
+        advert.is_in_shelter = True if user.is_shelter and advert_input.is_in_shelter else False
+        advert.shelter_id = user.id if user.is_shelter and advert_input.is_in_shelter else None
+
+        for picture_link in advert_input.picture_links:
+            existing = self.session.query(Picture).filter(Picture.link == picture_link).first()
+            if existing:
+                continue
+            else:
+                new_picture = Picture(advert_id=advert.id, link=picture_link)
+                self.session.add(new_picture)
+
+        self._save_advert(advert, pet)
+        return advert
+
+    def delete_advert(self, advert_id: int, user_id: int):
+        advert = self.session.query(Advertisement).filter(Advertisement.id == advert_id).first()
+        if not advert:
+            raise AdvertNotFoundException
+        if advert.user_id != user_id:
+            raise PermissionDeniedException
+
+        advert.deleted = True
+        self._save_advert(advert)
