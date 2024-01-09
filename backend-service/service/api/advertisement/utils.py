@@ -17,7 +17,7 @@ def map_to_output_advert_short(db_advert: Advertisement):
         advert_category=db_advert.category,
         username=user.username,
         pet_name=pet.name if pet.name else '?',
-        picture_link=pictures[0].link if pictures[0] else None
+        picture_link=pictures[0].link if len(pictures) > 0 else None
     )
 
 

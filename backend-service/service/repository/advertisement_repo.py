@@ -81,6 +81,29 @@ class AdvertisementRepository:
             .all()
         )
 
+    def get_user_adverts(
+            self,
+            user_id: int,
+            page: int,
+            page_size: int
+    ):
+        query = (
+            self.session.query(Advertisement)
+            .options(
+                joinedload(Advertisement.user_posted),
+                joinedload(Advertisement.pet_posted),
+                joinedload(Advertisement.shelter)
+            )
+            .filter(Advertisement.deleted == False, Advertisement.user_id == user_id)
+        )
+
+        return (
+            query
+            .order_by(desc(Advertisement.date_time_adv))
+            .limit(page_size).offset((page - 1) * page_size)
+            .all()
+        )
+
     def get_advert_by_id(self, advert_id: int):
         query = (
             self.session.query(Advertisement)
