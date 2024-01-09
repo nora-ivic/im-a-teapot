@@ -31,4 +31,4 @@ def validation_exception_handler(request: Request, exc: RequestValidationError):
 
 @app.get("/health-check-status")
 def health_check():
-    return {"I'm a teapot"}
+    return "I'm a teapot"
