@@ -1,5 +1,9 @@
+import json
+
 from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Annotated, Optional, List
+
+from starlette.responses import Response
 
 from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull, AdvertisementInput
 from service.api.advertisement.filters import AdvertisementFilter, get_advert_filter
@@ -42,6 +46,24 @@ def details(
     output_advert = map_to_output_advert_full(db_advert)
 
     return output_advert
+
+
+@advert_router.post('/{advert_id}/in_shelter')
+def in_shelter(
+        advert_id: int,
+        user_id: Annotated[int, Depends(validate_token)]
+):
+    repo = AdvertisementRepository()
+
+    if not repo.is_shelter(user_id):
+        raise HTTPException(status_code=403, detail='Only shelters have this option!')
+
+    try:
+        edited_advert = repo.make_sheltered(advert_id, user_id)
+    except AdvertNotFoundException:
+        raise HTTPException(status_code=404, detail="Advert not found!")
+
+    return map_to_output_advert_full(edited_advert)
 
 
 @advert_router.post('/create')

@@ -46,7 +46,6 @@ class AdvertisementRepository:
         return query
 
     def _save_advert(self, advert: Advertisement = None, pet: Pet = None):
-        print(advert)
         if advert:
             self.session.add(advert)
         if pet:
@@ -96,6 +95,32 @@ class AdvertisementRepository:
         return (
             query.first()
         )
+
+    def is_shelter(self, user_id: int):
+        auth_repo = AuthorizationRepository(session=self.session)
+        is_shelter = auth_repo.check_is_shelter(user_id=user_id)
+        return is_shelter
+
+    def make_sheltered(
+            self,
+            advert_id: int,
+            user_id: int
+    ):
+        advert = (
+            self.session.query(Advertisement)
+            .filter(Advertisement.id == advert_id)
+            .first()
+        )
+
+        if not advert:
+            raise AdvertNotFoundException
+
+        advert.category = 'sheltered'
+        advert.is_in_shelter = True
+        advert.shelter_id = user_id
+
+        self._save_advert(advert)
+        return advert
 
     def create_advert(self, advert_input: AdvertisementInput, user_id: int):
         new_pet = Pet(
