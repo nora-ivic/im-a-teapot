@@ -27,11 +27,23 @@ class SearchFragment : Fragment() {
     private lateinit var datePicker: MaterialDatePicker<Long>
     private lateinit var sharedPreferences: SharedPreferences
     private var _binding: FragmentSearchBinding? = null
+    private lateinit var speciesTranslationMap: Map<String, String>
     private var age: Int? = null
     private val binding get() = _binding!!
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initDatePicker()
+        //ovo bi trebalo negdje drugdje stavit
+        speciesTranslationMap = mapOf(
+            "Pas" to "dog",
+            "Mačka" to "cat",
+            "Ptica" to "bird",
+            "Zec" to "rabbit",
+            "Zmija" to "snake",
+            "Gušter" to "lizard",
+            "Glodavac" to "rodent",
+            "Ostalo" to "other"
+        )
     }
 
     override fun onCreateView(
@@ -115,11 +127,11 @@ class SearchFragment : Fragment() {
 
             return SearchFilter(
                 ime = textInputEditTextIme.text.toString(),
-                vrsta = autocompleteTextVrsta.text.toString(),
+                vrsta = speciesTranslationMap[autocompleteTextVrsta.text.toString()],
                 boja = autocompleteTextBoja.text.toString(),
-                starost = age.toString(),
+                starost = age?.toString(),
                 datumNestanka = formattedDate,
-                description = textInputEditTextOpis.text.toString(),
+                description = textInputEditTextOpis.text.toString()
             )
         }
     }

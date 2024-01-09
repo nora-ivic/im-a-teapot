@@ -28,6 +28,7 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
         android:fillViewport="true">
 
         <LinearLayout
@@ -40,7 +41,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/margin_54dp"
                 android:layout_marginBottom="@dimen/margin_16dp"
                 android:text="@string/unesite_podatke_o_zeljenom_ljubimcu"
                 android:textSize="@dimen/text20sp"
@@ -117,7 +117,7 @@
                             android:layout_width="270dp"
                             android:layout_height="wrap_content"
                             android:inputType="none"
-                            app:simpleItems="@array/simple_items" />
+                            app:simpleItems="@array/species" />
 
                     </com.google.android.material.textfield.TextInputLayout>
 

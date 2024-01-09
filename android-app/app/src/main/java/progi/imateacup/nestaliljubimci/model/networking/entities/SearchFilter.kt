@@ -19,15 +19,15 @@ data class SearchFilter(
 //Extension function
 fun SearchFilter.toQueryMap(): Map<String, String> {
     val map = mutableMapOf<String, String>()
-    map["pet_name"] = ime ?: ""
-    map["pet_species"] = vrsta ?: ""
-    map["pet_color"] = boja ?: ""
-    map["pet_age"] = starost ?: ""
-    map["date_time_lost"] = datumNestanka ?: ""
-    map["description"] = description ?: ""
-    map["location_lost"] = lokacija ?: ""
-    map["username"] = korisnickoIme ?: ""
-    map["shelter_name"] = imeSklonista ?: ""
-    map["advert_category"] = kategorijaOglasa ?: ""
+    ime?.takeIf { it.isNotBlank() }?.let { map["pet_name"] = it }
+    vrsta?.takeIf { it.isNotBlank() }?.let { map["pet_species"] = it }
+    boja?.takeIf { it.isNotBlank() }?.let { map["pet_color"] = it }
+    starost?.takeIf { it.isNotBlank() }?.let { map["pet_age"] = it }
+    datumNestanka?.takeIf { it.isNotBlank() }?.let { map["date_time_lost"] = it }
+    description?.takeIf { it.isNotBlank() }?.let { map["description"] = it }
+    lokacija?.takeIf { it.isNotBlank() }?.let { map["location_lost"] = it }
+    korisnickoIme?.takeIf { it.isNotBlank() }?.let { map["username"] = it }
+    imeSklonista?.takeIf { it.isNotBlank() }?.let { map["shelter_name"] = it }
+    kategorijaOglasa?.takeIf { it.isNotBlank() }?.let { map["advert_category"] = it }
     return map
 }

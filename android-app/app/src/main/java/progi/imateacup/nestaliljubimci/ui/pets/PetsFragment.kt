@@ -22,6 +22,7 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FilterInputDialogBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
+import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.AppState
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
@@ -116,6 +117,7 @@ class PetsFragment : Fragment() {
 
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0
+                        && totalItemCount != visibleItemCount
                     ) {
                         if (isInternetAvailable(requireContext())) {
                             viewModel.getPets(
@@ -134,25 +136,25 @@ class PetsFragment : Fragment() {
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.izgubljeni -> {
-                        filterAndGetForCategory("Izgubljeni")
+                        filterAndGetForCategory(AdvertisementCategory.lost.toString())
                         currentFilter.text = getString(R.string.izgubljeni)
                         true
                     }
 
                     R.id.pronadeni -> {
-                        filterAndGetForCategory("Pronadeni")
+                        filterAndGetForCategory(AdvertisementCategory.found.toString())
                         currentFilter.text = getString(R.string.pronadeni)
                         true
                     }
 
                     R.id.prekinutoTrazenje -> {
-                        filterAndGetForCategory("PrekinutoTrazenje")
+                        filterAndGetForCategory(AdvertisementCategory.dead.toString())
                         currentFilter.text = getString(R.string.prekinutoTrazenje)
                         true
                     }
 
                     R.id.uSklonistu -> {
-                        filterAndGetForCategory("USklonistu")
+                        filterAndGetForCategory(AdvertisementCategory.sheltered.toString())
                         currentFilter.text = getString(R.string.uSklonistu)
                         true
                     }
@@ -302,3 +304,8 @@ class PetsFragment : Fragment() {
         }
     }
 }
+
+/** TODO
+ * Popravi konstantno refreshanje kod scrollanja
+ * Popravi micanje displaya za filter kod vracanja na fragment
+ */

@@ -17,9 +17,8 @@
             android:layout_width="320dp"
             android:layout_height="wrap_content"
             android:imeOptions="actionDone"
-            android:maxLines="1"
             android:inputType="text"
-            />
+            android:maxLines="1" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

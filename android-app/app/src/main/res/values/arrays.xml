@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="simple_items">
+    <string-array name="species">
         <item>Ptica</item>
         <item>Mačka</item>
         <item>Pas</item>
