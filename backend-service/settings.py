@@ -18,3 +18,5 @@ TEST_DATABASE = "lost_pets_test"
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 120
+
+PICTURE_PATH = 'service/api/pictures/media/'
