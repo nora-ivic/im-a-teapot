@@ -8,6 +8,7 @@ class AdvertisementCategory(enum.Enum):
     SHELTERED = 'sheltered'
     DEAD = 'dead'
 
+
 class PetSpecies(enum.Enum):
     BIRD = 'bird'
     CAT = 'cat'
