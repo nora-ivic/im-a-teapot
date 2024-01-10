@@ -41,11 +41,13 @@ class AdvertisementRepository:
         if filter_.username:
             query = query.filter(UserCustom.username.ilike(filter_.username))
         if filter_.shelter_name:
-            query = query.filter(
-                self.session.scalar(
-                    select(UserCustom.id).where(UserCustom.shelter_name.ilike(filter_.shelter_name))
-                ) == Advertisement.shelter_id
+            shelter_id = self.session.scalar(
+                select(UserCustom.id).where(UserCustom.shelter_name.ilike(filter_.shelter_name))
             )
+            if shelter_id:
+                query = query.filter(Advertisement.shelter_id == shelter_id)
+            else:
+                raise AdvertNotFoundException
         return query
 
     def _save_advert(self, advert: Advertisement = None, pet: Pet = None):
@@ -69,7 +71,10 @@ class AdvertisementRepository:
             .filter(Advertisement.deleted == False)
         )
         if filter_:
-            query = self._filter_query(query, filter_)
+            try:
+                query = self._filter_query(query, filter_)
+            except AdvertNotFoundException:
+                return []
 
         if not user_id:
             query = query.filter(Advertisement.category == AdvertisementCategory.LOST.value)
