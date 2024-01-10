@@ -72,7 +72,6 @@ class PetsViewModel : ViewModel() {
                 }
             }
         } else {
-            Log.d("PetsViewModel", "No internet connection")
             fetching = false
             _PetsDisplayStateLiveData.value = PetsDisplayState.ERROR
         }
