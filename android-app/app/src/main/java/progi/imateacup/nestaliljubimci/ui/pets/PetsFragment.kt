@@ -23,7 +23,8 @@ import progi.imateacup.nestaliljubimci.databinding.FilterInputDialogBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
-import progi.imateacup.nestaliljubimci.model.networking.enums.AppState
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.networking.PAGE_SIZE
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -35,7 +36,6 @@ class PetsFragment : Fragment() {
     private lateinit var usernameDialog: AlertDialog
     private lateinit var shelterDialog: AlertDialog
     private var filter: SearchFilter? = null
-    private var filterPresent = false
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
@@ -65,11 +65,9 @@ class PetsFragment : Fragment() {
         }
         initRecyclerViewAdapter()
         setLiveDataObservers()
-        if (!filterPresent) {
-            viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
-        }
         initListeners()
         MenuCompat.setGroupDividerEnabled(binding.topAppBar.menu, true)
+        binding.currentFilter.text = sharedPreferences.getString("lastFilterTitle", "")
     }
 
     private fun initListeners() {
@@ -81,11 +79,10 @@ class PetsFragment : Fragment() {
             handleMenu()
 
             ocistiFilter.setOnClickListener {
-                filterPresent = false
+                viewModel.filterPresentLiveData.value = false
                 filter = SearchFilter()
                 currentFilter.text = ""
                 filterDisplay.visibility = View.GONE
-                viewModel.getPets(isInternetAvailable(requireContext()), filter!!)
             }
 
             tryAgain.setOnClickListener {
@@ -98,6 +95,8 @@ class PetsFragment : Fragment() {
                  */
                 filterDisplay.visibility = View.VISIBLE
                 currentFilter.text = getString(R.string.mojiOglasi)
+                sharedPreferences.edit().putString("lastFilterTitle", getString(R.string.mojiOglasi))
+                    .apply()
                 true
             }
             dodajOglas.setOnClickListener {
@@ -117,7 +116,6 @@ class PetsFragment : Fragment() {
 
                     if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
                         && firstVisibleItemPosition >= 0
-                        && totalItemCount != visibleItemCount
                     ) {
                         if (isInternetAvailable(requireContext())) {
                             viewModel.getPets(
@@ -133,48 +131,49 @@ class PetsFragment : Fragment() {
 
     private fun handleMenu() {
         with(binding) {
+
+            if (accessToken == null) {
+                topAppBar.menu.removeItem(R.id.pronadeni)
+                topAppBar.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBar.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBar.menu.removeItem(R.id.uSklonistu)
+            }
+
             topAppBar.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.izgubljeni -> {
-                        filterAndGetForCategory(AdvertisementCategory.lost.toString())
-                        currentFilter.text = getString(R.string.izgubljeni)
+                        filterAndGetForCategory(AdvertisementCategory.lost.toString(), getString(R.string.izgubljeni))
                         true
                     }
 
                     R.id.pronadeni -> {
-                        filterAndGetForCategory(AdvertisementCategory.found.toString())
-                        currentFilter.text = getString(R.string.pronadeni)
+                        filterAndGetForCategory(AdvertisementCategory.found.toString(), getString(R.string.pronadeni))
                         true
                     }
 
                     R.id.prekinutoTrazenje -> {
-                        filterAndGetForCategory(AdvertisementCategory.dead.toString())
-                        currentFilter.text = getString(R.string.prekinutoTrazenje)
+                        filterAndGetForCategory(AdvertisementCategory.dead.toString(), getString(R.string.prekinutoTrazenje))
                         true
                     }
 
                     R.id.uSklonistu -> {
-                        filterAndGetForCategory(AdvertisementCategory.sheltered.toString())
-                        currentFilter.text = getString(R.string.uSklonistu)
+                        filterAndGetForCategory(AdvertisementCategory.sheltered.toString(), getString(R.string.uSklonistu))
                         true
                     }
 
                     R.id.po_ljubimcu -> {
                         val direction = PetsFragmentDirections.actionPetsFragmentToSearchFragment()
-                        filterPresent = true
                         findNavController().navigate(direction)
                         true
                     }
 
                     R.id.trazi_po_korisniku -> {
                         usernameDialog.show()
-                        filterPresent = true
                         true
                     }
 
                     R.id.trazi_po_sklonistu -> {
                         shelterDialog.show()
-                        filterPresent = true
                         true
                     }
 
@@ -184,10 +183,12 @@ class PetsFragment : Fragment() {
         }
     }
 
-    private fun filterAndGetForCategory(category: String) {
+    private fun filterAndGetForCategory(category: String, title: String? = "") {
+        binding.currentFilter.text = title
+        sharedPreferences.edit().putString("lastFilterTitle", title)
+            .apply()
         filter = SearchFilter(kategorijaOglasa = category)
-        viewModel.getPets(isInternetAvailable(requireContext()), filter!!)
-        filterPresent = true
+        viewModel.filterPresentLiveData.value = true
         binding.filterDisplay.visibility = View.VISIBLE
     }
 
@@ -201,31 +202,48 @@ class PetsFragment : Fragment() {
     }
 
     private fun setLiveDataObservers() {
-        viewModel.petsLiveData.observe(viewLifecycleOwner) { pets ->
-            if (!pets.isNullOrEmpty() && pets != adapter.getPetsList()) {
-                adapter.updateData(pets)
-            }
-        }
-        viewModel.appStateLiveData.observe(viewLifecycleOwner) { state ->
-            when (state) {
-                AppState.LOADING -> {
-                    showLoading()
-                }
-
-                AppState.SUCCESS -> {
-                    showPets()
-                }
-
-                AppState.ERROR -> {
-                    showNoPosts()
-                    Snackbar.make(
-                        binding.root,
-                        "Došlo je do pogreške prilikom dohvaćanja oglasa",
-                        Snackbar.LENGTH_LONG
-                    ).show()
+        with(viewModel) {
+            petsLiveData.observe(viewLifecycleOwner) { pets ->
+                if (!pets.isNullOrEmpty() && pets != adapter.getPetsList()) {
+                    adapter.updateData(pets)
                 }
             }
+            PetsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    PetsDisplayState.LOADING -> {
+                        showLoading()
+                    }
+
+                    PetsDisplayState.SUCCESS -> {
+                        showPets()
+                    }
+
+                    PetsDisplayState.ERROR -> {
+                        showNoPosts()
+                        Snackbar.make(
+                            binding.root,
+                            "Došlo je do pogreške prilikom dohvaćanja oglasa",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
+                    PetsDisplayState.NOPOSTS -> {
+                        showNoPosts()
+                    }
+                }
+            }
+            filterPresentLiveData.observe(viewLifecycleOwner) { filterPresentLd ->
+                if (filterPresentLd) {
+                    viewModel.getPets(isInternetAvailable(requireContext()), filter?: SearchFilter())
+                    binding.filterDisplay.visibility = View.VISIBLE
+                } else {
+                    viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
+                    binding.filterDisplay.visibility = View.GONE
+                }
+            }
+
         }
+
         val navController = findNavController()
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("filter")
             ?.observe(
@@ -233,8 +251,9 @@ class PetsFragment : Fragment() {
             ) { filterJson ->
                 Log.d("PetsFragment", "Filter: $filterJson")
                 filter = Json.decodeFromString(filterJson)
-                viewModel.getPets(isInternetAvailable(requireContext()), filter!!)
                 binding.filterDisplay.visibility = View.VISIBLE
+                binding.currentFilter.text = ""
+                viewModel.filterPresentLiveData.value = true
             }
     }
 
@@ -247,8 +266,9 @@ class PetsFragment : Fragment() {
             if (username.isNotEmpty()) {
                 filter = SearchFilter(korisnickoIme = username)
                 binding.currentFilter.text = username
-                binding.filterDisplay.visibility = View.VISIBLE
-                viewModel.getPets(isInternetAvailable(requireContext()), filter!!)
+                sharedPreferences.edit().putString("lastFilterTitle", username)
+                    .apply()
+                viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }
         }.setNegativeButton("Odustani") { dialog, _ ->
@@ -268,8 +288,9 @@ class PetsFragment : Fragment() {
             if (shelterName.isNotEmpty()) {
                 filter = SearchFilter(imeSklonista = shelterName)
                 binding.currentFilter.text = shelterName
-                binding.filterDisplay.visibility = View.VISIBLE
-                viewModel.getPets(isInternetAvailable(requireContext()), filter!!)
+                sharedPreferences.edit().putString("lastFilterTitle", shelterName)
+                    .apply()
+                viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }
         }.setNegativeButton("Odustani") { dialog, _ ->
@@ -283,29 +304,24 @@ class PetsFragment : Fragment() {
     private fun showPets() {
         with(binding) {
             recyclerView.visibility = View.VISIBLE
-            postsLoadingProgressBar.visibility = View.GONE
+            adapter.toggleLoadingSpinnerVisibility(false)
             noPostsDisplay.visibility = View.GONE
         }
     }
 
     private fun showLoading() {
         with(binding) {
-            recyclerView.visibility = View.GONE
-            postsLoadingProgressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.VISIBLE
             noPostsDisplay.visibility = View.GONE
+            adapter.toggleLoadingSpinnerVisibility(true)
         }
     }
 
     private fun showNoPosts() {
         with(binding) {
             recyclerView.visibility = View.GONE
-            postsLoadingProgressBar.visibility = View.GONE
+            adapter.toggleLoadingSpinnerVisibility(false)
             noPostsDisplay.visibility = View.VISIBLE
         }
     }
 }
-
-/** TODO
- * Popravi konstantno refreshanje kod scrollanja
- * Popravi micanje displaya za filter kod vracanja na fragment
- */

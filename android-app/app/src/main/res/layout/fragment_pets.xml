@@ -72,17 +72,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:paddingBottom="?actionBarSize"
-        android:visibility="gone"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/missing_pet_post" />
-
-    <ProgressBar
-        android:id="@+id/postsLoadingProgressBar"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        tools:visibility="gone" />
 
     <LinearLayout
         android:id="@+id/noPostsDisplay"

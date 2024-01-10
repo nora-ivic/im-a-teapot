@@ -1,5 +1,5 @@
 package progi.imateacup.nestaliljubimci.model.networking.enums
 
-enum class AppState {
-    LOADING, ERROR, SUCCESS
+enum class PetsDisplayState {
+    LOADING, ERROR, SUCCESS, NOPOSTS
 }

@@ -8,5 +8,5 @@ data class Pet(
     @SerialName("advert_category") val postCategory: String,
     @SerialName("pet_name") val petName: String,
     @SerialName("username") val ownerUsername: String,
-    @SerialName("picture_link") val imageUri: String
+    @SerialName("picture_link") val imageUri: String?
 )
