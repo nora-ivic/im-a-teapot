@@ -185,7 +185,7 @@ class AdvertisementRepository:
     def edit_advert(self, advert_input: AdvertisementInput, advert_id: int, user_id: int):
         advert = (
             self.session.query(Advertisement)
-            .options(joinedload(Advertisement.pet_posted), joinedload(Advertisement.user_posted))
+            .options(joinedload(Advertisement.user_posted))
             .filter(Advertisement.id == advert_id).first()
         )
 
@@ -195,7 +195,7 @@ class AdvertisementRepository:
         if advert.user_id != user_id:
             raise PermissionDeniedException
 
-        pet = advert.pet_posted
+        pet = self.session.query(Pet).filter(Pet.id == advert.pet_id).first()
         user = advert.user_posted
 
         pet.species = advert_input.pet_species.value

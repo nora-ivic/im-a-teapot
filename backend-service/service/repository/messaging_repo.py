@@ -1,4 +1,5 @@
 from sqlalchemy import desc
+from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
 
@@ -27,19 +28,12 @@ class MessagingRepository:
         self.session.add(new_message)
         self.session.flush()
 
-        pictures_posted = []
-
         for link in message_input.picture_links:
             new_picture = Picture(
                 message_id=new_message.id,
                 link=link
             )
             self.session.add(new_picture)
-            pictures_posted.append(new_picture)
-
-        self.session.flush()
-
-        new_message.picture_posted = pictures_posted
 
         self.session.commit()
 
