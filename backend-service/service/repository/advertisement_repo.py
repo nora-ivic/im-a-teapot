@@ -1,7 +1,7 @@
 from sqlalchemy import Date
-from sqlalchemy import desc
+from sqlalchemy import desc, select
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session, joinedload
+from sqlalchemy.orm import Session, joinedload, aliased
 from typing import Optional
 from datetime import date
 
@@ -41,8 +41,11 @@ class AdvertisementRepository:
         if filter_.username:
             query = query.filter(UserCustom.username.ilike(filter_.username))
         if filter_.shelter_name:
-            query = query.filter(UserCustom.shelter_name.ilike(filter_.shelter_name))
-
+            query = query.filter(
+                self.session.scalar(
+                    select(UserCustom.id).where(UserCustom.shelter_name.ilike(filter_.shelter_name))
+                ) == Advertisement.shelter_id
+            )
         return query
 
     def _save_advert(self, advert: Advertisement = None, pet: Pet = None):
@@ -61,11 +64,8 @@ class AdvertisementRepository:
     ):
         query = (
             self.session.query(Advertisement)
-            .options(
-                joinedload(Advertisement.user_posted),
-                joinedload(Advertisement.pet_posted),
-                joinedload(Advertisement.shelter)
-            )
+            .join(Advertisement.user_posted)
+            .join(Advertisement.pet_posted)
             .filter(Advertisement.deleted == False)
         )
         if filter_:
