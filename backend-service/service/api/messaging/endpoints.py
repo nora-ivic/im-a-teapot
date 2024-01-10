@@ -3,6 +3,7 @@ import json
 from fastapi import APIRouter, Depends, Query, HTTPException
 from typing import Annotated, Optional, List
 
+from sqlalchemy.exc import SQLAlchemyError
 from starlette.responses import Response
 
 from service.api.authorization.utils import validate_token
@@ -25,8 +26,10 @@ def add_message(
     validate_message(message_input)
 
     repo = MessagingRepository()
-
-    repo.post_message(advert_id, user_id, message_input)
+    try:
+        repo.post_message(advert_id, user_id, message_input)
+    except SQLAlchemyError:
+        raise HTTPException(status_code=404, detail="Advert not found")
 
     return Response(status_code=200, content=json.dumps({"detail": "Message successfully sent"}))
 

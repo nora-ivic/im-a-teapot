@@ -21,7 +21,13 @@ def log_in(user_login: UserLogin):
 
     token = generate_token(current_user)
 
-    return {"token": token, "is_shelter": current_user.is_shelter}
+    return {
+        "token": token,
+        "is_shelter": current_user.is_shelter,
+        "current_user_username": current_user.username,
+        "current_user_email": current_user.email,
+        "current_user_phone_number": current_user.phone_number
+    }
 
 
 @auth_router.post("/signup")
