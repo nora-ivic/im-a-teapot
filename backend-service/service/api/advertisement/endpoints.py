@@ -90,6 +90,9 @@ def create_advert(
         user_id: Annotated[int, Depends(validate_token)],
         advert_input: Annotated[AdvertisementInput, Depends(validate_advert_input)],
 ):
+    if not user_id:
+        raise HTTPException(status_code=403, detail='Only registered users have this option!')
+
     repo = AdvertisementRepository()
 
     db_advert = repo.create_advert(advert_input, user_id)
@@ -102,6 +105,9 @@ def edit_advert(
         advert_id: int,
         advert_input: Annotated[AdvertisementInput, Depends(validate_advert_input)],
 ):
+    if not user_id:
+        raise HTTPException(status_code=403, detail='Only registered users have this option!')
+
     repo = AdvertisementRepository()
 
     try:
@@ -119,6 +125,9 @@ def delete_advert(
         user_id: Annotated[int, Depends(validate_token)],
         advert_id: int,
 ):
+    if not user_id:
+        raise HTTPException(status_code=403, detail='Only registered users have this option!')
+
     repo = AdvertisementRepository()
 
     try:
