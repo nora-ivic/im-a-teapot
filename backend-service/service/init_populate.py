@@ -75,4 +75,10 @@ def init_populate(database: str):
                    "    WHERE NOT EXISTS (SELECT * FROM picture"
                    "                        WHERE advert_id = 2 AND link = 'https://images.pexels.com/photos/2261538/pexels-photo-2261538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')")
 
+    cursor.execute("DELETE FROM picture "
+                   "WHERE advert_id = 1 AND link = 'https://images.pexels.com/photos/3812207/pexels-photo-3812207.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'")
+
+    cursor.execute("DELETE FROM picture "
+                   "WHERE advert_id = 2 AND link = 'https://images.pexels.com/photos/2261538/pexels-photo-2261538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'")
+
     conn.commit()

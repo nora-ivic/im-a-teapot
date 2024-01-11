@@ -86,14 +86,13 @@ def run_migrations(database: str):
 
     cursor.execute("CREATE TABLE IF NOT EXISTS message ("
                    "id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY,"
-                   "user_id INTEGER,"
-                   "advert_id INTEGER,"
+                   "user_id INTEGER NOT NULL,"
+                   "advert_id INTEGER NOT NULL,"
                    "text TEXT,"
                    "location VARCHAR(256),"
                    "date_time_mess TIMESTAMP DEFAULT NOW()::TIMESTAMP,"
                    "FOREIGN KEY (user_id) REFERENCES user_custom(id),"
-                   "FOREIGN KEY (advert_id) REFERENCES advertisement(id),"
-                   "CONSTRAINT chk_content_not_empty CHECK (text IS NOT NULL OR location IS NOT NULL)"
+                   "FOREIGN KEY (advert_id) REFERENCES advertisement(id)"
                    ")")
 
     cursor.execute("CREATE TABLE IF NOT EXISTS picture ("
@@ -106,5 +105,10 @@ def run_migrations(database: str):
                    "CONSTRAINT chk_ids CHECK ((advert_id IS NULL AND message_id IS NOT NULL)"
                    "                            OR (advert_id IS NOT NULL AND message_id IS NULL))"
                    ")")
+
+    cursor.execute("ALTER TABLE IF EXISTS message "
+                   "ALTER COLUMN user_id SET NOT NULL,"
+                   "ALTER COLUMN advert_id SET NOT NULL,"
+                   "DROP CONSTRAINT IF EXISTS chk_content_not_empty;")
 
     conn.commit()

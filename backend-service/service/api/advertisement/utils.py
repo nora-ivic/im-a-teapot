@@ -1,6 +1,9 @@
 from typing import List
+from fastapi import HTTPException
 
-from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull
+from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull, AdvertisementInput
+from service.enums import AdvertisementCategory
+from service.repository.authorization_repo import AuthorizationRepository
 from service.repository.mappers import Advertisement, UserCustom, Pet, Picture
 
 
@@ -14,7 +17,7 @@ def map_to_output_advert_short(db_advert: Advertisement):
         advert_category=db_advert.category,
         username=user.username,
         pet_name=pet.name if pet.name else '?',
-        picture_link=pictures[0].link if pictures[0] else None
+        picture_link=pictures[0].link if len(pictures) > 0 else None
     )
 
 
@@ -42,3 +45,15 @@ def map_to_output_advert_full(db_advert: Advertisement):
         shelter_email=shelter.email if shelter else None,
         shelter_phone_number=shelter.phone_number if shelter else None
     )
+
+
+def validate_advert_input(advert_input: AdvertisementInput):
+    if not (
+            advert_input.pet_name or
+            advert_input.pet_species or
+            advert_input.description or
+            advert_input.picture_links
+    ):
+        raise HTTPException(status_code=400, detail='Please provide additional information')
+
+    return advert_input

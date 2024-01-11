@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <item name="search" type="id">@+id/search_icon</item>
+    <item name="izgubljeni" type="id" />
+    <item name="pronadeni" type="id"/>
+    <item name="pojedini_ljubimci" type="id"/>
+    <item name="trazi_po_korisniku" type="id"/>
 </resources>
