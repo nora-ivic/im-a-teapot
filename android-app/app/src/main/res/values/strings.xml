@@ -76,11 +76,13 @@
     <string name="po_ljubimcu">Po ljubimcu</string>
     <string name="pretrazi_po_korisniku">Po korisniku</string>
     <string name="pretrazi_po_sklonistu">Po skloništu</string>
-    <string name="prekinutoTrazenje">Prekinuto traženje</string>
+    <string name="prekinutoTrazenje">Potraga prekinuta</string>
     <string name="uSklonistu">U skloništu</string>
     <string name="content_description_pronadeni">Prikaži samo pronađene ljubimce</string>
     <string name="no_pets">Ne možemo pronaći nikakve nestale ljubimce</string>
     <string name="ukloni_filter">Ukloni filter</string>
     <string name="pokusaj_opet">Pokušaj opet</string>
     <string name="mojiOglasi">Moji Oglasi</string>
+    <string name="filtriranje_po_ljubimcu">Filtriranje po ljubimcu</string>
+    <string name="uginuli">Uginuli</string>
 </resources>
