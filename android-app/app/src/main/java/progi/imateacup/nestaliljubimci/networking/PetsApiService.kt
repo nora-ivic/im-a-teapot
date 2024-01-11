@@ -15,6 +15,7 @@ import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
 import retrofit2.http.Query
+import retrofit2.http.QueryMap
 
 //DEFAULT VALUES
 const val PAGE = 1
@@ -26,12 +27,13 @@ interface PetsApiService {
     suspend fun login(@Body request: LoginRequest): Response<LoginResponse>
 
     @POST("api/authorization/signup")
-    suspend fun register(@Body request: RegisterRequest) : Response<RegisterResponse>
+    suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @GET("api/advert/")
     suspend fun getPets(
         @Query("page") page: Int = PAGE,
-        @Query("page_size") items: Int = PAGE_SIZE
+        @Query("page_size") items: Int = PAGE_SIZE,
+        @QueryMap filter: Map<String, String>
     ): Response<List<Pet>>
 
     @GET("api/advert/{advert_id}/details")

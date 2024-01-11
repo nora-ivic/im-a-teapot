@@ -14,11 +14,12 @@ object ApiModule {
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    private  var accessToken: String = ""
+    private var accessToken: String = ""
 
-    fun setSessionInfo (accessToken: String){
+    fun setSessionInfo(accessToken: String) {
         this.accessToken = accessToken
     }
+
     fun initRetrofit() {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor { chain ->
