@@ -165,14 +165,23 @@ class AdvertisementRepository:
 
         auth_repo = AuthorizationRepository(session=self.session)
         is_shelter = auth_repo.check_is_shelter(user_id=user_id)
+        category = (
+            AdvertisementCategory.SHELTERED.value
+            if is_shelter and advert_input.advert_category.value == AdvertisementCategory.SHELTERED.value
+            else AdvertisementCategory.LOST.value
+        )
 
         new_advert = Advertisement(
-            category=advert_input.advert_category.value,
+            category=category,
             deleted=False,
             user_id=user_id,
             pet_id=new_pet.id,
-            is_in_shelter=True if is_shelter and advert_input.is_in_shelter else False,
-            shelter_id=advert_input.user_id if is_shelter and advert_input.is_in_shelter else None,
+            is_in_shelter=True if category == AdvertisementCategory.SHELTERED.value else False,
+            shelter_id=(
+                user_id
+                if category == AdvertisementCategory.SHELTERED.value
+                else None
+            ),
         )
         self.session.add(new_advert)
         self.session.flush()
