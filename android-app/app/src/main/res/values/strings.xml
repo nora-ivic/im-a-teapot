@@ -17,7 +17,7 @@
     <string name="username_text">Korisničko ime</string>
     <string name="last_name_error_message">Prezime treba biti kraće od 50 znakova</string>
     <string name="login_unsuccessful">Prijava neuspješna, molimo Vas pokušajte ponovno.</string>
-    <string name="no_pets_message">Nema pronađenih nestalih ljubimaca - ikona</string>
+    <string name="no_pets_image">Nema pronađenih nestalih ljubimaca - ikona</string>
     <string name="logo_text">Nestali ljubimci</string>
     <string name="cat_footprint_description">Slika mačje šape</string>
     <string name="repeat_password_text">Ponovi lozinku</string>

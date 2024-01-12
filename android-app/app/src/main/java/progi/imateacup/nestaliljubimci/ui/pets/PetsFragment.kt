@@ -167,13 +167,12 @@ class PetsFragment : Fragment() {
 
     private fun handleMenu() {
         with(binding) {
-
             if (accessToken == null) {
-                topAppBar.menu.removeItem(R.id.pronadeni)
-                topAppBar.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBar.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBar.menu.removeItem(R.id.uSklonistu)
-                topAppBar.menu.removeItem(R.id.uginuli)
+                topAppBarPets.menu.removeItem(R.id.pronadeni)
+                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBarPets.menu.removeItem(R.id.uSklonistu)
+                topAppBarPets.menu.removeItem(R.id.uginuli)
             }
 
             topAppBarPets.setOnMenuItemClickListener { menuItem ->
