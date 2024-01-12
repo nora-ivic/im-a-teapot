@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 import settings
 import jwt
 
-from service.api.authorization.models import UserSignup
+from service.api.authorization.models import UserSignup, ShelterOutput
 from service.repository.authorization_repo import AuthorizationRepository
 from service.repository.mappers import UserCustom
 from typing import Annotated
@@ -57,3 +57,13 @@ def validate_token(authentication: Annotated[str, Header()] = None):
         raise HTTPException(status_code=401, detail="Invalid token")
 
     return decoded["id"]
+
+
+def map_to_output_shelter(db_shelter: UserCustom):
+
+    return ShelterOutput(
+        username=db_shelter.username,
+        shelter_name=db_shelter.shelter_name,
+        email=db_shelter.email,
+        phone_number=db_shelter.phone_number
+    )
