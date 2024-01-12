@@ -57,6 +57,7 @@ class LoginFragment : Fragment() {
 
     private fun checkUserLoggedIn() {
         if (sharedPreferences.getString(ACCESS_TOKEN, null) != null) {
+            ApiModule.setSessionInfo(sharedPreferences.getString(ACCESS_TOKEN, "")!!)
             val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment(
                 sharedPreferences.getString(USERNAME, "")!!,
                 sharedPreferences.getString(PHONE_NUMBER, "")!!,
