@@ -107,8 +107,10 @@ class PetsFragment : Fragment() {
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter(), true)
-                filterDisplay.visibility = View.VISIBLE
+                with (viewModel) {
+                    getPets(isInternetAvailable(requireContext()), SearchFilter(), true)
+                    filterPresentLiveData.value = true
+                }
                 currentFilter.text = getString(R.string.mojiOglasi)
                 sharedPreferences.edit()
                     .putString("lastFilterTitle", getString(R.string.mojiOglasi))
@@ -245,7 +247,6 @@ class PetsFragment : Fragment() {
         filter = SearchFilter(kategorijaOglasa = category)
         viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
         viewModel.filterPresentLiveData.value = true
-        binding.filterDisplay.visibility = View.VISIBLE
     }
 
     private fun initRecyclerViewAdapter() {
@@ -303,7 +304,6 @@ class PetsFragment : Fragment() {
                 viewLifecycleOwner
             ) { filterJson ->
                 filter = Json.decodeFromString(filterJson)
-                binding.filterDisplay.visibility = View.VISIBLE
                 binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
                 viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
                 viewModel.filterPresentLiveData.value = true
