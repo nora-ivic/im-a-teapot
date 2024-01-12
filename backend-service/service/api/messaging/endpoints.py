@@ -31,7 +31,7 @@ def add_message(
     except SQLAlchemyError:
         raise HTTPException(status_code=404, detail="Advert not found")
 
-    return Response(status_code=200, content=json.dumps({"detail": "Message successfully sent"}))
+    return {'detail': 'Message successfully sent!'}
 
 
 @messages_router.get('/{advert_id}')

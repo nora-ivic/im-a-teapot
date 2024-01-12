@@ -62,8 +62,8 @@ def validate_token(authentication: Annotated[str, Header()] = None):
 def map_to_output_shelter(db_shelter: UserCustom):
 
     return ShelterOutput(
-        username=db_shelter.username,
+        shelter_username=db_shelter.username,
         shelter_name=db_shelter.shelter_name,
-        email=db_shelter.email,
-        phone_number=db_shelter.phone_number
+        shelter_email=db_shelter.email,
+        shelter_phone_number=db_shelter.phone_number
     )
