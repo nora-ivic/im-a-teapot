@@ -1,5 +1,3 @@
-from sqlalchemy import desc
-from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
 
