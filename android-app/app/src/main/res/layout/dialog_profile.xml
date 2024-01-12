@@ -66,7 +66,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:textSize="24sp"
+            android:textSize="30sp"
             android:textStyle="bold"
             tools:text="Mufle" />
 
@@ -77,19 +77,6 @@
             android:layout_gravity="center"
             android:textSize="14sp"
             tools:text="098789456" />
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/logoutButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/size16dp"
-            android:text="@string/log_out"
-            android:textAllCaps="false"
-            android:backgroundTint="@color/register_button_color"
-            android:textSize="@dimen/text16sp"
-            android:textColor="@color/white"
-            app:cornerRadius="@dimen/size40dp"
-            />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

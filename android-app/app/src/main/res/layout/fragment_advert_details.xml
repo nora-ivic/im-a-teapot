@@ -24,7 +24,6 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar_details"
             app:navigationIcon="@drawable/sharp_arrow_back"
             app:title="@string/nestali_ljubimci"
             app:titleCentered="true"

@@ -18,7 +18,6 @@ import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
-import progi.imateacup.nestaliljubimci.databinding.DialogProfileBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
@@ -36,7 +35,6 @@ class AdvertDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     private val args by navArgs<AdvertDetailsFragmentArgs>()
-    private var profileDialogClosed = true
 
     private val advertDetailsViewModel: AdvertDetailsViewModel by viewModels()
 
@@ -78,26 +76,6 @@ class AdvertDetailsFragment : Fragment() {
             topAppBarDetails.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
-            if (accessToken == null)
-                topAppBarDetails.menu.clear()
-            else
-                topAppBarDetails.setOnMenuItemClickListener { menuItem ->
-                    when (menuItem.itemId) {
-                        R.id.user_details_icon -> {
-
-                            val dialog = buildUserInfoDialog()
-                            if (profileDialogClosed) {
-                                profileDialogClosed = false
-                                dialog.show()
-                            }
-
-                            true
-                        }
-
-                        else -> false
-                    }
-                }
-
             val dialog = buildCommentDialog()
             commentButton.setOnClickListener {
                 dialog.show()
@@ -201,25 +179,6 @@ class AdvertDetailsFragment : Fragment() {
             //detailedViewModel.advertComment(userId, advertId, text, pictureId, location)
             dialog.dismiss()
         }
-        return dialog
-    }
-
-    private fun buildUserInfoDialog(): BottomSheetDialog {
-        val dialog = BottomSheetDialog(requireContext())
-        val dialogProfileBinding = DialogProfileBinding.inflate(layoutInflater)
-        dialog.setContentView(dialogProfileBinding.root)
-
-        dialog.setOnDismissListener {
-            profileDialogClosed = true
-        }
-
-        with(dialogProfileBinding) {
-
-            logoutButton.setOnClickListener {
-                dialog.dismiss()
-            }
-        }
-
         return dialog
     }
 }

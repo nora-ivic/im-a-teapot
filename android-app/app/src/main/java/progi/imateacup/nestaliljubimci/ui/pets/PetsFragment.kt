@@ -1,18 +1,17 @@
 package progi.imateacup.nestaliljubimci.ui.pets
 
+import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.Menu
-import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -25,7 +24,6 @@ import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
-import progi.imateacup.nestaliljubimci.networking.PAGE_SIZE
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -40,7 +38,11 @@ class PetsFragment : Fragment() {
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
+
+    private val args by navArgs<PetsFragmentArgs>()
+
     private val binding get() = _binding!!
+
     private val viewModel by viewModels<PetsViewModel>()
     private var profileDialogClosed = true
 
@@ -64,20 +66,31 @@ class PetsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (accessToken != null) {
-            binding.topAppBar.navigationIcon = null
+            binding.topAppBarPets.navigationIcon = null
         }
         initRecyclerViewAdapter()
         setLiveDataObservers()
         initListeners()
-        MenuCompat.setGroupDividerEnabled(binding.topAppBar.menu, true)
+        MenuCompat.setGroupDividerEnabled(binding.topAppBarPets.menu, true)
         binding.currentFilter.text = sharedPreferences.getString("lastFilterTitle", "")
     }
 
     private fun initListeners() {
         with(binding) {
-            topAppBar.setNavigationOnClickListener {
-                val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                findNavController().navigate(direction)
+            if (accessToken != null) {
+                topAppBarPets.setNavigationIcon(R.drawable.icons_user_big)
+                topAppBarPets.setNavigationOnClickListener {
+                    val dialog = buildUserInfoDialog()
+                    if (profileDialogClosed) {
+                        profileDialogClosed = false
+                        dialog.show()
+                    }
+                }
+            } else {
+                topAppBarPets.setNavigationOnClickListener {
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                    findNavController().navigate(direction)
+                }
             }
             handleMenu()
 
@@ -103,21 +116,6 @@ class PetsFragment : Fragment() {
                     .putString("lastFilterTitle", getString(R.string.mojiOglasi))
                     .apply()
                 true
-            }
-            if (accessToken != null) {
-                topAppBarPets.setNavigationIcon(R.drawable.icons_user)
-                topAppBarPets.setNavigationOnClickListener {
-                    val dialog = buildUserInfoDialog()
-                    if (profileDialogClosed) {
-                        profileDialogClosed = false
-                        dialog.show()
-                    }
-                }
-            } else {
-                topAppBarPets.setNavigationOnClickListener {
-                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                    findNavController().navigate(direction)
-                }
             }
             dodajOglas.setOnClickListener {
                 /*val direction = PetsFragmentDirections.actionPetsFragmentToHandlePostFragment()
@@ -158,10 +156,9 @@ class PetsFragment : Fragment() {
         }
 
         with(dialogProfileBinding) {
-
-            logoutButton.setOnClickListener {
-                dialog.dismiss()
-            }
+            textViewEmail.text = args.email
+            textViewUsername.text = args.username
+            textViewPhoneNumber.text = args.phoneNumber
         }
 
         return dialog
@@ -172,13 +169,13 @@ class PetsFragment : Fragment() {
         with(binding) {
 
             if (accessToken == null) {
-                topAppBar.menu.removeItem(R.id.pronadeni)
-                topAppBar.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBar.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBar.menu.removeItem(R.id.uSklonistu)
+                topAppBarPets.menu.removeItem(R.id.pronadeni)
+                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBarPets.menu.removeItem(R.id.uSklonistu)
             }
 
-            topAppBar.setOnMenuItemClickListener { menuItem ->
+            topAppBarPets.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.izgubljeni -> {
                         filterAndGetForCategory(
@@ -245,9 +242,9 @@ class PetsFragment : Fragment() {
     }
 
     private fun initRecyclerViewAdapter() {
-        adapter = PetsAdapter(emptyList()) { post ->
+        adapter = PetsAdapter(emptyList()) { advert ->
             val direction =
-                PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = post.postId)
+                PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = advert.advertId)
             findNavController().navigate(direction)
         }
         binding.recyclerView.adapter = adapter
@@ -325,22 +322,6 @@ class PetsFragment : Fragment() {
         }.setNegativeButton("Odustani") { dialog, _ ->
             dialog.dismiss()
         }.setView(R.layout.filter_input_dialog).setTitle("Unesite traženo korisničko ime").create()
-        viewModel.petsLiveData.observe(viewLifecycleOwner) { pets ->
-            if (pets != null && pets != adapter.getPetsList()) {
-                adapter.updateData(pets)
-            }
-        }
-        viewModel.getPetsSuccessLiveData.observe(viewLifecycleOwner) { success ->
-            if (!success) {
-                Snackbar.make(
-                    binding.recyclerView,
-                    getString(R.string.get_pets_failed),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-            }
-        }
-    }
-}
 
         userDialogBinding.outlineTextFieldLayout.hint = "Korisničko ime"
         usernameDialog.setView(userDialogBinding.root)

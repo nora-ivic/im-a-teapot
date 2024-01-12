@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/login_icon_with_text"
             app:title="@string/nestali_ljubimci"
             app:titleCentered="true"
@@ -60,7 +61,7 @@
                 app:backgroundTint="@color/primary_container"
                 app:icon="@drawable/baseline_clear_24"
                 app:iconTint="@color/onPrimaryContainer"
-                app:layout_anchor="@id/topAppBarLayout"
+                app:layout_anchor="@id/topAppBarPets"
                 tools:visibility="visible" />
         </LinearLayout>
 
@@ -90,7 +91,8 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/paw_exc_wide_border_640" />
+            android:src="@drawable/paw_exc_wide_border_640"
+            android:contentDescription="@string/no_pets_image" />
 
         <TextView
             android:layout_width="match_parent"
