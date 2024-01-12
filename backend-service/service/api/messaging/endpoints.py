@@ -1,10 +1,7 @@
-import json
-
 from fastapi import APIRouter, Depends, Query, HTTPException
-from typing import Annotated, Optional, List
+from typing import Annotated, List
 
 from sqlalchemy.exc import SQLAlchemyError
-from starlette.responses import Response
 
 from service.api.authorization.utils import validate_token
 from service.api.messaging.models import MessageInput, MessageOutput
@@ -31,7 +28,7 @@ def add_message(
     except SQLAlchemyError:
         raise HTTPException(status_code=404, detail="Advert not found")
 
-    return Response(status_code=200, content=json.dumps({"detail": "Message successfully sent"}))
+    return {'detail': 'Message successfully sent!'}
 
 
 @messages_router.get('/{advert_id}')

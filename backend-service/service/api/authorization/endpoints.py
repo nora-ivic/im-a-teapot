@@ -1,8 +1,9 @@
 import json
+from typing import Annotated, List
 
-from fastapi import APIRouter, HTTPException, Response
-from service.api.authorization.models import UserLogin, UserSignup
-from service.api.authorization.utils import generate_token, validate_signup
+from fastapi import APIRouter, HTTPException, Response, Depends, Query
+from service.api.authorization.models import UserLogin, UserSignup, ShelterOutput
+from service.api.authorization.utils import generate_token, validate_signup, validate_token, map_to_output_shelter
 from service.exceptions import InvalidLoginException
 from service.repository.authorization_repo import AuthorizationRepository
 
@@ -42,3 +43,19 @@ def sign_up(user_signup: UserSignup):
     repo.save_new_user(user_signup)
 
     return Response(status_code=201, content=json.dumps({"detail": "User successfully saved"}))
+
+
+@auth_router.get("/shelters")
+def get_shelters(
+        user_id: Annotated[int, Depends(validate_token)],
+        page: Annotated[int, Query(gt=0, le=100)] = 1,
+        page_size: Annotated[int, Query(gt=0, le=100)] = 5
+) -> List[ShelterOutput]:
+    repo = AuthorizationRepository()
+    db_shelters = repo.get_shelters(page, page_size)
+    output_shelters = []
+
+    for db_shelter in db_shelters:
+        output_shelters.append(map_to_output_shelter(db_shelter))
+
+    return output_shelters

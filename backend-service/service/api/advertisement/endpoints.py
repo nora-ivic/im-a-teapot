@@ -1,9 +1,5 @@
-import json
-
 from fastapi import APIRouter, Depends, Query, HTTPException
-from typing import Annotated, Optional, List
-
-from starlette.responses import Response
+from typing import Annotated, List
 
 from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull, AdvertisementInput
 from service.api.advertisement.filters import AdvertisementFilter, get_advert_filter
