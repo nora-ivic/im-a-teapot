@@ -43,7 +43,7 @@
                 <item
                     android:id="@+id/trazi_po_sklonistu"
                     android:contentDescription="@string/pretrazi_po_sklonistu"
-                    android:title="@string/pretrazi_po_sklonistu" />
+                    android:title="@string/pretrazi_po_sklonistu"/>
             </menu>
         </item>
     </group>

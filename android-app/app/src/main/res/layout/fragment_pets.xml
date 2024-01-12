@@ -8,14 +8,14 @@
     android:backgroundTint="@color/surface">
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/topAppBarLayout"
+        android:id="@+id/appBarLayoutPets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/surface_container"
         android:paddingTop="5dp">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/topAppBarPets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
@@ -61,7 +61,7 @@
                 app:backgroundTint="@color/primary_container"
                 app:icon="@drawable/baseline_clear_24"
                 app:iconTint="@color/onPrimaryContainer"
-                app:layout_anchor="@id/topAppBarLayout"
+                app:layout_anchor="@id/topAppBarPets"
                 tools:visibility="visible" />
         </LinearLayout>
 
@@ -71,6 +71,8 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/surface"
+        android:backgroundTint="@color/surface"
         android:paddingBottom="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
         tools:listitem="@layout/missing_pet_post" />
@@ -89,7 +91,8 @@
             android:layout_width="250dp"
             android:layout_height="250dp"
             android:layout_gravity="center_vertical|center_horizontal"
-            android:src="@drawable/paw_exc_wide_border_640" />
+            android:src="@drawable/paw_exc_wide_border_640"
+            android:contentDescription="@string/no_pets_image" />
 
         <TextView
             android:layout_width="match_parent"

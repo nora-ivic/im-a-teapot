@@ -51,6 +51,18 @@
         <action
             android:id="@+id/actionPetsFragmentToSearchFragment"
             app:destination="@id/searchFragment" />
+        <argument
+            android:name="username"
+            android:defaultValue="Korisničko ime"
+            app:argType="string" />
+        <argument
+            android:name="phoneNumber"
+            android:defaultValue="Broj telefona"
+            app:argType="string" />
+        <argument
+            android:name="email"
+            android:defaultValue="E-mail"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"

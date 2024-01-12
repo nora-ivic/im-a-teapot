@@ -7,7 +7,6 @@ import android.os.Environment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -32,6 +31,7 @@ class AdvertDetailsFragment : Fragment() {
 
     private var accessToken: String? = null
     private var _binding: FragmentAdvertDetailsBinding? = null
+
     private val binding get() = _binding!!
 
     private val args by navArgs<AdvertDetailsFragmentArgs>()
@@ -48,6 +48,7 @@ class AdvertDetailsFragment : Fragment() {
 
         advertDetailsViewModel.setImageDir(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES))
     }
+
     private fun handleApiRequests() {
         advertDetailsViewModel.getAdvertDetails(args.advertId)
         //advertDetailsViewModel.getComments(args.advertId)
@@ -71,20 +72,14 @@ class AdvertDetailsFragment : Fragment() {
     }
 
     private fun init() {
-        with(requireActivity() as AppCompatActivity) {
-            with(binding) {
-                val dialog = buildDialog()
-                commentButton.setOnClickListener {
-                    dialog.show()
-                }
-                setSupportActionBar(toolAppBar)
-                toolAppBar.setNavigationOnClickListener {
-                    findNavController().popBackStack()
-                }
+        with(binding) {
+            topAppBarDetails.setNavigationOnClickListener {
+                findNavController().popBackStack()
             }
-
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setDisplayShowHomeEnabled(true)
+            val dialog = buildCommentDialog()
+            commentButton.setOnClickListener {
+                dialog.show()
+            }
         }
         initRecyclerViewAdapter()
         displayAdvertDetails()
@@ -171,7 +166,7 @@ class AdvertDetailsFragment : Fragment() {
         }
     }
 
-    private fun buildDialog(): BottomSheetDialog {
+    private fun buildCommentDialog(): BottomSheetDialog {
         val dialog = BottomSheetDialog(requireContext())
         val dialogAddCommentBinding = DialogAddCommentBinding.inflate(layoutInflater)
         dialog.setContentView(dialogAddCommentBinding.root)
@@ -186,5 +181,4 @@ class AdvertDetailsFragment : Fragment() {
         }
         return dialog
     }
-
 }

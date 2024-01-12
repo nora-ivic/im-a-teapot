@@ -8,12 +8,16 @@
     <string name="shelter_name_text">Naziv skloništa</string>
     <string name="register_text">Registriraj se</string>
     <string name="nestali_ljubimci">Nestali ljubimci</string>
+    <string name="profile">Detalji profila</string>
     <string name="message_text">Kako biste nastavili, molimo Vas prijavite se</string>
     <string name="login_text">Prijava</string>
     <string name="guest_text">Nastavi kao gost</string>
+    <string name="user_icon">Korisnička ikona</string>
+    <string name="log_out">Odjavi se</string>
     <string name="username_text">Korisničko ime</string>
     <string name="last_name_error_message">Prezime treba biti kraće od 50 znakova</string>
     <string name="login_unsuccessful">Prijava neuspješna, molimo Vas pokušajte ponovno.</string>
+    <string name="no_pets_image">Nema pronađenih nestalih ljubimaca - ikona</string>
     <string name="logo_text">Nestali ljubimci</string>
     <string name="cat_footprint_description">Slika mačje šape</string>
     <string name="repeat_password_text">Ponovi lozinku</string>
@@ -60,6 +64,7 @@
     <string name="dodaj_oglas">Dodaj oglas</string>
     <string name="closeButtonImageDescription">Gumb za izlaženje</string>
     <string name="get_pets_failed">Neuspješno dohvaćanje oglasa</string>
+    <string name="content_description_user_icon">Prikaži korisničke detalje</string>
     <string name="izgubljeni">Izgubljeni</string>
     <string name="content_description_izgubljeni">Prikaži samo izgubljene ljubimce</string>
     <string name="pretrazi_ljubimce">Pretraži ljubimce</string>
