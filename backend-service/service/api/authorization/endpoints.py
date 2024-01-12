@@ -2,7 +2,7 @@ import json
 from typing import Annotated, List
 
 from fastapi import APIRouter, HTTPException, Response, Depends, Query
-from service.api.authorization.models import UserLogin, UserSignup
+from service.api.authorization.models import UserLogin, UserSignup, ShelterOutput
 from service.api.authorization.utils import generate_token, validate_signup, validate_token
 from service.exceptions import InvalidLoginException
 from service.repository.authorization_repo import AuthorizationRepository
@@ -49,4 +49,6 @@ def get_shelters(
         user_id: Annotated[int, Depends(validate_token)],
         page: Annotated[int, Query(gt=0, le=100)] = 1,
         page_size: Annotated[int, Query(gt=0, le=100)] = 5
-) -> List[ShelterOutput]
+) -> List[ShelterOutput]:
+    repo = AuthorizationRepository()
+    db_shelters = repo.get_shelters(page, page_size)
