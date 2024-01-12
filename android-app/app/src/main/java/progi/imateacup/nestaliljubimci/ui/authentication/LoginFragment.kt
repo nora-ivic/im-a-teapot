@@ -78,8 +78,8 @@ class LoginFragment : Fragment() {
                     val direction =
                         LoginFragmentDirections.actionLoginFragmentToPetsFragment(
                             loginResponseData.username!!,
-                            loginResponseData.email!!,
-                            loginResponseData.phoneNumber!!
+                            loginResponseData.phoneNumber!!,
+                            loginResponseData.email!!
                         )
                     findNavController().navigate(direction)
                 }
