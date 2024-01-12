@@ -18,6 +18,10 @@
             android:id="@+id/uSklonistu"
             android:contentDescription="@string/uSklonistu"
             android:title="@string/uSklonistu" />
+        <item
+            android:id="@+id/uginuli"
+            android:contentDescription="@string/uginuli"
+            android:title="@string/uginuli"/>
     </group>
 
     <group android:id="@+id/search_group">

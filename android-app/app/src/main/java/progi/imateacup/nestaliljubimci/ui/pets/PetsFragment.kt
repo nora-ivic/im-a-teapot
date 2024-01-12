@@ -169,10 +169,11 @@ class PetsFragment : Fragment() {
         with(binding) {
 
             if (accessToken == null) {
-                topAppBarPets.menu.removeItem(R.id.pronadeni)
-                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBarPets.menu.removeItem(R.id.uSklonistu)
+                topAppBar.menu.removeItem(R.id.pronadeni)
+                topAppBar.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBar.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBar.menu.removeItem(R.id.uSklonistu)
+                topAppBar.menu.removeItem(R.id.uginuli)
             }
 
             topAppBarPets.setOnMenuItemClickListener { menuItem ->
@@ -205,6 +206,14 @@ class PetsFragment : Fragment() {
                         filterAndGetForCategory(
                             AdvertisementCategory.sheltered.toString(),
                             getString(R.string.uSklonistu)
+                        )
+                        true
+                    }
+
+                    R.id.uginuli -> {
+                        filterAndGetForCategory(
+                            AdvertisementCategory.dead.toString(),
+                            getString(R.string.uginuli)
                         )
                         true
                     }
@@ -298,7 +307,7 @@ class PetsFragment : Fragment() {
             ) { filterJson ->
                 filter = Json.decodeFromString(filterJson)
                 binding.filterDisplay.visibility = View.VISIBLE
-                binding.currentFilter.text = ""
+                binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
                 viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
                 viewModel.filterPresentLiveData.value = true
             }
