@@ -95,7 +95,7 @@ class PetsFragment : Fragment() {
             handleMenu()
 
             ocistiFilter.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
+                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter(), false)
                 viewModel.filterPresentLiveData.value = false
                 filter = SearchFilter()
                 currentFilter.text = ""
@@ -103,13 +103,11 @@ class PetsFragment : Fragment() {
             }
 
             tryAgain.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
-                /** TODO
-                 * Dohvati moje ljubimce
-                 */
+                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter(), true)
                 filterDisplay.visibility = View.VISIBLE
                 currentFilter.text = getString(R.string.mojiOglasi)
                 sharedPreferences.edit()
@@ -137,7 +135,8 @@ class PetsFragment : Fragment() {
                         if (isInternetAvailable(requireContext())) {
                             viewModel.getPets(
                                 isInternetAvailable(requireContext()),
-                                filter ?: SearchFilter()
+                                filter ?: SearchFilter(),
+                                false
                             )
                         }
                     }
@@ -244,7 +243,7 @@ class PetsFragment : Fragment() {
         sharedPreferences.edit().putString("lastFilterTitle", title)
             .apply()
         filter = SearchFilter(kategorijaOglasa = category)
-        viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+        viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
         viewModel.filterPresentLiveData.value = true
         binding.filterDisplay.visibility = View.VISIBLE
     }
@@ -296,7 +295,6 @@ class PetsFragment : Fragment() {
                     binding.filterDisplay.visibility = View.GONE
                 }
             }
-
         }
 
         val navController = findNavController()
@@ -307,7 +305,7 @@ class PetsFragment : Fragment() {
                 filter = Json.decodeFromString(filterJson)
                 binding.filterDisplay.visibility = View.VISIBLE
                 binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
                 viewModel.filterPresentLiveData.value = true
             }
     }
@@ -323,7 +321,7 @@ class PetsFragment : Fragment() {
                 binding.currentFilter.text = username
                 sharedPreferences.edit().putString("lastFilterTitle", username)
                     .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
                 viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }
@@ -346,7 +344,7 @@ class PetsFragment : Fragment() {
                 binding.currentFilter.text = shelterName
                 sharedPreferences.edit().putString("lastFilterTitle", shelterName)
                     .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
                 viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }

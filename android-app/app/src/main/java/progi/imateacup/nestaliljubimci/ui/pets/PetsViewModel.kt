@@ -27,7 +27,7 @@ class PetsViewModel : ViewModel() {
     private val _PetsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
     val PetsDisplayStateLiveData: LiveData<PetsDisplayState> = _PetsDisplayStateLiveData
 
-    fun getPets(networkAvailable: Boolean, filter: SearchFilter) {
+    fun getPets(networkAvailable: Boolean, filter: SearchFilter, getMyPets: Boolean) {
         Log.d("PetsViewModel", "Getting pets")
         if (networkAvailable) {
             if (fetching) {
@@ -46,8 +46,11 @@ class PetsViewModel : ViewModel() {
 
             viewModelScope.launch {
                 try {
-                    Log.d("PetsViewModel", "In try block")
-                    val newPosts = sendGetPetsRequest(filter)
+                    val newPosts = if (getMyPets) {
+                        sendGetMyPetsRequest()
+                    } else {
+                        sendGetPetsRequest(filter)
+                    }
                     if (_petsLiveData.value == null) {
                         _petsLiveData.value = listOf<Pet>()
                     }
@@ -77,8 +80,17 @@ class PetsViewModel : ViewModel() {
         }
     }
 
+    private suspend fun sendGetMyPetsRequest(): List<Pet>? {
+        val response = ApiModule.retrofit.getMyPets(page = page)
+
+        if (!response.isSuccessful) {
+            throw IOException("Failed to get my missing pets adds")
+        } else {
+            return response.body()
+        }
+    }
+
     private suspend fun sendGetPetsRequest(filter: SearchFilter): List<Pet>? {
-        Log.d("PetsViewModel", "Sending request for page $page")
         val response = ApiModule.retrofit.getPets(page = page, filter = filter.toQueryMap())
 
         if (!response.isSuccessful) {
