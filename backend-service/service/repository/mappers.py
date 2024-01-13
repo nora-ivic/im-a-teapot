@@ -39,7 +39,7 @@ class UserCustom(Base):
 class UserAuth(Base):
     __tablename__ = "user_auth"
 
-    username: Mapped[str] = mapped_column(ForeignKey("user_custom.id"), primary_key=True)
+    username: Mapped[str] = mapped_column(ForeignKey("user_custom.username"), primary_key=True)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
 
     user_info: Mapped["UserCustom"] = relationship(back_populates="login_info", foreign_keys=[username])
