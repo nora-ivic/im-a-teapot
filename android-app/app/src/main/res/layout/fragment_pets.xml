@@ -1,40 +1,116 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools">
+    android:background="@color/surface"
+    android:backgroundTint="@color/surface">
 
     <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutPets"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:backgroundTint="@color/surface_container"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp">
+        android:paddingTop="5dp">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBar"
+            android:id="@+id/topAppBarPets"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minHeight="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
             app:navigationIcon="@drawable/login_icon_with_text"
             app:title="@string/nestali_ljubimci"
-            app:titleTextColor="@color/black"
             app:titleCentered="true"
-            app:menu="@menu/top_app_bar"
-            />
+            app:titleTextColor="@color/black" />
+
+        <LinearLayout
+            android:id="@+id/filterDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/surfaceVariant"
+            android:backgroundTint="@color/surfaceVariant"
+            android:orientation="horizontal"
+            android:padding="4dp"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <TextView
+                android:id="@+id/currentFilter"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="@dimen/margin_16dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text20sp"
+                tools:text="U skloništu" />
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/ocistiFilter"
+                android:layout_width="wrap_content"
+                android:layout_height="32dp"
+                android:layout_gravity="center_vertical"
+                android:layout_marginVertical="2dp"
+                android:layout_marginEnd="@dimen/margin_8dp"
+                android:text="@string/ukloni_filter"
+                android:textAllCaps="false"
+                android:textColor="@color/onPrimaryContainer"
+                app:backgroundTint="@color/primary_container"
+                app:icon="@drawable/baseline_clear_24"
+                app:iconTint="@color/onPrimaryContainer"
+                app:layout_anchor="@id/topAppBarPets"
+                tools:visibility="visible" />
+        </LinearLayout>
+
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/surface"
+        android:backgroundTint="@color/surface"
         android:paddingBottom="?actionBarSize"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"
-        android:backgroundTint="@color/surface"
-        android:background="@color/surface"
-        tools:listitem="@layout/missing_pet_post"/>
+        tools:listitem="@layout/missing_pet_post" />
+
+    <LinearLayout
+        android:id="@+id/noPostsDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginVertical="?actionBarSize"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:src="@drawable/paw_exc_wide_border_640"
+            android:contentDescription="@string/no_pets_image" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_pets"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text24sp" />
+
+        <Button
+            android:id="@+id/tryAgain"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_8dp"
+            android:text="@string/pokusaj_opet"
+            android:textColor="@color/black" />
+    </LinearLayout>
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottomAppBar"
@@ -42,23 +118,20 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        app:layout_anchor="@+id/recyclerView"
-        app:layout_anchorGravity="bottom|center"
         android:backgroundTint="@color/surface_container"
-        app:menu="@menu/bottom_app_bar"
-        />
+        app:layout_anchorGravity="bottom|center"
+        app:menu="@menu/bottom_app_bar" />
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/dodaj_oglas"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:text="@string/dodaj_oglas"
+        android:textAllCaps="false"
+        android:textColor="@color/onPrimaryContainer"
+        app:backgroundTint="@color/primary_container"
         app:icon="@drawable/pen"
         app:iconTint="@color/onPrimaryContainer"
-        android:text="@string/dodaj_oglas"
-        android:textColor="@color/onPrimaryContainer"
-        android:textAllCaps="false"
-        app:layout_anchor="@id/bottomAppBar"
-        app:backgroundTint="@color/primary_container"
-        />
+        app:layout_anchor="@id/bottomAppBar" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

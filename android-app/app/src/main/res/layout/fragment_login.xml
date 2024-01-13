@@ -129,7 +129,7 @@
             android:text="@string/login_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondary_container"
+            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/passwordFieldLayout" />
@@ -145,7 +145,7 @@
             android:text="@string/guest_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondary_container"
+            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/loginButton" />
@@ -157,7 +157,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/register_button"
+            android:background="@drawable/button_secondary"
             android:text="@string/register_text"
             android:textColor="@color/surface"
             android:textSize="@dimen/text16sp"

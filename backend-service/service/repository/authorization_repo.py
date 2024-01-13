@@ -62,3 +62,20 @@ class AuthorizationRepository:
             raise InvalidLoginException
 
         return self._get_user_custom(username=existing_user.username)
+
+    def get_shelters(
+            self,
+            page: int,
+            page_size: int
+    ):
+        query = (
+            self.session.query(UserCustom)
+            .filter(UserCustom.is_shelter == True)
+        )
+
+        return (
+            query
+            .order_by(UserCustom.shelter_name)
+            .limit(page_size).offset((page - 1) * page_size)
+            .all()
+        )

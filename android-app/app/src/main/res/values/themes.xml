@@ -1,10 +1,10 @@
 <resources>
     <!-- Base application theme. -->
-    <style name="Theme.NestaliLjubimci" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.NestaliLjubimci.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryVariant">@color/colorPrimaryVariant</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/colorSecondary</item>
         <item name="colorSecondaryVariant">@color/colorSecondary</item>
@@ -12,5 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
+        <item name="popupMenuBackground">@drawable/custom_popup_background</item>
     </style>
 </resources>

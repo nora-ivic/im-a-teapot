@@ -2,8 +2,6 @@ from typing import List
 from fastapi import HTTPException
 
 from service.api.advertisement.models import AdvertisementOutputShort, AdvertisementOutputFull, AdvertisementInput
-from service.enums import AdvertisementCategory
-from service.repository.authorization_repo import AuthorizationRepository
 from service.repository.mappers import Advertisement, UserCustom, Pet, Picture
 
 

@@ -1,9 +1,7 @@
 from sqlalchemy import Date
 from sqlalchemy import desc, select
-from sqlalchemy.exc import IntegrityError
-from sqlalchemy.orm import Session, joinedload, aliased
+from sqlalchemy.orm import Session, joinedload
 from typing import Optional
-from datetime import date
 
 from service.api.advertisement.filters import AdvertisementFilter
 from service.api.advertisement.models import AdvertisementInput
