@@ -22,6 +22,9 @@ class LoginFragment : Fragment() {
 
     companion object {
         const val ACCESS_TOKEN = "ACCESS_TOKEN"
+        const val USERNAME = "USERNAME"
+        const val EMAIL = "EMAIL"
+        const val PHONE_NUMBER = "PHONE_NUMBER"
     }
 
     private var _binding: FragmentLoginBinding? = null
@@ -33,9 +36,7 @@ class LoginFragment : Fragment() {
         super.onCreate(savedInstanceState)
         sharedPreferences =
             requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.edit {
-            putString(ACCESS_TOKEN, null)
-        }
+        checkUserLoggedIn()
         ApiModule.initRetrofit()
     }
 
@@ -52,6 +53,18 @@ class LoginFragment : Fragment() {
         setAccessTokenObserver()
         setOnLoginResultAction()
         initListeners()
+    }
+
+    private fun checkUserLoggedIn() {
+        if (sharedPreferences.getString(ACCESS_TOKEN, null) != null) {
+            ApiModule.setSessionInfo(sharedPreferences.getString(ACCESS_TOKEN, "")!!)
+            val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment(
+                sharedPreferences.getString(USERNAME, "")!!,
+                sharedPreferences.getString(PHONE_NUMBER, "")!!,
+                sharedPreferences.getString(EMAIL, "")!!
+            )
+            findNavController().navigate(direction)
+        }
     }
 
     private fun setAccessTokenObserver() {
@@ -75,6 +88,12 @@ class LoginFragment : Fragment() {
             }
             loginResponseLiveData.observe(viewLifecycleOwner) { loginResponseData ->
                 if (loginResponseData.username != null && loginResponseData.email != null && loginResponseData.phoneNumber != null) {
+                    sharedPreferences.edit {
+                        putString(USERNAME, loginResponseData.username)
+                        putString(EMAIL, loginResponseData.email)
+                        putString(PHONE_NUMBER, loginResponseData.phoneNumber)
+
+                    }
                     val direction =
                         LoginFragmentDirections.actionLoginFragmentToPetsFragment(
                             loginResponseData.username!!,

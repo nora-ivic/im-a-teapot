@@ -331,12 +331,15 @@ class PetsFragment : Fragment() {
             ) { filterJson ->
                 filter = Json.decodeFromString(filterJson)
                 binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
+                sharedPreferences.edit().putString("lastFilterTitle", getString(R.string.filtriranje_po_ljubimcu))
+                    .apply()
                 viewModel.getPets(
                     isInternetAvailable(requireContext()),
                     filter ?: SearchFilter(),
                     displayMyPets
                 )
                 viewModel.filterPresentLiveData.value = true
+                navController.currentBackStackEntry?.savedStateHandle?.remove<String>("filter")
             }
     }
 
