@@ -12,6 +12,7 @@ import progi.imateacup.nestaliljubimci.model.networking.entities.toQueryMap
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.networking.ApiModule
+import retrofit2.Response
 
 class PetsViewModel : ViewModel() {
     private var page = 0
@@ -28,16 +29,18 @@ class PetsViewModel : ViewModel() {
     private val _PetsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
     val PetsDisplayStateLiveData: LiveData<PetsDisplayState> = _PetsDisplayStateLiveData
 
-    fun getPets(networkAvailable: Boolean, filter: SearchFilter, getMyPets: Boolean) {
+    fun getPets(networkAvailable: Boolean, filter: SearchFilter, getMyPets: Boolean, reset: Boolean) {
         Log.d("PetsViewModel", "Getting pets")
         if (networkAvailable) {
             if (fetching) {
                 Log.d("PetsViewModel", "Already fetching")
                 return
             }
-            if (lastFilter != filter || lastGetMyPets != getMyPets) {
-                Log.d("PetsViewModel", "Filter changed")
+
+            if (lastFilter != filter || lastGetMyPets != getMyPets || reset) {
+                Log.d("PetsViewModel", "Reset")
                 lastFilter = filter
+                lastGetMyPets = getMyPets
                 page = 0
                 _petsLiveData.value = null
             }
@@ -58,11 +61,11 @@ class PetsViewModel : ViewModel() {
                     val oldPosts = _petsLiveData.value
                     if (!newPosts.isNullOrEmpty()) {
                         _petsLiveData.value = oldPosts!! + newPosts
-                        _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
-
+                        _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
                     } else {
+                        page--
                         if (oldPosts!!.isNotEmpty()) {
-                            _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                            _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
                         } else {
                             _PetsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
                         }
@@ -71,13 +74,13 @@ class PetsViewModel : ViewModel() {
                 } catch (err: Exception) {
                     Log.d("PetsViewModel", "Failed to get pets: ${err.message}")
                     Log.d("PetsViewModel", err.stackTraceToString())
-                    _PetsDisplayStateLiveData.value = PetsDisplayState.ERROR
+                    _PetsDisplayStateLiveData.value = PetsDisplayState.ERRORGET
                     fetching = false
                 }
             }
         } else {
             fetching = false
-            _PetsDisplayStateLiveData.value = PetsDisplayState.ERROR
+            _PetsDisplayStateLiveData.value = PetsDisplayState.ERRORGET
         }
     }
 
@@ -99,5 +102,29 @@ class PetsViewModel : ViewModel() {
         } else {
             return response.body()
         }
+    }
+
+    fun deleteAdvert(advertId: Int, networkAvailable: Boolean) {
+        if (networkAvailable) {
+            viewModelScope.launch {
+                try {
+                    sendDeleteRequest(advertId)
+                    _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESSDELETE
+                } catch (err: Exception) {
+                    _PetsDisplayStateLiveData.value = PetsDisplayState.ERRORDELETE
+                }
+            }
+        } else {
+            _PetsDisplayStateLiveData.value = PetsDisplayState.ERRORDELETE
+        }
+    }
+
+    private suspend fun sendDeleteRequest(advertId: Int): Response<Unit> {
+        val response = ApiModule.retrofit.deleteAdvert(advertId)
+
+        if (!response.isSuccessful) {
+            throw IOException("Failed to delete advert")
+        }
+        return response
     }
 }
