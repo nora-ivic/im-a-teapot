@@ -1,5 +1,5 @@
 import pytest
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, close_all_sessions
 
 import settings
 from sqlalchemy_utils import create_database, drop_database
@@ -35,16 +35,16 @@ def pytest_unconfigure():
     )
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture(scope="function")
 def test_session():
     EngineManager.set_database(settings.TEST_DATABASE)
-    Base.metadata.create_all(EngineManager.get_engine())
+    engine = EngineManager.get_engine()
+    Base.metadata.create_all(engine)
 
-    test_session_mold = sessionmaker(bind=EngineManager.get_engine())
+    test_session_mold = sessionmaker(bind=engine, expire_on_commit=False)
     test_session = test_session_mold()
     yield test_session
 
-    test_session.rollback()
-    test_session.close()
-    Base.metadata.drop_all(EngineManager.get_engine())
+    close_all_sessions()
+    Base.metadata.drop_all(engine)
     EngineManager.unset_database()
