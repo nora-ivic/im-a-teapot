@@ -24,6 +24,7 @@ import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -45,6 +46,7 @@ class PetsFragment : Fragment() {
 
     private val viewModel by viewModels<PetsViewModel>()
     private var profileDialogClosed = true
+    private var displayMyPets = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -95,7 +97,14 @@ class PetsFragment : Fragment() {
             handleMenu()
 
             ocistiFilter.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter(), false)
+                if (displayMyPets == true) {
+                    displayMyPets = false
+                }
+                viewModel.getPets(
+                    isInternetAvailable(requireContext()),
+                    SearchFilter(),
+                    displayMyPets
+                )
                 viewModel.filterPresentLiveData.value = false
                 filter = SearchFilter()
                 currentFilter.text = ""
@@ -103,12 +112,17 @@ class PetsFragment : Fragment() {
             }
 
             tryAgain.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
+                viewModel.getPets(
+                    isInternetAvailable(requireContext()),
+                    filter ?: SearchFilter(),
+                    displayMyPets
+                )
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
-                with (viewModel) {
-                    getPets(isInternetAvailable(requireContext()), SearchFilter(), true)
+                displayMyPets = true
+                with(viewModel) {
+                    getPets(isInternetAvailable(requireContext()), SearchFilter(), displayMyPets)
                     filterPresentLiveData.value = true
                 }
                 currentFilter.text = getString(R.string.mojiOglasi)
@@ -245,7 +259,11 @@ class PetsFragment : Fragment() {
         sharedPreferences.edit().putString("lastFilterTitle", title)
             .apply()
         filter = SearchFilter(kategorijaOglasa = category)
-        viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
+        viewModel.getPets(
+            isInternetAvailable(requireContext()),
+            filter ?: SearchFilter(),
+            displayMyPets
+        )
         viewModel.filterPresentLiveData.value = true
     }
 
@@ -261,8 +279,16 @@ class PetsFragment : Fragment() {
     private fun setLiveDataObservers() {
         with(viewModel) {
             petsLiveData.observe(viewLifecycleOwner) { pets ->
-                if (!pets.isNullOrEmpty() && pets != adapter.getPetsList()) {
-                    adapter.updateData(pets)
+                if (!pets.isNullOrEmpty()) {
+                    if (pets != adapter.getPetsList()) {
+                        if (displayMyPets) {
+
+                        } else {
+                            adapter.updateData(pets)
+                        }
+                    }
+                } else {
+                    adapter.updateData(listOf<Pet>())
                 }
             }
             PetsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
@@ -305,7 +331,11 @@ class PetsFragment : Fragment() {
             ) { filterJson ->
                 filter = Json.decodeFromString(filterJson)
                 binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
+                viewModel.getPets(
+                    isInternetAvailable(requireContext()),
+                    filter ?: SearchFilter(),
+                    displayMyPets
+                )
                 viewModel.filterPresentLiveData.value = true
             }
     }
@@ -321,7 +351,11 @@ class PetsFragment : Fragment() {
                 binding.currentFilter.text = username
                 sharedPreferences.edit().putString("lastFilterTitle", username)
                     .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
+                viewModel.getPets(
+                    isInternetAvailable(requireContext()),
+                    filter ?: SearchFilter(),
+                    displayMyPets
+                )
                 viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }
@@ -344,7 +378,11 @@ class PetsFragment : Fragment() {
                 binding.currentFilter.text = shelterName
                 sharedPreferences.edit().putString("lastFilterTitle", shelterName)
                     .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter(), false)
+                viewModel.getPets(
+                    isInternetAvailable(requireContext()),
+                    filter ?: SearchFilter(),
+                    displayMyPets
+                )
                 viewModel.filterPresentLiveData.value = true
                 dialog.dismiss()
             }

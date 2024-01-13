@@ -17,6 +17,7 @@ class PetsViewModel : ViewModel() {
     private var page = 0
     private var fetching = false
     private var lastFilter: SearchFilter? = null
+    private var lastGetMyPets = false
 
     //used so that the filter display survives configuration changes
     val filterPresentLiveData = MutableLiveData<Boolean>()
@@ -34,7 +35,7 @@ class PetsViewModel : ViewModel() {
                 Log.d("PetsViewModel", "Already fetching")
                 return
             }
-            if (lastFilter != filter) {
+            if (lastFilter != filter || lastGetMyPets != getMyPets) {
                 Log.d("PetsViewModel", "Filter changed")
                 lastFilter = filter
                 page = 0
