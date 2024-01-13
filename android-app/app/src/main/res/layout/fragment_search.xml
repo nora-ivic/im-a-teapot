@@ -89,14 +89,17 @@
                         android:hint="@string/ime"
                         app:boxBackgroundColor="@color/surface_container_highest"
                         app:layout_constraintStart_toEndOf="@+id/paw"
-                        app:layout_constraintTop_toTopOf="parent">
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/textInputEditTextIme"
                             android:layout_width="270dp"
                             android:layout_height="wrap_content"
                             android:imeOptions="actionDone"
-                            android:maxLines="1" />
+                            android:inputType="text"
+                            android:maxLines="1"
+                            />
 
                     </com.google.android.material.textfield.TextInputLayout>
 
