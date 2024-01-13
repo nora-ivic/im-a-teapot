@@ -36,10 +36,9 @@ class PetsAdapter(
                 is MissingPetPostBinding -> {
                     with(binding) {
                         if (showingMyPets) {
-                            advertMenu.visibility = View.VISIBLE
-                            advertMenu.bringToFront()
-
-                            advertMenu.setOnClickListener {
+                            menuCard.visibility = View.VISIBLE
+                            menuCard.bringToFront()
+                            menuCard.setOnClickListener {
                                 val popupMenu = PopupMenu(
                                     itemView.context,
                                     advertMenu
@@ -52,17 +51,19 @@ class PetsAdapter(
                                             onEditPostClickCallback.invoke(pet!!)
                                             true
                                         }
+
                                         R.id.delete_advert -> {
                                             onDeletePostClickCallback.invoke(pet!!)
                                             true
                                         }
+
                                         else -> false
                                     }
                                 }
                                 popupMenu.show()
                             }
                         } else {
-                            advertMenu.visibility = View.GONE
+                            menuCard.visibility = View.GONE
                         }
 
                         petPostCard.setOnClickListener {
@@ -72,7 +73,7 @@ class PetsAdapter(
                         OwnerUsername.text = pet.ownerUsername
 
                         Glide.with(itemView.context).load(pet.imageUri)
-                            .placeholder(R.drawable.white_background)
+                            .placeholder(R.drawable.placeholder_image)
                             .listener(MyRequestListener(loadingSpinner)).into(petImage)
                     }
                 }
@@ -133,7 +134,15 @@ class PetsAdapter(
     fun updateData(newPetPosts: List<Pet>, showingMyPets: Boolean = false) {
         this.showingMyPets = showingMyPets
         pets = newPetPosts
-        notifyDataSetChanged()
+
+        val handler = Handler(Looper.getMainLooper())
+        handler.post {
+            try {
+                notifyDataSetChanged()
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+        }
     }
 
     fun getPetsList(): List<Pet> {

@@ -35,7 +35,6 @@ class PetsFragment : Fragment() {
     private lateinit var adapter: PetsAdapter
     private lateinit var usernameDialog: AlertDialog
     private lateinit var shelterDialog: AlertDialog
-    private var filter: SearchFilter? = null
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
@@ -46,7 +45,6 @@ class PetsFragment : Fragment() {
 
     private val viewModel by viewModels<PetsViewModel>()
     private var profileDialogClosed = true
-    private var displayMyPets = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,7 +99,7 @@ class PetsFragment : Fragment() {
             }
 
             tryAgain.setOnClickListener {
-                getPets(filter, displayMyPets, null)
+                getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null)
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
@@ -117,7 +115,6 @@ class PetsFragment : Fragment() {
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
@@ -127,8 +124,8 @@ class PetsFragment : Fragment() {
                     ) {
                         if (isInternetAvailable(requireContext())) {
                             getPets(
-                                filter,
-                                displayMyPets,
+                                viewModel.filterLiveData.value,
+                                viewModel.fetchMyPetsLiveData.value?: false,
                                 null
                             )
                         }
@@ -273,10 +270,10 @@ class PetsFragment : Fragment() {
             petsLiveData.observe(viewLifecycleOwner) { pets ->
                 if (!pets.isNullOrEmpty()) {
                     if (pets != adapter.getPetsList()) {
-                        adapter.updateData(pets, displayMyPets)
+                        adapter.updateData(pets, viewModel.fetchMyPetsLiveData.value?: false)
                     }
                 } else {
-                    adapter.updateData(listOf<Pet>(), displayMyPets)
+                    adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value?: false)
                 }
             }
             PetsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
@@ -303,7 +300,7 @@ class PetsFragment : Fragment() {
                             "Oglas je uspješno obrisan",
                             Snackbar.LENGTH_LONG
                         ).show()
-                        getPets(filter, displayMyPets, null, true)
+                        getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null, true)
                     }
                     PetsDisplayState.ERRORDELETE -> {
                         Snackbar.make(
@@ -374,8 +371,8 @@ class PetsFragment : Fragment() {
     }
     private fun getPets(newFilter: SearchFilter?, gettingMyPets: Boolean, filterDisplayText: String?, reset: Boolean = false) {
         //filter has to be set to null if clear so that the live data gets updated below
-        filter = newFilter
-        displayMyPets = gettingMyPets
+        viewModel.filterLiveData.value = newFilter
+        viewModel.fetchMyPetsLiveData.value = gettingMyPets
         if (filterDisplayText != null) {
             binding.currentFilter.text = filterDisplayText
             sharedPreferences.edit().putString("lastFilterTitle", filterDisplayText)
@@ -383,11 +380,11 @@ class PetsFragment : Fragment() {
         }
         viewModel.getPets(
             isInternetAvailable(requireContext()),
-            filter ?: SearchFilter(),
-            displayMyPets,
+            viewModel.filterLiveData.value ?: SearchFilter(),
+            viewModel.fetchMyPetsLiveData.value?: false,
             reset
         )
-        viewModel.filterPresentLiveData.value = (filter != null || displayMyPets)
+        viewModel.filterPresentLiveData.value = (viewModel.filterLiveData.value != null || viewModel.fetchMyPetsLiveData.value?: false)
     }
 
     private fun showPets() {

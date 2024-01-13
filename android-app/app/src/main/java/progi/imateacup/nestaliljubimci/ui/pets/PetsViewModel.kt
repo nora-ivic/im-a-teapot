@@ -20,8 +20,10 @@ class PetsViewModel : ViewModel() {
     private var lastFilter: SearchFilter? = null
     private var lastGetMyPets = false
 
-    //used so that the filter display survives configuration changes
+    //used so that the filter survives configuration changes
     val filterPresentLiveData = MutableLiveData<Boolean>()
+    val filterLiveData = MutableLiveData<SearchFilter?>()
+    val fetchMyPetsLiveData = MutableLiveData<Boolean>()
 
     private val _petsLiveData = MutableLiveData<List<Pet>?>()
     val petsLiveData: LiveData<List<Pet>?> = _petsLiveData
