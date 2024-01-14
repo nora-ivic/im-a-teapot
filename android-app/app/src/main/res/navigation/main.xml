@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     app:startDestination="@id/loginFragment">
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment"
@@ -35,6 +35,9 @@
             android:name="advertId"
             android:defaultValue="-1"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_advertDetailsView_to_mapFragment"
+            app:destination="@id/mapFragment" />
     </fragment>
     <fragment
         android:id="@+id/petsFragment"
@@ -68,4 +71,9 @@
         android:id="@+id/searchFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.search.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/mapFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.map.MapFragment"
+        android:label="fragment_map"
+        tools:layout="@layout/fragment_map" />
 </navigation>

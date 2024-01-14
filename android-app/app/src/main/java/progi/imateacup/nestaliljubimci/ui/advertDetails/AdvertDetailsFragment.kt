@@ -16,6 +16,7 @@ import android.widget.FrameLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -36,6 +37,7 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
+import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -105,7 +107,7 @@ class AdvertDetailsFragment : Fragment() {
                 dialog.show()
             }
         }
-
+        observeCoordinates()
         initRecyclerViews()
         displayAdvertDetails()
         displayImages()
@@ -168,6 +170,16 @@ class AdvertDetailsFragment : Fragment() {
                 }
             }
         }
+    }
+
+    private fun observeCoordinates() {
+        val navController = findNavController()
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("coordinates")
+            ?.observe(
+                viewLifecycleOwner
+            ) { coordinates ->
+                Log.d("AdvertDetails", "Coordinates: $coordinates")
+            }
     }
 
     private fun setAdvertDisplayValues(advert: Advert) {
@@ -238,6 +250,15 @@ class AdvertDetailsFragment : Fragment() {
 
         dialogAddCommentBinding.addImageButton.setOnClickListener {
             showAddPictureAlertDialog()
+        }
+
+        dialogAddCommentBinding.addLocationButton.setOnClickListener {
+            /**
+             * save data to shared preferences
+             */
+            dialog.dismiss()
+            val direction = AdvertDetailsFragmentDirections.actionAdvertDetailsViewToMapFragment()
+            findNavController().navigate(direction)
         }
 
         dialogAddCommentBinding.closeButton.setOnClickListener {
