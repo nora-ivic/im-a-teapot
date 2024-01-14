@@ -150,7 +150,7 @@ class AdvertisementRepository:
 
     def create_advert(self, advert_input: AdvertisementInput, user_id: int):
         new_pet = Pet(
-            species=advert_input.pet_species.value,
+            species=advert_input.pet_species.value if advert_input.pet_species else None,
             name=advert_input.pet_name,
             color=advert_input.pet_color,
             age=advert_input.pet_age,
@@ -210,7 +210,7 @@ class AdvertisementRepository:
         pet = self.session.query(Pet).filter(Pet.id == advert.pet_id).first()
         user = advert.user_posted
 
-        pet.species = advert_input.pet_species.value
+        pet.species = advert_input.pet_species.value if advert_input.pet_species else None
         pet.name = advert_input.pet_name
         pet.color = advert_input.pet_color
         pet.age = advert_input.pet_age

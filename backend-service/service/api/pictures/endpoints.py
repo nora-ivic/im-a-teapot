@@ -10,7 +10,9 @@ picture_router = APIRouter()
 def upload(file: UploadFile = File(...)):
     try:
         contents = file.file.read()
-        path = settings.PICTURE_PATH + str(uuid.uuid4())
+        picture_uuid = uuid.uuid4()
+        path = settings.PICTURE_FOLDER + str(picture_uuid)
+        link = settings.PICTURE_PATH + str(picture_uuid)
         with open(path, 'wb') as f:
             f.write(contents)
     except Exception:
@@ -18,4 +20,4 @@ def upload(file: UploadFile = File(...)):
     finally:
         file.file.close()
 
-    return {"link": path}
+    return {"link": link}
