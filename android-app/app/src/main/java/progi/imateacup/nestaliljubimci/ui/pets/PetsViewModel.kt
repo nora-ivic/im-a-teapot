@@ -24,8 +24,8 @@ class PetsViewModel : ViewModel() {
     private val _petsLiveData = MutableLiveData<List<Pet>?>()
     val petsLiveData: LiveData<List<Pet>?> = _petsLiveData
 
-    private val _PetsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
-    val PetsDisplayStateLiveData: LiveData<PetsDisplayState> = _PetsDisplayStateLiveData
+    private val _petsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
+    val petsDisplayStateLiveData: LiveData<PetsDisplayState> = _petsDisplayStateLiveData
 
     fun getPets(networkAvailable: Boolean, filter: SearchFilter) {
         Log.d("PetsViewModel", "Getting pets")
@@ -40,7 +40,7 @@ class PetsViewModel : ViewModel() {
                 page = 0
                 _petsLiveData.value = null
             }
-            _PetsDisplayStateLiveData.value = PetsDisplayState.LOADING
+            _petsDisplayStateLiveData.value = PetsDisplayState.LOADING
             fetching = true
             page++
 
@@ -54,26 +54,26 @@ class PetsViewModel : ViewModel() {
                     val oldPosts = _petsLiveData.value
                     if (!newPosts.isNullOrEmpty()) {
                         _petsLiveData.value = oldPosts!! + newPosts
-                        _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                        _petsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
 
                     } else {
                         if (oldPosts!!.isNotEmpty()) {
-                            _PetsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                            _petsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
                         } else {
-                            _PetsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
+                            _petsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
                         }
                     }
                     fetching = false
                 } catch (err: Exception) {
                     Log.d("PetsViewModel", "Failed to get pets: ${err.message}")
                     Log.d("PetsViewModel", err.stackTraceToString())
-                    _PetsDisplayStateLiveData.value = PetsDisplayState.ERROR
+                    _petsDisplayStateLiveData.value = PetsDisplayState.ERROR
                     fetching = false
                 }
             }
         } else {
             fetching = false
-            _PetsDisplayStateLiveData.value = PetsDisplayState.ERROR
+            _petsDisplayStateLiveData.value = PetsDisplayState.ERROR
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 import java.io.File
@@ -27,6 +28,12 @@ class AdvertDetailsViewModel : ViewModel() {
     private val _advertFetchSuccessLiveData = MutableLiveData<Boolean>()
     val advertFetchSuccessLiveData: LiveData<Boolean> = _advertFetchSuccessLiveData
 
+    private val _commentsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
+    val commentsDisplayStateLiveData: LiveData<PetsDisplayState> = _commentsDisplayStateLiveData
+
+    private var fetching = false
+    private var page = 0
+
     private var imageDir: File? = null
     fun getAdvertDetails(advertId: Int) {
         viewModelScope.launch {
@@ -39,6 +46,7 @@ class AdvertDetailsViewModel : ViewModel() {
             }
         }
     }
+
     private suspend fun fetchAdvertDetails(advertId: Int): Advert? {
         val response = ApiModule.retrofit.getAdvertDetails(advertId = advertId)
 
@@ -48,36 +56,59 @@ class AdvertDetailsViewModel : ViewModel() {
             return response.body()
     }
 
-    private fun getComments(advertId: Int) {
+    fun getComments(advertId: Int) {
+        if (fetching) {
+            return
+        }
+        _commentsDisplayStateLiveData.value = PetsDisplayState.LOADING
+        fetching = true
+        page++
+
         viewModelScope.launch {
             try {
-                val comments = fetchComments(advertId)
-                _commentsLiveData.value = comments
+                val newComments = fetchComments(advertId)
+                if (_commentsLiveData.value == null) {
+                    _commentsLiveData.value = listOf()
+                }
+                val oldComments = _commentsLiveData.value
+                if (!newComments.isNullOrEmpty()) {
+                    _commentsLiveData.value = oldComments!! + newComments
+                    _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+
+                } else {
+                    if (oldComments!!.isNotEmpty()) {
+                        _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                    } else {
+                        _commentsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
+                    }
+                }
+                fetching = false
             } catch (err: Exception) {
-                Log.e("EXCEPTION", err.toString())
+                _commentsDisplayStateLiveData.value = PetsDisplayState.ERROR
+                fetching = false
             }
         }
     }
 
-    private suspend fun fetchComments(advertId: Int): List<Comment> {
-        val result = ApiModule.retrofit.getComments(advertId = advertId, page  = 1, items = 5)
+    private suspend fun fetchComments(advertId: Int): List<Comment>? {
+        val result = ApiModule.retrofit.getComments(advertId = advertId, page = page, items = 5)
         if (!result.isSuccessful) {
             throw IOException("Unable to get comments")
+        } else {
+            return result.body()
         }
-        return result.body()!!.comments
     }
 
     fun advertComment(
-        userId: Int,
         advertId: Int,
         text: String,
-        pictureId: Int,
+        pictureLinks: List<String>,
         location: String
     ) {
         viewModelScope.launch {
             try {
                 _commentAddedLiveData.value =
-                    postComment(userId, advertId, text, pictureId, location)
+                    postComment(advertId, text, pictureLinks, location)
 
             } catch (err: Exception) {
                 Log.e("EXCEPTION", err.toString())
@@ -87,26 +118,22 @@ class AdvertDetailsViewModel : ViewModel() {
     }
 
     private suspend fun postComment(
-        userId: Int,
         advertId: Int,
         text: String,
-        pictureId: Int,
+        pictureLinks: List<String>,
         location: String
     ): Boolean {
         val response = ApiModule.retrofit.addComment(
+            advertId = advertId,
             request = AddCommentRequest(
-                userId = userId,
-                advertId = advertId,
                 text = text,
-                pictureId = pictureId,
+                pictureLinks = pictureLinks,
                 location = location
             )
         )
         if (!response.isSuccessful) {
             throw IOException("Cannot add comment")
         }
-        //since the response was successful the network must be available
-        getComments(advertId)
         getAdvertDetails(advertId)
         return true
     }
@@ -114,4 +141,6 @@ class AdvertDetailsViewModel : ViewModel() {
     fun setImageDir(imageDir: File?) {
         this.imageDir = imageDir
     }
+
+
 }

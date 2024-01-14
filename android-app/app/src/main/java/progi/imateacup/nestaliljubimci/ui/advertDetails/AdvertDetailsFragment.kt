@@ -1,27 +1,43 @@
 package progi.imateacup.nestaliljubimci.ui.advertDetails
 
+import android.app.AlertDialog
 import android.content.Context
+import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.snackbar.Snackbar
 import org.threeten.bp.LocalDateTime
 import org.threeten.bp.format.DateTimeFormatter
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
+import com.google.android.material.snackbar.Snackbar
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
+import progi.imateacup.nestaliljubimci.util.FileUtil
+import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
+import progi.imateacup.nestaliljubimci.util.isInternetAvailable
+import java.io.File
 
 class AdvertDetailsFragment : Fragment() {
 
@@ -34,9 +50,15 @@ class AdvertDetailsFragment : Fragment() {
 
     private val binding get() = _binding!!
 
+    private var file: File? = null
+    private lateinit var snapAnImage: ActivityResultLauncher<Uri>
+    private lateinit var pickAnImage: ActivityResultLauncher<PickVisualMediaRequest>
+    private lateinit var imageUri: Uri
+
     private val args by navArgs<AdvertDetailsFragmentArgs>()
 
     private val advertDetailsViewModel: AdvertDetailsViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,13 +67,14 @@ class AdvertDetailsFragment : Fragment() {
         accessToken = sharedPreferences.getString(LoginFragment.ACCESS_TOKEN, null)
 
         handleApiRequests()
+        handleAddImage()
 
         advertDetailsViewModel.setImageDir(context?.getExternalFilesDir(Environment.DIRECTORY_PICTURES))
     }
 
     private fun handleApiRequests() {
         advertDetailsViewModel.getAdvertDetails(args.advertId)
-        //advertDetailsViewModel.getComments(args.advertId)
+        advertDetailsViewModel.getComments(args.advertId)
     }
 
     override fun onCreateView(
@@ -81,10 +104,50 @@ class AdvertDetailsFragment : Fragment() {
                 dialog.show()
             }
         }
-        initRecyclerViewAdapter()
+        initRecyclerViews()
         displayAdvertDetails()
         displayImages()
-        //displayComments()
+        displayComments()
+    }
+
+    private fun displayComments() {
+        with(advertDetailsViewModel) {
+            commentsLiveData.observe(viewLifecycleOwner) { comments ->
+                if (!comments.isNullOrEmpty() && comments != commentsAdapter.getCommentList()) {
+                    commentsAdapter.updateData(comments)
+                }
+            }
+            commentsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    PetsDisplayState.LOADING -> {
+                        showLoading()
+                    }
+
+                    PetsDisplayState.SUCCESS -> {
+                        showComments()
+                    }
+
+                    PetsDisplayState.ERROR -> {
+                        showNoPosts()
+                        Snackbar.make(
+                            binding.root,
+                            "Došlo je do pogreške prilikom dohvaćanja komentara",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
+                    PetsDisplayState.NOPOSTS -> {
+                        showNoPosts()
+                    }
+                }
+            }
+            advertDetailsViewModel.commentAddedLiveData.observe(viewLifecycleOwner) { commentAdded ->
+                if (!commentAdded) {
+                    Snackbar.make(binding.root, R.string.comment_post_fail, Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+        }
     }
 
     private fun displayAdvertDetails() {
@@ -109,6 +172,7 @@ class AdvertDetailsFragment : Fragment() {
         val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
         val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")
         with(binding) {
+            petStatusValue.text = advert.category.toString()
             petSpeciesValue.text =
                 if (advert.petSpecies != null) advert.petSpecies.toString() else "Nepoznato"
             petNameValue.text = advert.petName ?: "Nepoznato"
@@ -125,37 +189,34 @@ class AdvertDetailsFragment : Fragment() {
         }
     }
 
-    private fun displayComments() {
+    private fun initRecyclerViews() {
         with(binding) {
+            imagesAdapter = ImagesAdapter(emptyList())
+            imageRecycler.adapter = imagesAdapter
 
-            advertDetailsViewModel.commentsLiveData.observe(viewLifecycleOwner) { comments ->
-                if (!comments.isNullOrEmpty()) {
-                    commentsAdapter.updateData(comments)
-                    if (noCommentsMessage.isVisible) {
-                        commentRecyclerView.isVisible = true
-                        noCommentsMessage.isVisible = false
+            commentsAdapter = CommentsAdapter(emptyList())
+            commentRecyclerView.adapter = commentsAdapter
+
+            val layoutManager = LinearLayoutManager(context)
+            commentRecyclerView.layoutManager = layoutManager
+            commentRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+
+                    val visibleItemCount = layoutManager.childCount
+                    val totalItemCount = layoutManager.itemCount
+                    val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                    if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount
+                        && firstVisibleItemPosition >= 0
+                    ) {
+                        if (isInternetAvailable(requireContext())) {
+                            advertDetailsViewModel.getComments(args.advertId)
+                        }
                     }
-                } else {
-                    commentRecyclerView.isVisible = false
-                    noCommentsMessage.isVisible = true
                 }
-            }
-            advertDetailsViewModel.commentAddedLiveData.observe(viewLifecycleOwner) { reviewAdded ->
-                if (!reviewAdded) {
-                    Snackbar.make(binding.root, R.string.comment_post_fail, Snackbar.LENGTH_SHORT)
-                        .show()
-                }
-            }
-
+            })
         }
-    }
-
-    private fun initRecyclerViewAdapter() {
-        imagesAdapter = ImagesAdapter(emptyList())
-        binding.imageRecycler.adapter = imagesAdapter
-
-        commentsAdapter = CommentsAdapter(emptyList())
-        binding.commentRecyclerView.adapter = commentsAdapter
     }
 
     private fun displayImages() {
@@ -167,18 +228,115 @@ class AdvertDetailsFragment : Fragment() {
     }
 
     private fun buildCommentDialog(): BottomSheetDialog {
+
         val dialog = BottomSheetDialog(requireContext())
         val dialogAddCommentBinding = DialogAddCommentBinding.inflate(layoutInflater)
         dialog.setContentView(dialogAddCommentBinding.root)
+
+        dialogAddCommentBinding.addImageButton.setOnClickListener {
+            showAddPictureAlertDialog()
+        }
 
         dialogAddCommentBinding.closeButton.setOnClickListener {
             dialog.dismiss()
         }
 
         dialogAddCommentBinding.submitButton.setOnClickListener {
-            //detailedViewModel.advertComment(userId, advertId, text, pictureId, location)
+            advertDetailsViewModel.advertComment(
+                advertId = args.advertId,
+                text = dialogAddCommentBinding.messageInput.text.toString(),
+                pictureLinks = emptyList(),
+                location = ""
+            )
             dialog.dismiss()
         }
+
         return dialog
+
+    }
+
+    private fun showAddPictureAlertDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.select_method)
+            .setMessage(R.string.picture_change_instruction)
+            .setPositiveButton(R.string.camera) { _: DialogInterface, _: Int -> takeANewProfilePicture() }
+            .setNegativeButton(R.string.gallery) { _: DialogInterface, _: Int -> chooseProfilePictureFromGallery() }
+            .show()
+    }
+
+    private fun takeANewProfilePicture() {
+        file = FileUtil.createImageFile(requireContext())
+        if (file != null) {
+            imageUri = FileProvider.getUriForFile(
+                requireContext(),
+                "${requireContext().applicationContext.packageName}.provider",
+                file!!
+            )
+        }
+        if (this::imageUri.isInitialized) {
+            snapAnImage.launch(imageUri)
+        }
+    }
+
+    private fun chooseProfilePictureFromGallery() {
+        pickAnImage.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+    }
+
+    private fun handleAddImage() {
+        snapAnImageRegister()
+        pickAnImageRegister()
+    }
+
+    private fun snapAnImageRegister() {
+
+        snapAnImage =
+            registerForActivityResult(ActivityResultContracts.TakePicture()) { pictureSaved ->
+                if (pictureSaved) {
+                    uploadImage()
+                } else {
+                    Log.e("SavePicture", "Picture not saved")
+                }
+            }
+    }
+
+    private fun pickAnImageRegister() {
+        pickAnImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
+            if (uri != null) {
+                val path = getRealPathFromURI(uri, requireContext())
+                Log.i("PATH", path.toString())
+                val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
+                requireContext().contentResolver.takePersistableUriPermission(uri, flag)
+                uploadImage()
+            }
+        }
+    }
+
+
+    private fun uploadImage() {
+        // advertDetailsViewModel.uploadImage(imageUri.toFile())
+    }
+
+    private fun showComments() {
+        with(binding) {
+            commentRecyclerView.visibility = View.VISIBLE
+            commentsAdapter.toggleLoadingSpinnerVisibility(false)
+            noCommentsMessage.visibility = View.GONE
+        }
+    }
+
+    private fun showLoading() {
+        with(binding) {
+            commentRecyclerView.visibility = View.VISIBLE
+            commentsAdapter.toggleLoadingSpinnerVisibility(true)
+            noCommentsMessage.visibility = View.GONE
+        }
+    }
+
+    private fun showNoPosts() {
+        with(binding) {
+            commentRecyclerView.visibility = View.GONE
+            commentsAdapter.toggleLoadingSpinnerVisibility(false)
+            noCommentsMessage.visibility = View.VISIBLE
+        }
     }
 }

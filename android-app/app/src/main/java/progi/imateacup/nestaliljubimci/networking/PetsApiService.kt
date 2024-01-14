@@ -1,5 +1,6 @@
 package progi.imateacup.nestaliljubimci.networking
 
+import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
@@ -7,7 +8,6 @@ import progi.imateacup.nestaliljubimci.model.networking.response.LoginResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.RegisterResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.ListCommentsResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
 import retrofit2.http.Body
@@ -41,15 +41,16 @@ interface PetsApiService {
         @Path("advert_id") advertId: Int,
     ): Response<Advert>
 
-    @GET("api/messages/{advert_id}/fetch")
+    @GET("api/messages/{advert_id}")
     suspend fun getComments(
         @Path("advert_id") advertId: Int,
         @Query("page") page: Int = PAGE,
         @Query("page_size") items: Int = PAGE_SIZE,
-    ): Response<ListCommentsResponse>
+    ): Response<List<Comment>>
 
-    @POST("/comment")
+    @POST("api/messages/{advert_id}/add")
     suspend fun addComment(
+        @Path("advert_id") advertId: Int,
         @Body request: AddCommentRequest
     ): Response<AddCommentResponse>
 }

@@ -9,6 +9,16 @@
     android:padding="8dp"
     android:clipToPadding="false">
 
+    <View
+        android:id="@+id/borderLine"
+        android:layout_width="match_parent"
+        android:layout_height="6dp"
+        android:background="@color/colorPrimaryVariant"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/profilePicture"
         android:layout_width="36dp"
@@ -22,7 +32,7 @@
         app:shapeAppearanceOverlay="@style/CornerSize50Percent"/>
 
     <TextView
-        android:id="@+id/profileName"
+        android:id="@+id/username"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
@@ -35,7 +45,7 @@
         />
 
     <TextView
-        android:id="@+id/reviewComment"
+        android:id="@+id/commentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/size16dp"

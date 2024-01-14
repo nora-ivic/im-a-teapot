@@ -120,12 +120,11 @@
 
         <Button
             android:id="@+id/loginButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/CustomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="60dp"
-            android:background="@drawable/login_button"
             android:text="@string/login_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
@@ -136,12 +135,11 @@
 
         <Button
             android:id="@+id/guestButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/CustomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/guest_button"
             android:text="@string/guest_text"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
@@ -152,12 +150,11 @@
 
         <Button
             android:id="@+id/registrationButton"
-            style="@style/Widget.Material3.Button.OutlinedButton"
+            style="@style/CustomButtonStyle"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/button_secondary"
             android:text="@string/register_text"
             android:textColor="@color/surface"
             android:textSize="@dimen/text16sp"
