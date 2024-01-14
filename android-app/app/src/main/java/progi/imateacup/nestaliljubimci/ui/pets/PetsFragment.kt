@@ -4,7 +4,6 @@ import android.app.AlertDialog
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +24,7 @@ import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -35,7 +35,6 @@ class PetsFragment : Fragment() {
     private lateinit var adapter: PetsAdapter
     private lateinit var usernameDialog: AlertDialog
     private lateinit var shelterDialog: AlertDialog
-    private var filter: SearchFilter? = null
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
@@ -66,9 +65,7 @@ class PetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (accessToken != null) {
-            binding.topAppBarPets.navigationIcon = null
-        }
+        handleDifferentUsersDisplay()
         initRecyclerViewAdapter()
         setLiveDataObservers()
         initListeners()
@@ -76,10 +73,26 @@ class PetsFragment : Fragment() {
         binding.currentFilter.text = sharedPreferences.getString("lastFilterTitle", "")
     }
 
-    private fun initListeners() {
-        with(binding) {
-            if (accessToken != null) {
+    private fun handleDifferentUsersDisplay() {
+        with (binding) {
+            if (accessToken == null) {
+                topAppBarPets.menu.removeItem(R.id.pronadeni)
+                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBarPets.menu.removeItem(R.id.uSklonistu)
+                topAppBarPets.menu.removeItem(R.id.uginuli)
+
+                topAppBarPets.setNavigationOnClickListener {
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                    findNavController().navigate(direction)
+                }
+
+                bottomAppBar.visibility = View.GONE
+                addPost.visibility = View.GONE
+
+            } else {
                 topAppBarPets.setNavigationIcon(R.drawable.icons_user_big)
+
                 topAppBarPets.setNavigationOnClickListener {
                     val dialog = buildUserInfoDialog()
                     if (profileDialogClosed) {
@@ -87,38 +100,27 @@ class PetsFragment : Fragment() {
                         dialog.show()
                     }
                 }
-            } else {
-                topAppBarPets.setNavigationOnClickListener {
-                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                    findNavController().navigate(direction)
-                }
             }
+        }
+    }
+
+    private fun initListeners() {
+        with(binding) {
             handleMenu()
 
             ocistiFilter.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), SearchFilter())
-                viewModel.filterPresentLiveData.value = false
-                filter = SearchFilter()
-                currentFilter.text = ""
-                filterDisplay.visibility = View.GONE
+                getPets(null, false, "", true)
             }
 
             tryAgain.setOnClickListener {
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
+                getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null)
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
-                /** TODO
-                 * Dohvati moje ljubimce
-                 */
-                filterDisplay.visibility = View.VISIBLE
-                currentFilter.text = getString(R.string.mojiOglasi)
-                sharedPreferences.edit()
-                    .putString("lastFilterTitle", getString(R.string.mojiOglasi))
-                    .apply()
+                getPets(null, true, getString(R.string.mojiOglasi))
                 true
             }
-            dodajOglas.setOnClickListener {
+            addPost.setOnClickListener {
                 /*val direction = PetsFragmentDirections.actionPetsFragmentToHandlePostFragment()
                 findNavController().navigate(direction)*/
             }
@@ -127,7 +129,6 @@ class PetsFragment : Fragment() {
             recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
                 override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
                     super.onScrolled(recyclerView, dx, dy)
-
                     val visibleItemCount = layoutManager.childCount
                     val totalItemCount = layoutManager.itemCount
                     val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
@@ -136,9 +137,10 @@ class PetsFragment : Fragment() {
                         && firstVisibleItemPosition >= 0
                     ) {
                         if (isInternetAvailable(requireContext())) {
-                            viewModel.getPets(
-                                isInternetAvailable(requireContext()),
-                                filter ?: SearchFilter()
+                            getPets(
+                                viewModel.filterLiveData.value,
+                                viewModel.fetchMyPetsLiveData.value?: false,
+                                null
                             )
                         }
                     }
@@ -168,51 +170,48 @@ class PetsFragment : Fragment() {
 
     private fun handleMenu() {
         with(binding) {
-            if (accessToken == null) {
-                topAppBarPets.menu.removeItem(R.id.pronadeni)
-                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBarPets.menu.removeItem(R.id.uSklonistu)
-                topAppBarPets.menu.removeItem(R.id.uginuli)
-            }
-
             topAppBarPets.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.izgubljeni -> {
-                        filterAndGetForCategory(
-                            AdvertisementCategory.lost.toString(),
+                        getPets(
+                            SearchFilter(kategorijaOglasa = AdvertisementCategory.lost.toString()),
+                            false,
                             getString(R.string.izgubljeni)
                         )
                         true
                     }
 
                     R.id.pronadeni -> {
-                        filterAndGetForCategory(
-                            AdvertisementCategory.found.toString(),
+                        getPets(
+                            SearchFilter(kategorijaOglasa = AdvertisementCategory.found.toString()),
+                            false,
                             getString(R.string.pronadeni)
                         )
                         true
                     }
 
                     R.id.prekinutoTrazenje -> {
-                        filterAndGetForCategory(
-                            AdvertisementCategory.dead.toString(),
+                        getPets(
+                            SearchFilter(kategorijaOglasa = AdvertisementCategory.abandoned.toString()),
+                            false,
                             getString(R.string.prekinutoTrazenje)
                         )
                         true
                     }
 
                     R.id.uSklonistu -> {
-                        filterAndGetForCategory(
-                            AdvertisementCategory.sheltered.toString(),
+                        getPets(
+                            SearchFilter(kategorijaOglasa = AdvertisementCategory.sheltered.toString()),
+                            false,
                             getString(R.string.uSklonistu)
                         )
                         true
                     }
 
                     R.id.uginuli -> {
-                        filterAndGetForCategory(
-                            AdvertisementCategory.dead.toString(),
+                        getPets(
+                            SearchFilter(kategorijaOglasa = AdvertisementCategory.dead.toString()),
+                            false,
                             getString(R.string.uginuli)
                         )
                         true
@@ -240,30 +239,47 @@ class PetsFragment : Fragment() {
         }
     }
 
-    private fun filterAndGetForCategory(category: String, title: String? = "") {
-        binding.currentFilter.text = title
-        sharedPreferences.edit().putString("lastFilterTitle", title)
-            .apply()
-        filter = SearchFilter(kategorijaOglasa = category)
-        viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
-        viewModel.filterPresentLiveData.value = true
-        binding.filterDisplay.visibility = View.VISIBLE
-    }
-
     private fun initRecyclerViewAdapter() {
-        adapter = PetsAdapter(emptyList()) { advert ->
-            val direction =
-                PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = advert.advertId)
-            findNavController().navigate(direction)
-        }
+        adapter = PetsAdapter(emptyList(),
+            onPetPostClickCallback =
+            { advert ->
+                val direction =
+                    PetsFragmentDirections.actionPetsFragmentToDetailedViewFragment(advertId = advert.advertId)
+                findNavController().navigate(direction)
+            },
+            onEditPostClickCallback =
+            { advert ->
+                /**
+                 * ako treba jos neke paramtere dodati ih i prilagoditi kod ispod ili u PetsAdapter.kt
+                 * val direction = <ime fragmenta za add i edit post>.actionPetsFragmentTo<ime fragmenta za add i edit post>(advert.advertId)
+                 * findNavController().navigate(direction)
+                 */
+            },
+            onDeletePostClickCallback =
+            {
+                advert ->
+                    AlertDialog.Builder(requireContext())
+                        .setTitle(getString(R.string.brisanje_oglasa))
+                        .setMessage(getString(R.string.potvrda_brisanja_oglasa))
+                        .setPositiveButton(getString(R.string.izbrisi)) { _, _ ->
+                            viewModel.deleteAdvert(advert.advertId, isInternetAvailable(requireContext()))
+                        }
+                        .setNegativeButton(getString(R.string.odustani)) { dialog, _ ->
+                            dialog.dismiss()
+                        }.show()
+            })
         binding.recyclerView.adapter = adapter
     }
 
     private fun setLiveDataObservers() {
         with(viewModel) {
             petsLiveData.observe(viewLifecycleOwner) { pets ->
-                if (!pets.isNullOrEmpty() && pets != adapter.getPetsList()) {
-                    adapter.updateData(pets)
+                if (!pets.isNullOrEmpty()) {
+                    if (pets != adapter.getPetsList()) {
+                        adapter.updateData(pets, viewModel.fetchMyPetsLiveData.value?: false)
+                    }
+                } else {
+                    adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value?: false)
                 }
             }
             PetsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
@@ -272,11 +288,11 @@ class PetsFragment : Fragment() {
                         showLoading()
                     }
 
-                    PetsDisplayState.SUCCESS -> {
+                    PetsDisplayState.SUCCESSGET -> {
                         showPets()
                     }
 
-                    PetsDisplayState.ERROR -> {
+                    PetsDisplayState.ERRORGET -> {
                         showNoPosts()
                         Snackbar.make(
                             binding.root,
@@ -284,7 +300,21 @@ class PetsFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-
+                    PetsDisplayState.SUCCESSDELETE -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Oglas je uspješno obrisan",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null, true)
+                    }
+                    PetsDisplayState.ERRORDELETE -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Došlo je do pogreške prilikom brisanja oglasa",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
                     PetsDisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
@@ -297,7 +327,6 @@ class PetsFragment : Fragment() {
                     binding.filterDisplay.visibility = View.GONE
                 }
             }
-
         }
 
         val navController = findNavController()
@@ -305,13 +334,7 @@ class PetsFragment : Fragment() {
             ?.observe(
                 viewLifecycleOwner
             ) { filterJson ->
-                filter = Json.decodeFromString(filterJson)
-                binding.filterDisplay.visibility = View.VISIBLE
-                binding.currentFilter.text = getString(R.string.filtriranje_po_ljubimcu)
-                sharedPreferences.edit().putString("lastFilterTitle", getString(R.string.filtriranje_po_ljubimcu))
-                    .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
-                viewModel.filterPresentLiveData.value = true
+                getPets(Json.decodeFromString(filterJson), false, getString(R.string.filtriranje_po_ljubimcu))
                 navController.currentBackStackEntry?.savedStateHandle?.remove<String>("filter")
             }
     }
@@ -323,12 +346,7 @@ class PetsFragment : Fragment() {
         usernameDialog = builder.setPositiveButton("Pretraži") { dialog, _ ->
             val username = userDialogBinding.textInputEditText.text.toString()
             if (username.isNotEmpty()) {
-                filter = SearchFilter(korisnickoIme = username)
-                binding.currentFilter.text = username
-                sharedPreferences.edit().putString("lastFilterTitle", username)
-                    .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
-                viewModel.filterPresentLiveData.value = true
+                getPets(SearchFilter(korisnickoIme = username), false, username)
                 dialog.dismiss()
             }
         }.setNegativeButton("Odustani") { dialog, _ ->
@@ -339,6 +357,7 @@ class PetsFragment : Fragment() {
         usernameDialog.setView(userDialogBinding.root)
     }
 
+
     private fun buildShelterNameDialog() {
         val shelterDialogBinding = FilterInputDialogBinding.inflate(layoutInflater)
 
@@ -346,12 +365,7 @@ class PetsFragment : Fragment() {
         shelterDialog = builder.setPositiveButton("Pretraži") { dialog, _ ->
             val shelterName = shelterDialogBinding.textInputEditText.text.toString()
             if (shelterName.isNotEmpty()) {
-                filter = SearchFilter(imeSklonista = shelterName)
-                binding.currentFilter.text = shelterName
-                sharedPreferences.edit().putString("lastFilterTitle", shelterName)
-                    .apply()
-                viewModel.getPets(isInternetAvailable(requireContext()), filter ?: SearchFilter())
-                viewModel.filterPresentLiveData.value = true
+                getPets(SearchFilter(imeSklonista = shelterName), false, shelterName)
                 dialog.dismiss()
             }
         }.setNegativeButton("Odustani") { dialog, _ ->
@@ -360,6 +374,23 @@ class PetsFragment : Fragment() {
 
         shelterDialogBinding.outlineTextFieldLayout.hint = "Ime skloništa"
         shelterDialog.setView(shelterDialogBinding.root)
+    }
+    private fun getPets(newFilter: SearchFilter?, gettingMyPets: Boolean, filterDisplayText: String?, reset: Boolean = false) {
+        //filter has to be set to null if clear so that the live data gets updated below
+        viewModel.filterLiveData.value = newFilter
+        viewModel.fetchMyPetsLiveData.value = gettingMyPets
+        if (filterDisplayText != null) {
+            binding.currentFilter.text = filterDisplayText
+            sharedPreferences.edit().putString("lastFilterTitle", filterDisplayText)
+            .apply()
+        }
+        viewModel.getPets(
+            isInternetAvailable(requireContext()),
+            viewModel.filterLiveData.value ?: SearchFilter(),
+            viewModel.fetchMyPetsLiveData.value?: false,
+            reset
+        )
+        viewModel.filterPresentLiveData.value = (viewModel.filterLiveData.value != null || viewModel.fetchMyPetsLiveData.value?: false)
     }
 
     private fun showPets() {
