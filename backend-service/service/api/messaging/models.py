@@ -11,6 +11,8 @@ class MessageInput(BaseModel):
 
 class MessageOutput(BaseModel):
     username: str
+    user_email: str
+    user_phone_number: str
     text: Optional[str] = None
     location: Optional[str] = None
     picture_links: List[str] = []
