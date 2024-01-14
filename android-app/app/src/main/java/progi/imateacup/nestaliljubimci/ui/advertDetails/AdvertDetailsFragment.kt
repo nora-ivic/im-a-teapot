@@ -12,6 +12,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
@@ -30,6 +31,7 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
+import com.mapbox.maps.MapView
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
@@ -58,7 +60,6 @@ class AdvertDetailsFragment : Fragment() {
     private val args by navArgs<AdvertDetailsFragmentArgs>()
 
     private val advertDetailsViewModel: AdvertDetailsViewModel by viewModels()
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -104,6 +105,7 @@ class AdvertDetailsFragment : Fragment() {
                 dialog.show()
             }
         }
+
         initRecyclerViews()
         displayAdvertDetails()
         displayImages()
@@ -231,6 +233,7 @@ class AdvertDetailsFragment : Fragment() {
 
         val dialog = BottomSheetDialog(requireContext())
         val dialogAddCommentBinding = DialogAddCommentBinding.inflate(layoutInflater)
+
         dialog.setContentView(dialogAddCommentBinding.root)
 
         dialogAddCommentBinding.addImageButton.setOnClickListener {
