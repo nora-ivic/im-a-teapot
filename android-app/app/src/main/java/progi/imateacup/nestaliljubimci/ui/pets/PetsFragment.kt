@@ -65,9 +65,7 @@ class PetsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (accessToken != null) {
-            binding.topAppBarPets.navigationIcon = null
-        }
+        handleDifferentUsersDisplay()
         initRecyclerViewAdapter()
         setLiveDataObservers()
         initListeners()
@@ -75,10 +73,26 @@ class PetsFragment : Fragment() {
         binding.currentFilter.text = sharedPreferences.getString("lastFilterTitle", "")
     }
 
-    private fun initListeners() {
-        with(binding) {
-            if (accessToken != null) {
+    private fun handleDifferentUsersDisplay() {
+        with (binding) {
+            if (accessToken == null) {
+                topAppBarPets.menu.removeItem(R.id.pronadeni)
+                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
+                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
+                topAppBarPets.menu.removeItem(R.id.uSklonistu)
+                topAppBarPets.menu.removeItem(R.id.uginuli)
+
+                topAppBarPets.setNavigationOnClickListener {
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                    findNavController().navigate(direction)
+                }
+
+                bottomAppBar.visibility = View.GONE
+                addPost.visibility = View.GONE
+
+            } else {
                 topAppBarPets.setNavigationIcon(R.drawable.icons_user_big)
+
                 topAppBarPets.setNavigationOnClickListener {
                     val dialog = buildUserInfoDialog()
                     if (profileDialogClosed) {
@@ -86,12 +100,12 @@ class PetsFragment : Fragment() {
                         dialog.show()
                     }
                 }
-            } else {
-                topAppBarPets.setNavigationOnClickListener {
-                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                    findNavController().navigate(direction)
-                }
             }
+        }
+    }
+
+    private fun initListeners() {
+        with(binding) {
             handleMenu()
 
             ocistiFilter.setOnClickListener {
@@ -106,7 +120,7 @@ class PetsFragment : Fragment() {
                 getPets(null, true, getString(R.string.mojiOglasi))
                 true
             }
-            dodajOglas.setOnClickListener {
+            addPost.setOnClickListener {
                 /*val direction = PetsFragmentDirections.actionPetsFragmentToHandlePostFragment()
                 findNavController().navigate(direction)*/
             }
@@ -156,14 +170,6 @@ class PetsFragment : Fragment() {
 
     private fun handleMenu() {
         with(binding) {
-            if (accessToken == null) {
-                topAppBarPets.menu.removeItem(R.id.pronadeni)
-                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBarPets.menu.removeItem(R.id.uSklonistu)
-                topAppBarPets.menu.removeItem(R.id.uginuli)
-            }
-
             topAppBarPets.setOnMenuItemClickListener { menuItem ->
                 when (menuItem.itemId) {
                     R.id.izgubljeni -> {
