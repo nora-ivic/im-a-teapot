@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
+import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -35,6 +36,8 @@ class PetsFragment : Fragment() {
     private lateinit var adapter: PetsAdapter
     private lateinit var usernameDialog: AlertDialog
     private lateinit var shelterDialog: AlertDialog
+    private lateinit var sheltersDialog: SheltersDialog
+    private lateinit var transaction: FragmentTransaction
     private var filter: SearchFilter? = null
 
     private var accessToken: String? = null
@@ -230,7 +233,8 @@ class PetsFragment : Fragment() {
                     }
 
                     R.id.trazi_po_sklonistu -> {
-                        shelterDialog.show()
+                        val direction = PetsFragmentDirections.actionPetsFragmentToSheltersDialog()
+                        findNavController().navigate(direction)
                         true
                     }
 
