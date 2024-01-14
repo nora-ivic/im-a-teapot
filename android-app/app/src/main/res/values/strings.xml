@@ -90,4 +90,16 @@
     <string name="mojiOglasi">Moji Oglasi</string>
     <string name="filtriranje_po_ljubimcu">Filtriranje po ljubimcu</string>
     <string name="uginuli">Uginuli</string>
+    <string name="pet_name">Ime</string>
+    <string name="pet_color">Boja</string>
+    <string name="pet_age">Dob</string>
+    <string name="advert">Oglas za ljubimca</string>
+    <string name="post_text">Objavi oglas</string>
+    <string name="description_text">Opis oglasa</string>
+    <string name="species_text">Vrsta</string>
+    <string name="category_text">Kategorija</string>
+    <string name="shelter_text">U skloništu</string>
+    <string name="date">Datum</string>
+    <string name="picture_text">Dodaj sliku</string>
+    <string name="advert_unsuccessful">Oglas ima nedovoljno podataka</string>
 </resources>
