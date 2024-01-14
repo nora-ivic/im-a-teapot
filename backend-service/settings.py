@@ -19,4 +19,5 @@ SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 120
 
-PICTURE_PATH = 'service/api/pictures/media/'
+PICTURE_FOLDER = 'service/api/pictures/media/'
+PICTURE_PATH = '/media/'

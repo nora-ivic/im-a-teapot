@@ -7,6 +7,9 @@ passlib~=1.7.4
 bcrypt
 pyjwt~=2.8.0
 pytest
+pytest-mock
 python-dotenv~=1.0.0
 starlette~=0.27.0
 python-multipart
+sqlalchemy_utils
+httpx
