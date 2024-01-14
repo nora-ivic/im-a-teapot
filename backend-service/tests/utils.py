@@ -1,6 +1,6 @@
 from sqlalchemy.orm import Session
 
-from service.repository.mappers import UserCustom, UserAuth
+from service.repository.mappers import UserCustom, UserAuth, Pet, Advertisement
 
 
 def mock_user_token():
@@ -26,3 +26,20 @@ def user_factory(user_id: int, session: Session):
     session.add(user_auth)
     session.commit()
     return user
+
+
+def advert_factory(id: int, user_id: int, session: Session):
+    pet = Pet(
+        id=id,
+        name=('test_pet_' + str(id)),
+        location_lost=('test_location_' + str(id)),
+    )
+    advert = Advertisement(
+        id=id,
+        pet_id=id,
+        user_id=user_id,
+        category='lost'
+    )
+    session.add(pet)
+    session.add(advert)
+    session.commit()

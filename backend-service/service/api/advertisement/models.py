@@ -34,7 +34,7 @@ class AdvertisementOutputFull(BaseModel):
 
 
 class AdvertisementInput(BaseModel):
-    advert_category: Optional[AdvertisementCategory] = AdvertisementCategory.LOST.value
+    advert_category: Optional[AdvertisementCategory] = AdvertisementCategory.LOST
     pet_name: Optional[str] = None
     pet_species: Optional[PetSpecies] = None
     pet_color: Optional[str] = None
