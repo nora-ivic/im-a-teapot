@@ -98,4 +98,5 @@
     <string name="brisanje_oglasa">Brisanje oglasa</string>
     <string name="sklonista">Registrirana skloništa</string>
     <string name="svaSklonista">Sva skloništa</string>
+    <string name="no_shelters">Ne možemo pronaći niti jedno sklonište</string>
 </resources>

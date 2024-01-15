@@ -10,7 +10,6 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
-import androidx.fragment.app.FragmentTransaction
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -25,7 +24,7 @@ import progi.imateacup.nestaliljubimci.databinding.DialogProfileBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
-import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
@@ -295,17 +294,17 @@ class PetsFragment : Fragment() {
                     adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value?: false)
                 }
             }
-            PetsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
+            displayStateLiveData.observe(viewLifecycleOwner) { state ->
                 when (state) {
-                    PetsDisplayState.LOADING -> {
+                    DisplayState.LOADING -> {
                         showLoading()
                     }
 
-                    PetsDisplayState.SUCCESSGET -> {
+                    DisplayState.SUCCESSGET -> {
                         showPets()
                     }
 
-                    PetsDisplayState.ERRORGET -> {
+                    DisplayState.ERRORGET -> {
                         showNoPosts()
                         Snackbar.make(
                             binding.root,
@@ -313,7 +312,7 @@ class PetsFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    PetsDisplayState.SUCCESSDELETE -> {
+                    DisplayState.SUCCESSDELETE -> {
                         Snackbar.make(
                             binding.root,
                             "Oglas je uspješno obrisan",
@@ -321,14 +320,14 @@ class PetsFragment : Fragment() {
                         ).show()
                         getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null, true)
                     }
-                    PetsDisplayState.ERRORDELETE -> {
+                    DisplayState.ERRORDELETE -> {
                         Snackbar.make(
                             binding.root,
                             "Došlo je do pogreške prilikom brisanja oglasa",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    PetsDisplayState.NOPOSTS -> {
+                    DisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
                 }

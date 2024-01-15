@@ -8,8 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.databinding.SheltersDialogBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
+import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
 
@@ -42,16 +46,94 @@ class SheltersDialog : DialogFragment() {
         binding.topAppBarPets.setNavigationOnClickListener {
             dismiss()
         }
-        viewModelShelters.getShelters()
 
         adapter = SheltersAdapter(emptyList())
         binding.sheltersRecyclerView.adapter = adapter
         setObservers()
+        addScrollPagination()
+    }
+
+    private fun addScrollPagination() {
+        val layoutManager = LinearLayoutManager(context)
+        binding.sheltersRecyclerView.layoutManager = layoutManager
+        binding.sheltersRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                println("SCROLL TRIGGERED")
+                super.onScrolled(recyclerView, dx, dy)
+                val visibleItemCount = layoutManager.childCount
+                val totalItemCount = layoutManager.itemCount
+                val firstVisibleItemPosition = layoutManager.findFirstVisibleItemPosition()
+
+                if ((visibleItemCount + firstVisibleItemPosition) >= totalItemCount && firstVisibleItemPosition >= 0) {
+                    if (isInternetAvailable(requireContext())) {
+                        viewModelShelters.getShelters(
+                            isInternetAvailable(requireContext())
+                        )
+                    }
+                }
+            }
+        })
     }
 
     private fun setObservers() {
-        viewModelShelters.sheltersLiveData.observe(viewLifecycleOwner) { shelters ->
-            adapter.setShelters(shelters)
+        with(viewModelShelters) {
+            displayStateLiveData.observe(viewLifecycleOwner) { state ->
+                when (state) {
+                    DisplayState.LOADING -> {
+                        showLoading()
+                    }
+                    DisplayState.ERRORGET -> {
+                        showError()
+                    }
+                    DisplayState.SUCCESSGET -> {
+                        showShelters()
+                    }
+                    DisplayState.NOPOSTS -> {
+                        showNoPosts()
+                    }
+                    else -> {
+                        showNoPosts()
+                    }
+                }
+            }
+            viewModelShelters.sheltersLiveData.observe(viewLifecycleOwner) { shelters ->
+                adapter.setShelters(shelters)
+            }
+        }
+
+    }
+
+    fun showLoading() {
+        with (binding) {
+            sheltersLoadingProgressBar.visibility = View.VISIBLE
+            noPostsDisplay.visibility = View.GONE
+            sheltersRecyclerView.visibility = View.GONE
+        }
+    }
+    fun showShelters() {
+        with (binding) {
+            sheltersLoadingProgressBar.visibility = View.GONE
+            noPostsDisplay.visibility = View.GONE
+            sheltersRecyclerView.visibility = View.VISIBLE
+        }
+    }
+    fun showError() {
+        with (binding) {
+            sheltersLoadingProgressBar.visibility = View.GONE
+            noPostsDisplay.visibility = View.VISIBLE
+            sheltersRecyclerView.visibility = View.GONE
+            Snackbar.make(
+                binding.root,
+                "Error loading shelters",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+    fun showNoPosts() {
+        with (binding) {
+            sheltersLoadingProgressBar.visibility = View.GONE
+            noPostsDisplay.visibility = View.VISIBLE
+            sheltersRecyclerView.visibility = View.GONE
         }
     }
 }

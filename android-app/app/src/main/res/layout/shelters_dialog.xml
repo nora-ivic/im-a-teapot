@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutShelters"
         android:layout_width="match_parent"
@@ -17,21 +17,66 @@
             android:minHeight="?attr/actionBarSize"
             app:navigationIcon="@drawable/sharp_arrow_back"
             app:title="@string/sklonista"
-            app:titleTextColor="@color/black" />
+            app:titleTextColor="@color/black"
+            android:translationZ="80dp"
+            >
+            <ProgressBar
+                android:id="@+id/sheltersLoadingProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:layout_gravity="end"
+                android:visibility="gone"
+                />
+        </com.google.android.material.appbar.MaterialToolbar>
+
     </com.google.android.material.appbar.AppBarLayout>
-    <androidx.constraintlayout.widget.ConstraintLayout
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/surface_container_highest"
         android:backgroundTint="@color/surface_container_highest"
+        android:orientation="vertical"
         android:layout_marginTop="?actionBarSize">
-
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shelters_recycler_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="45dp"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            />
+        <LinearLayout
+            android:id="@+id/noPostsDisplay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:visibility="gone"
+            tools:visibility="visible">
+
+            <ImageView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:src="@drawable/paw_exc_wide_border_640"
+                android:contentDescription="@string/no_pets_image" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/no_shelters"
+                android:textAlignment="center"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text24sp" />
+
+            <Button
+                android:id="@+id/tryAgain"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginVertical="@dimen/margin_8dp"
+                android:text="@string/pokusaj_opet"
+                android:textColor="@color/black" />
+        </LinearLayout>
+    </LinearLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
