@@ -42,6 +42,9 @@ class SheltersDialog : DialogFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        viewModelShelters.getShelters(
+            isInternetAvailable(requireContext())
+        )
 
         binding.topAppBarPets.setNavigationOnClickListener {
             dismiss()
@@ -58,7 +61,6 @@ class SheltersDialog : DialogFragment() {
         binding.sheltersRecyclerView.layoutManager = layoutManager
         binding.sheltersRecyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                println("SCROLL TRIGGERED")
                 super.onScrolled(recyclerView, dx, dy)
                 val visibleItemCount = layoutManager.childCount
                 val totalItemCount = layoutManager.itemCount
@@ -96,7 +98,7 @@ class SheltersDialog : DialogFragment() {
                     }
                 }
             }
-            viewModelShelters.sheltersLiveData.observe(viewLifecycleOwner) { shelters ->
+            sheltersLiveData.observe(viewLifecycleOwner) { shelters ->
                 adapter.setShelters(shelters)
             }
         }
@@ -107,7 +109,6 @@ class SheltersDialog : DialogFragment() {
         with (binding) {
             sheltersLoadingProgressBar.visibility = View.VISIBLE
             noPostsDisplay.visibility = View.GONE
-            sheltersRecyclerView.visibility = View.GONE
         }
     }
     fun showShelters() {
