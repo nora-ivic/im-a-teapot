@@ -45,8 +45,8 @@ class AdvertDetailsFragment : Fragment() {
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var imagesAdapter: ImagesAdapter
 
-    private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
     private val RETURNED_FROM_MAP_FRAGMENT_KEY = "returned_from_map_fragment"
+    private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
     private var temporaryMessage: String = ""
     private var returnedFromSelectMap: Boolean = false
 

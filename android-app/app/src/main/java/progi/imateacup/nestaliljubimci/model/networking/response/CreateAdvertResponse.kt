@@ -4,5 +4,5 @@ import kotlinx.serialization.SerialName
 
 @kotlinx.serialization.Serializable
 data class CreateAdvertResponse (
-    @SerialName("token") val token: String
+    @SerialName("detail") val detail: String? = null
 )

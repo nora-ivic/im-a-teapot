@@ -15,5 +15,4 @@ data class CreateAdvertRequest(
     @SerialName("date_time_lost") val date_time_lost: String?,
     @SerialName("location_lost") val location_lost: String?,
     @SerialName("description") val description: String?,
-    @SerialName("is_in_shelter") val is_in_shelter: Boolean?
 )

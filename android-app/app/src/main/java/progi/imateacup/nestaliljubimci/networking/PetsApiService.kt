@@ -33,7 +33,12 @@ interface PetsApiService {
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @POST("api/advert/create")
-    suspend fun advert(@Body request: CreateAdvertRequest) : Response<CreateAdvertResponse>
+    suspend fun addAdvert(@Body request: CreateAdvertRequest) : Response<CreateAdvertResponse>
+    @POST("api/messages/{advert_id}/add")
+    suspend fun addComment(
+        @Path("advert_id") advertId: Int,
+        @Body request: AddCommentRequest
+    ): Response<AddCommentResponse>
 
     @GET("api/advert/")
     suspend fun getPets(
@@ -65,10 +70,4 @@ interface PetsApiService {
         @Query("page") page: Int = PAGE,
         @Query("page_size") items: Int = PAGE_SIZE,
     ): Response<List<Comment>>
-
-    @POST("api/messages/{advert_id}/add")
-    suspend fun addComment(
-        @Path("advert_id") advertId: Int,
-        @Body request: AddCommentRequest
-    ): Response<AddCommentResponse>
 }

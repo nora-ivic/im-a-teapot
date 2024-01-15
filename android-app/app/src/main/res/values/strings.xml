@@ -44,6 +44,7 @@
     <string name="location_info">Lokacija je priložena.</string>
     <string name="comment">Upiši komentar…</string>
     <string name="comment_submit">Pošalji komentar…</string>
+    <string name="advert_submit">Kreiraj oglas…</string>
     <string name="add_message_image">Dodaj sliku…</string>
     <string name="add_location_image">Dodaj lokaciju…</string>
     <string name="remove_location">Ukloni lokaciju…</string>

@@ -14,44 +14,10 @@ import java.io.IOException
 
 class CreateAdvertViewModel : ViewModel() {
 
-    private val _createAdvertResultLiveData = MutableLiveData<Boolean>()
-    val createAdvertResultLiveData: LiveData<Boolean> = _createAdvertResultLiveData
-    private val _accessTokenLiveData = MutableLiveData<String>()
-    var accessTokenLiveData: LiveData<String> = _accessTokenLiveData
+    private val _advertAddedLiveData = MutableLiveData<Boolean>()
+    val advertAddedLiveData: LiveData<Boolean> = _advertAddedLiveData
 
-    fun postCreateAdvert(
-        advert_category: AdvertisementCategory,
-        pet_name: String,
-        pet_species: PetSpecies,
-        pet_color: String,
-        pet_age: Int,
-        date_time_lost: String,
-        location_lost: String,
-        description: String,
-        is_in_shelter: Boolean
-    ) {
-        viewModelScope.launch {
-            try {
-                postCreateAdvertRequest(
-                    advert_category,
-                    pet_name,
-                    pet_species,
-                    pet_color,
-                    pet_age,
-                    date_time_lost,
-                    location_lost,
-                    description,
-                    is_in_shelter
-                )
-            } catch (err: Exception) {
-                Log.e("Exception", err.toString())
-                _createAdvertResultLiveData.value = false
-            }
-        }
-    }
-
-
-    private suspend fun postCreateAdvertRequest(
+    fun advertAdvert(
         advert_category: AdvertisementCategory,
         pet_name: String?,
         pet_species: PetSpecies?,
@@ -60,9 +26,37 @@ class CreateAdvertViewModel : ViewModel() {
         date_time_lost: String?,
         location_lost: String?,
         description: String?,
-        is_in_shelter: Boolean?
     ) {
-        val response = ApiModule.retrofit.advert(
+        viewModelScope.launch {
+            try {
+                _advertAddedLiveData.value = postAdvert(
+                    advert_category,
+                    pet_name,
+                    pet_species,
+                    pet_color,
+                    pet_age,
+                    date_time_lost,
+                    location_lost,
+                    description,
+                )
+            } catch (err: Exception) {
+                Log.e("Exception", err.toString())
+                _advertAddedLiveData.value = false
+            }
+        }
+    }
+
+    private suspend fun postAdvert(
+        advert_category: AdvertisementCategory,
+        pet_name: String?,
+        pet_species: PetSpecies?,
+        pet_color: String?,
+        pet_age: Int?,
+        date_time_lost: String?,
+        location_lost: String?,
+        description: String?,
+    ): Boolean {
+        val response = ApiModule.retrofit.addAdvert(
             request = CreateAdvertRequest(
                 advert_category = advert_category,
                 pet_name = pet_name,
@@ -72,12 +66,12 @@ class CreateAdvertViewModel : ViewModel() {
                 date_time_lost = date_time_lost,
                 location_lost = location_lost,
                 description = description,
-                is_in_shelter = is_in_shelter
             )
         )
         if (!response.isSuccessful) {
             throw IOException("Unsuccessful user registration")
         }
-        _createAdvertResultLiveData.value = true
+        //TODO: refetch
+        return true
     }
 }
