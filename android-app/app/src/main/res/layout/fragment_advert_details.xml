@@ -6,9 +6,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginBottom="@dimen/margin_12dp"
     android:background="@color/white">
-
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayoutDetails"
@@ -73,7 +71,32 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="24dp"
                 android:paddingVertical="4dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/statusText"
+                    android:layout_width="80dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="@dimen/margin_24dp"
+                    android:text="@string/statusText"
+                    android:textColor="@color/black"
+                    android:textSize="17sp" />
+
+                <TextView
+                    android:id="@+id/petStatusValue"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/margin_24dp"
+                    android:textColor="@color/black"
+                    android:textSize="17sp"
+                    tools:text="Izgubljena" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"                android:layout_marginVertical="4dp"
                 android:background="@drawable/info_background"
+                android:paddingVertical="4dp"
                 android:orientation="horizontal">
 
                 <TextView
@@ -355,6 +378,8 @@
                         tools:text="000 000 000" />
                 </LinearLayout>
 
+            </LinearLayout>
+
                 <TextView
                     android:id="@+id/comments"
                     android:layout_width="match_parent"
@@ -369,9 +394,10 @@
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/commentRecyclerView"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
+                    android:layout_height="500dp"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                    tools:listitem="@layout/comment_card" />
+                    tools:listitem="@layout/comment_card"
+                    android:paddingBottom="90dp"/>
 
                 <TextView
                     android:id="@+id/noCommentsMessage"
@@ -382,14 +408,10 @@
                     android:textAlignment="center"
                     android:textColor="@color/black"
                     android:textSize="17sp"
-                    android:visibility="gone" />
+                    android:visibility="gone"
+                    android:paddingBottom="90dp"/>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="256dp"
-                    android:visibility="invisible" />
 
-            </LinearLayout>
         </LinearLayout>
 
 
@@ -399,7 +421,7 @@
         android:id="@+id/commentButtonCard"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="24dp"
         app:cardBackgroundColor="@color/transparentColor"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

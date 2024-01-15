@@ -26,6 +26,10 @@ class EngineManager:
     def set_database(cls, database: str) -> None:
         EngineManager.database = database
 
+    @classmethod
+    def unset_database(cls) -> None:
+        EngineManager.database = settings.DEFAULT_DATABASE
+
 
 def get_session():
     return Session(EngineManager.get_engine())

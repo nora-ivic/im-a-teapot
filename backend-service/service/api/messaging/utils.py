@@ -17,6 +17,8 @@ def map_to_output_message(db_message: Message):
 
     return MessageOutput(
         username=user.username,
+        user_email=user.email,
+        user_phone_number=user.phone_number,
         text=db_message.text,
         location=db_message.location,
         picture_links=[picture.link for picture in pictures]

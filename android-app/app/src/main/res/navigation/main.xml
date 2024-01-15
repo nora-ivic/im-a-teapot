@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/main"
     app:startDestination="@id/loginFragment">
-
     <fragment
         android:id="@+id/loginFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment"
@@ -35,6 +35,12 @@
             android:name="advertId"
             android:defaultValue="-1"
             app:argType="integer" />
+        <action
+            android:id="@+id/action_advertDetailsView_to_mapSelectLocationFragment"
+            app:destination="@id/mapSelectLocationFragment" />
+        <action
+            android:id="@+id/action_advertDetailsView_to_mapDisplayLocationFragment"
+            app:destination="@id/mapDisplayLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/petsFragment"
@@ -79,4 +85,20 @@
             android:id="@+id/action_createAdvertFragment_to_petsFragment"
             app:destination="@id/petsFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mapSelectLocationFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.map.MapSelectLocationFragment"
+        android:label="fragment_select_location_map"
+        tools:layout="@layout/fragment_select_map" />
+    <fragment
+        android:id="@+id/mapDisplayLocationFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.map.MapDisplayLocationFragment"
+        android:label="fragment_display_location_map"
+        tools:layout="@layout/fragment_display_map">
+        <argument
+            android:name="coordinates"
+            android:defaultValue="0.0,0.0"
+            app:argType="string" />
+    </fragment>
+
 </navigation>
