@@ -6,6 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
+import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateAdvertRequest
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 import java.io.IOException
 
@@ -16,7 +19,7 @@ class CreateAdvertViewModel : ViewModel() {
     private val _accessTokenLiveData = MutableLiveData<String>()
     var accessTokenLiveData : LiveData<String> = _accessTokenLiveData
     fun postCreateAdvert(
-        advert_category: AdvertismentCategory,
+        advert_category: AdvertisementCategory,
         pet_name: String,
         pet_species: PetSpecies,
         pet_color: String,
@@ -48,7 +51,7 @@ class CreateAdvertViewModel : ViewModel() {
 
 
     private suspend fun postCreateAdvertRequest(
-        advert_category: AdvertismentCategory,
+        advert_category: AdvertisementCategory,
         pet_name: String,
         pet_species: PetSpecies,
         pet_color: String,

@@ -119,8 +119,8 @@ class PetsFragment : Fragment() {
                 true
             }
             dodajOglas.setOnClickListener {
-                /*val direction = PetsFragmentDirections.actionPetsFragmentToHandlePostFragment()
-                findNavController().navigate(direction)*/
+                val direction = PetsFragmentDirections.actionPetsFragmentToCreateAdvertFragment()
+                findNavController().navigate(direction)
             }
             val layoutManager = LinearLayoutManager(context)
             recyclerView.layoutManager = layoutManager

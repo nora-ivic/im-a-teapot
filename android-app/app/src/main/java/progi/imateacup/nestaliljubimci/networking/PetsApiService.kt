@@ -3,10 +3,12 @@ package progi.imateacup.nestaliljubimci.networking
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
+import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateAdvertRequest
 import progi.imateacup.nestaliljubimci.model.networking.response.LoginResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.RegisterResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
+import progi.imateacup.nestaliljubimci.model.networking.response.CreateAdvertResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.ListCommentsResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
@@ -28,6 +30,9 @@ interface PetsApiService {
 
     @POST("api/authorization/signup")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
+
+    @POST("api/advert")
+    suspend fun advert(@Body request: CreateAdvertRequest) : Response<CreateAdvertResponse>
 
     @GET("api/advert/")
     suspend fun getPets(

@@ -1,10 +1,13 @@
 package progi.imateacup.nestaliljubimci.model.networking.request.auth
 
 import kotlinx.serialization.SerialName
+import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
+import java.time.format.DateTimeFormatter
 
 @kotlinx.serialization.Serializable
 data class CreateAdvertRequest (
-    @SerialName("advert_category")    val advert_category: AdvertismentCategory,
+    @SerialName("advert_category")    val advert_category: AdvertisementCategory,
     @SerialName("pet_name")     val pet_name: String,
     @SerialName("pet_species") val pet_species: PetSpecies,
     @SerialName("pet_color")     val pet_color: String,

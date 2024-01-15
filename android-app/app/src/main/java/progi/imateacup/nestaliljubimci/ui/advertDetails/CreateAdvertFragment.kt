@@ -1,15 +1,24 @@
 package progi.imateacup.nestaliljubimci.ui.advertDetails
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.provider.MediaStore
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
+import android.widget.Button
+import android.widget.ImageView
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.AdvertFragmentBinding
@@ -17,6 +26,7 @@ import progi.imateacup.nestaliljubimci.networking.ApiModule
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 
 class CreateAdvertFragment : Fragment() {
+
 
     companion object {
         const val ACCESS_TOKEN = "ACCESS_TOKEN"
@@ -26,7 +36,12 @@ class CreateAdvertFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<CreateAdvertViewModel>()
     private lateinit var sharedPreferences: SharedPreferences
-
+    private lateinit var pickImage1: Button
+    private lateinit var selectedImage1: ImageView
+    private lateinit var pickImage2: Button
+    private lateinit var selectedImage2: ImageView
+    private lateinit var pickImage3: Button
+    private lateinit var selectedImage3: ImageView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -35,10 +50,6 @@ class CreateAdvertFragment : Fragment() {
             putString(ACCESS_TOKEN, null)
         }
         ApiModule.initRetrofit()
-        /*val items = listOf(AdvertismentCategory.lost,AdvertismentCategory.abandoned,AdvertismentCategory.dead,AdvertismentCategory.found,AdvertismentCategory.sheltered)
-        val arrayAdapter = ArrayAdapter(this, R.layout.advert_chategory_list, items)
-        val category = findViewById<PetSpeciesField>(R.id.petSpeciesField)
-        binding.MaterialAutoCompleteTextView.setAdapter(arrayAdapter)*/
     }
 
     override fun onCreateView(
@@ -47,12 +58,54 @@ class CreateAdvertFragment : Fragment() {
     ): View {
         _binding = AdvertFragmentBinding.inflate(inflater, container, false)
         return binding.root
+
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setAccessTokenObserver()
         setOnAdvertResultAction()
         initListeners()
+        val species = listOf("Ptica", "Mačka", "Pas", "Gušter","Zec","Glodavac","Zmija","Ostalo")
+        val adapter1 = ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
+        (binding.petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
+
+        val categories = listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu","Mrtav")
+        val adapter2 = ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
+        (binding.petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+        val sheltered = listOf("Da","Ne")
+        val adapter3 = ArrayAdapter(requireContext(), R.layout.advert_chategory_list, sheltered)
+        (binding.shelterField as? AutoCompleteTextView)?.setAdapter(adapter3)
+
+        pickImage1 = binding.picture1
+        selectedImage1 = binding.showPicture1
+
+        pickImage1.setOnClickListener {
+            val pickImg1 = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            changeImage1.launch(pickImg1)
+        }
+
+        pickImage2 = binding.picture2
+        selectedImage2 = binding.showPicture2
+
+        pickImage2.setOnClickListener {
+            val pickImg2 = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            changeImage2.launch(pickImg2)
+        }
+
+        pickImage3 = binding.picture3
+        selectedImage3 = binding.showPicture3
+
+        pickImage3.setOnClickListener {
+            val pickImg3 = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
+            changeImage3.launch(pickImg3)
+        }
+        binding.dateField.setOnClickListener {
+            val datePicker = MaterialDatePicker.Builder.datePicker()
+                    .setTitleText("Select date")
+                    .build()
+        }
+
     }
 
     private fun setAccessTokenObserver() {
@@ -98,7 +151,7 @@ class CreateAdvertFragment : Fragment() {
             }
             descriptionField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
-                    updatePetAgeField()
+                    updateDescriptionField()
                 }
             }
 
@@ -125,6 +178,38 @@ class CreateAdvertFragment : Fragment() {
             petNameFieldLayout.error = null
         }
     }
+
+    private val changeImage1 =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                selectedImage1.setImageURI(imgUri)
+            }
+        }
+    private val changeImage2 =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                selectedImage2.setImageURI(imgUri)
+            }
+        }
+    private val changeImage3 =
+        registerForActivityResult(
+            ActivityResultContracts.StartActivityForResult()
+        ) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                val imgUri = data?.data
+                selectedImage3.setImageURI(imgUri)
+            }
+        }
+
 }
 
 

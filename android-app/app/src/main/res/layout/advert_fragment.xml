@@ -81,6 +81,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
             <AutoCompleteTextView
+                android:id="@+id/petCategoryField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -104,6 +105,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 
             <AutoCompleteTextView
+                android:id="@+id/shelterField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="none"
@@ -131,7 +133,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -156,7 +158,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="text"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -181,7 +183,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="numberSigned"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -193,6 +195,7 @@
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:layout_marginVertical="@dimen/size16dp"
             android:hint="@string/date"
+            android:clickable="true"
             android:textColorHint="@color/black"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:hintTextColor="@color/black"
@@ -205,7 +208,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:inputType="datetime"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
@@ -240,6 +243,21 @@
                 />
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.mapbox.maps.MapView
+            android:id="@+id/mapView"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:mapbox_cameraTargetLat="39.5"
+            app:mapbox_cameraTargetLng="-98.0"
+            app:mapbox_cameraZoom="2.0"
+            app:mapbox_cameraPitch="0.0"
+            app:mapbox_cameraBearing="0.0"
+            app:layout_constraintTop_toBottomOf="@id/descriptionFieldLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"/>
+
+
         <RelativeLayout
             android:id="@+id/pictures"
             android:layout_width="match_parent"
@@ -247,7 +265,7 @@
             android:layout_marginTop="20dp"
             android:layout_marginHorizontal="@dimen/margin_54dp"
             android:gravity="center"
-            app:layout_constraintTop_toBottomOf="@id/descriptionFieldLayout"
+            app:layout_constraintTop_toBottomOf="@id/mapView"
             tools:layout_editor_absoluteX="0dp">
 
             <Button
@@ -301,6 +319,51 @@
                 />
         </RelativeLayout>
 
+        <RelativeLayout
+            android:id="@+id/showPictures"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:gravity="center"
+            app:layout_constraintTop_toBottomOf="@id/pictures"
+            tools:layout_editor_absoluteX="0dp">
+        <ImageView
+            android:id="@+id/showPicture1"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="0dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            />
+
+        <ImageView
+            android:id="@+id/showPicture2"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+            <ImageView
+                android:id="@+id/showPicture3"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="200dp"
+                android:layout_marginTop="0dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                />
+
+        </RelativeLayout>
         <Button
             android:id="@+id/advertButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
@@ -312,10 +375,10 @@
             android:text="@string/post_text"
             android:textColor="@color/colorPrimary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondary_container"
+            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/pictures" />
+            app:layout_constraintTop_toBottomOf="@id/showPictures" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

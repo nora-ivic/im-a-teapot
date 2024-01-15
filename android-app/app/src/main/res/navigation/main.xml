@@ -63,9 +63,20 @@
             android:name="email"
             android:defaultValue="E-mail"
             app:argType="string" />
+        <action
+            android:id="@+id/action_petsFragment_to_createAdvertFragment"
+            app:destination="@id/createAdvertFragment" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.search.SearchFragment"
         android:label="SearchFragment" />
+    <fragment
+        android:id="@+id/createAdvertFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.advertDetails.CreateAdvertFragment"
+        android:label="CreateAdvertFragment" >
+        <action
+            android:id="@+id/action_createAdvertFragment_to_petsFragment"
+            app:destination="@id/petsFragment" />
+    </fragment>
 </navigation>
