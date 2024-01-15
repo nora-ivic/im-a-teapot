@@ -15,15 +15,14 @@ class SheltersAdapter(
     inner class SheltersViewHolder(private val binding: SheltersCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shelter: ShelterResponse) {
-            for(sheltera in shelters) {
-                Log.d("SheltersAdapter", sheltera.name)
-            }
             with (binding) {
-                Log.d("SheltersAdapter", "bind: ${shelter.name}")
                 binding.shelterCard.setOnClickListener {
                     onShelterClickCallback.invoke(shelter)
                 }
                 shelterName.text = shelter.name
+                shelterEmail.text = shelter.email
+                shelterPhoneNumber.text = shelter.phone_number
+                shelterUsername.text = shelter.username
             }
         }
     }
@@ -35,12 +34,10 @@ class SheltersAdapter(
     }
 
     override fun onBindViewHolder(holder: SheltersViewHolder, position: Int) {
-        Log.d("SheltersAdapter", "onBindViewHolder: ${shelters[position].name}")
         holder.bind(shelters[position])
     }
 
     override fun getItemCount(): Int {
-        Log.d("SheltersAdapter", "getItemCount: ${shelters.size}")
         return shelters.size
     }
 

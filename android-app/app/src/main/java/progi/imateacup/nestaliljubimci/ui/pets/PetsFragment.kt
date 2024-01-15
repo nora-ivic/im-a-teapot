@@ -36,7 +36,6 @@ class PetsFragment : Fragment() {
     private lateinit var adapter: PetsAdapter
     private lateinit var usernameDialog: AlertDialog
     private lateinit var shelterDialog: AlertDialog
-    private var filter: SearchFilter? = null
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
