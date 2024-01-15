@@ -44,17 +44,7 @@ class SheltersDialog : DialogFragment() {
         }
         viewModelShelters.getShelters()
 
-        adapter = SheltersAdapter(emptyList()) { shelter ->
-            sharedPreferences.edit().putString("lastFilterTitle", shelter.name).apply()
-            viewModelPets.filterPresentLiveData.value = true
-            viewModelPets.getPets(
-                isInternetAvailable(requireContext()),
-                SearchFilter(imeSklonista = shelter.name),
-                getMyPets = false,
-                reset = true
-            )
-            dismiss()
-        }
+        adapter = SheltersAdapter(emptyList())
         binding.sheltersRecyclerView.adapter = adapter
         setObservers()
     }

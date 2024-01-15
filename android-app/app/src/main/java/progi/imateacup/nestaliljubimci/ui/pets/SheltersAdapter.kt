@@ -9,16 +9,13 @@ import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.model.networking.response.ShelterResponse
 
 class SheltersAdapter(
-    private var shelters: List<ShelterResponse>, private val onShelterClickCallback: (ShelterResponse) -> Unit
+    private var shelters: List<ShelterResponse>
 ) : RecyclerView.Adapter<SheltersAdapter.SheltersViewHolder>() {
 
     inner class SheltersViewHolder(private val binding: SheltersCardBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(shelter: ShelterResponse) {
-            with (binding) {
-                binding.shelterCard.setOnClickListener {
-                    onShelterClickCallback.invoke(shelter)
-                }
+            with(binding) {
                 shelterName.text = shelter.name
                 shelterEmail.text = shelter.email
                 shelterPhoneNumber.text = shelter.phone_number

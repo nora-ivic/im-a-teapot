@@ -96,5 +96,6 @@
     <string name="izbrisi">Izbriši</string>
     <string name="potvrda_brisanja_oglasa">Jeste li sigurni da želite obrisati oglas?</string>
     <string name="brisanje_oglasa">Brisanje oglasa</string>
-    <string name="sklonista">Odaberi sklonište</string>
+    <string name="sklonista">Registrirana skloništa</string>
+    <string name="svaSklonista">Sva skloništa</string>
 </resources>

@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
@@ -77,16 +78,21 @@ class PetsFragment : Fragment() {
     private fun handleDifferentUsersDisplay() {
         with (binding) {
             if (accessToken == null) {
-                topAppBarPets.menu.removeItem(R.id.pronadeni)
-                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBarPets.menu.removeItem(R.id.uSklonistu)
-                topAppBarPets.menu.removeItem(R.id.uginuli)
+                with (topAppBarPets) {
+                    menu.removeItem(R.id.pronadeni)
+                    menu.removeItem(R.id.prekinutoTrazenje)
+                    menu.removeItem(R.id.uSklonistu)
+                    menu.removeItem(R.id.uginuli)
 
-                topAppBarPets.setNavigationOnClickListener {
-                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                    findNavController().navigate(direction)
+                    val menuItem: MenuItem = menu.findItem(R.id.serach_submenu)
+                    menuItem.subMenu?.removeItem(R.id.trazi_po_sklonistu)
+
+                    setNavigationOnClickListener {
+                        val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                        findNavController().navigate(direction)
+                    }
                 }
+
 
                 bottomAppBar.visibility = View.GONE
                 addPost.visibility = View.GONE
@@ -218,6 +224,12 @@ class PetsFragment : Fragment() {
                         true
                     }
 
+                    R.id.svaSkonista -> {
+                        val direction = PetsFragmentDirections.actionPetsFragmentToSheltersDialog()
+                        findNavController().navigate(direction)
+                        true
+                    }
+
                     R.id.po_ljubimcu -> {
                         val direction = PetsFragmentDirections.actionPetsFragmentToSearchFragment()
                         findNavController().navigate(direction)
@@ -230,8 +242,7 @@ class PetsFragment : Fragment() {
                     }
 
                     R.id.trazi_po_sklonistu -> {
-                        val direction = PetsFragmentDirections.actionPetsFragmentToSheltersDialog()
-                        findNavController().navigate(direction)
+                        shelterDialog.show()
                         true
                     }
 
