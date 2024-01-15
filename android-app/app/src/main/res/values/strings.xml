@@ -41,10 +41,12 @@
     <string name="comment_add_fail">Failed to add a comment</string>
     <string name="adds_fetch_fail">Failed to get adds</string>
     <string name="add_comment">Dodaj komentar:</string>
+    <string name="location_info">Lokacija je priložena.</string>
     <string name="comment">Upiši komentar…</string>
     <string name="comment_submit">Pošalji komentar…</string>
     <string name="add_message_image">Dodaj sliku…</string>
     <string name="add_location_image">Dodaj lokaciju…</string>
+    <string name="remove_location">Ukloni lokaciju…</string>
     <string name="advert_fetch_fail">Neuspješno dohvaćanje oglasa</string>
     <string name="pet_fetch_fail">Neuspješno dohvaćanje ljubimca</string>
     <string name="shelter_fetch_fail">Neuspješno dohvaćanje skloništa</string>

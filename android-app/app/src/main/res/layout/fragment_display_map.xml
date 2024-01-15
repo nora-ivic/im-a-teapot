@@ -3,10 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.map.MapFragment">
+    tools:context=".ui.map.MapDisplayLocationFragment">
 
     <com.mapbox.maps.MapView
-        android:id="@+id/map"
+        android:id="@+id/mapDisplay"
         android:layout_width="match_parent"
         android:layout_height="match_parent"/>
 

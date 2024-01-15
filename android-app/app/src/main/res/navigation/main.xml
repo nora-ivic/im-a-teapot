@@ -36,8 +36,11 @@
             android:defaultValue="-1"
             app:argType="integer" />
         <action
-            android:id="@+id/action_advertDetailsView_to_mapFragment"
-            app:destination="@id/mapFragment" />
+            android:id="@+id/action_advertDetailsView_to_mapSelectLocationFragment"
+            app:destination="@id/mapSelectLocationFragment" />
+        <action
+            android:id="@+id/action_advertDetailsView_to_mapDisplayLocationFragment"
+            app:destination="@id/mapDisplayLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/petsFragment"
@@ -72,8 +75,19 @@
         android:name="progi.imateacup.nestaliljubimci.ui.search.SearchFragment"
         android:label="SearchFragment" />
     <fragment
-        android:id="@+id/mapFragment"
-        android:name="progi.imateacup.nestaliljubimci.ui.map.MapFragment"
-        android:label="fragment_map"
-        tools:layout="@layout/fragment_map" />
+        android:id="@+id/mapSelectLocationFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.map.MapSelectLocationFragment"
+        android:label="fragment_select_location_map"
+        tools:layout="@layout/fragment_select_map" />
+    <fragment
+        android:id="@+id/mapDisplayLocationFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.map.MapDisplayLocationFragment"
+        android:label="fragment_display_location_map"
+        tools:layout="@layout/fragment_display_map">
+        <argument
+            android:name="coordinates"
+            android:defaultValue="0.0,0.0"
+            app:argType="string" />
+    </fragment>
+
 </navigation>

@@ -4,6 +4,7 @@ import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import progi.imateacup.nestaliljubimci.databinding.CommentCardBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
@@ -19,12 +20,21 @@ class CommentsAdapter(private var commentList: List<Comment>) :
             with(binding) {
                 username.text = comment.username
                 commentText.text = comment.text
-                /*Glide
-                    .with(itemView.context)
-                    .load(comment.user.imageUrl)
-                    .placeholder(R.drawable.ic_profile_placeholder)
-                    .into(profilePicture)
-                 */
+                phone.text = comment.userPhoneNumber
+                email.text = comment.userEmail
+                locationIcon.visibility = if (comment.location == "") {
+                    ViewGroup.GONE
+                } else {
+                    ViewGroup.VISIBLE
+                }
+
+                val direction =
+                    AdvertDetailsFragmentDirections.actionAdvertDetailsViewToMapDisplayLocationFragment(
+                        comment.location
+                    )
+                locationIcon.setOnClickListener { view ->
+                    view.findNavController().navigate(direction)
+                }
             }
         }
     }

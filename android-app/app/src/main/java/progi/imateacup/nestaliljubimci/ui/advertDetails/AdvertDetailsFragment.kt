@@ -12,11 +12,9 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.FrameLayout
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.FileProvider
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -32,12 +30,10 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
-import com.mapbox.maps.MapView
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
-import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -48,6 +44,13 @@ class AdvertDetailsFragment : Fragment() {
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var imagesAdapter: ImagesAdapter
+
+    private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
+    private val RETURNED_FROM_MAP_FRAGMENT_KEY = "returned_from_map_fragment"
+    private var temporaryMessage: String = ""
+    private var returnedFromSelectMap: Boolean = false
+
+    private var messageCoordinates: String? = null
 
     private var accessToken: String? = null
     private var _binding: FragmentAdvertDetailsBinding? = null
@@ -102,9 +105,18 @@ class AdvertDetailsFragment : Fragment() {
             topAppBarDetails.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
-            val dialog = buildCommentDialog()
+            returnedFromSelectMap = sharedPreferences.getBoolean(RETURNED_FROM_MAP_FRAGMENT_KEY, false)
+            val dialog = buildCommentDialog(returnedFromSelectMap)
             commentButton.setOnClickListener {
                 dialog.show()
+            }
+            if (returnedFromSelectMap) {
+                dialog.show()
+
+                returnedFromSelectMap = false
+                val editor = sharedPreferences.edit()
+                editor.putBoolean(RETURNED_FROM_MAP_FRAGMENT_KEY, returnedFromSelectMap)
+                editor.apply()
             }
         }
         observeCoordinates()
@@ -174,11 +186,12 @@ class AdvertDetailsFragment : Fragment() {
 
     private fun observeCoordinates() {
         val navController = findNavController()
+
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("coordinates")
             ?.observe(
                 viewLifecycleOwner
             ) { coordinates ->
-                Log.d("AdvertDetails", "Coordinates: $coordinates")
+                messageCoordinates = coordinates
             }
     }
 
@@ -241,7 +254,7 @@ class AdvertDetailsFragment : Fragment() {
         }
     }
 
-    private fun buildCommentDialog(): BottomSheetDialog {
+    private fun buildCommentDialog(returnedFromMap: Boolean): BottomSheetDialog {
 
         val dialog = BottomSheetDialog(requireContext())
         val dialogAddCommentBinding = DialogAddCommentBinding.inflate(layoutInflater)
@@ -252,13 +265,34 @@ class AdvertDetailsFragment : Fragment() {
             showAddPictureAlertDialog()
         }
 
+        if (returnedFromMap) {
+            dialogAddCommentBinding.locationInfo.visibility = View.VISIBLE
+            dialogAddCommentBinding.addLocationButton.text = getString(R.string.remove_location)
+        }
+
+        temporaryMessage = sharedPreferences.getString(TEMPORARY_COMENT_TEXT_KEY, "") ?: ""
+        if (temporaryMessage.isNotEmpty()) {
+            dialogAddCommentBinding.messageInput.setText(temporaryMessage)
+        }
+
         dialogAddCommentBinding.addLocationButton.setOnClickListener {
-            /**
-             * save data to shared preferences
-             */
-            dialog.dismiss()
-            val direction = AdvertDetailsFragmentDirections.actionAdvertDetailsViewToMapFragment()
-            findNavController().navigate(direction)
+
+            temporaryMessage = dialogAddCommentBinding.messageInput.text.toString()
+            val editor = sharedPreferences.edit()
+            editor.putString(TEMPORARY_COMENT_TEXT_KEY, temporaryMessage)
+            editor.apply()
+
+            if (messageCoordinates != null) {
+                messageCoordinates = null
+                dialogAddCommentBinding.locationInfo.visibility = View.GONE
+                dialogAddCommentBinding.addLocationButton.text =
+                    getString(R.string.add_location_image)
+            } else {
+                dialog.dismiss()
+                val direction =
+                    AdvertDetailsFragmentDirections.actionAdvertDetailsViewToMapSelectLocationFragment()
+                findNavController().navigate(direction)
+            }
         }
 
         dialogAddCommentBinding.closeButton.setOnClickListener {
@@ -270,13 +304,12 @@ class AdvertDetailsFragment : Fragment() {
                 advertId = args.advertId,
                 text = dialogAddCommentBinding.messageInput.text.toString(),
                 pictureLinks = emptyList(),
-                location = ""
+                location = messageCoordinates ?: ""
             )
             dialog.dismiss()
         }
 
         return dialog
-
     }
 
     private fun showAddPictureAlertDialog() {
