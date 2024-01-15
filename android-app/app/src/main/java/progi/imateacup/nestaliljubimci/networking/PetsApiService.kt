@@ -1,6 +1,6 @@
 package progi.imateacup.nestaliljubimci.networking
 
-import okhttp3.RequestBody
+import okhttp3.MultipartBody
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
@@ -16,7 +16,9 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
 import retrofit2.http.GET
+import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
 import retrofit2.http.QueryMap
@@ -42,9 +44,10 @@ interface PetsApiService {
         @Body request: AddCommentRequest
     ): Response<AddCommentResponse>
 
+    @Multipart
     @POST("api/pictures/upload")
     suspend fun uploadImage(
-        @Body image: RequestBody
+        @Part image: MultipartBody.Part
     ): Response<String>
 
     @GET("api/advert/")

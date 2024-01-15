@@ -118,9 +118,13 @@ class AdvertDetailsViewModel : ViewModel() {
     }
 
     private suspend fun postImageRequest(picture: File): String? {
-        val requestFile = picture.asRequestBody("image/*".toMediaType())
-        Log.d("IMAGE", requestFile.toString())
-        val response = ApiModule.retrofit.uploadImage(requestFile)
+        val response = ApiModule.retrofit.uploadImage(
+            MultipartBody.Part.createFormData(
+                "image",
+                picture.name,
+                picture.asRequestBody("image/*".toMediaType())
+            )
+        )
         if (!response.isSuccessful) {
             throw IOException("Failed to upload picture")
         }
