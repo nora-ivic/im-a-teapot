@@ -17,6 +17,9 @@ class CreateAdvertViewModel : ViewModel() {
     private val _advertAddedLiveData = MutableLiveData<Boolean>()
     val advertAddedLiveData: LiveData<Boolean> = _advertAddedLiveData
 
+    private val _advertCoordinatesLiveData = MutableLiveData<String?>()
+    val advertCoordinatesLiveData: LiveData<String?> = _advertCoordinatesLiveData
+
     fun advertAdvert(
         advert_category: AdvertisementCategory,
         pet_name: String?,
@@ -71,7 +74,10 @@ class CreateAdvertViewModel : ViewModel() {
         if (!response.isSuccessful) {
             throw IOException("Unsuccessful user registration")
         }
-        //TODO: refetch
         return true
+    }
+
+    fun setAdvertCoordinates(coordinates: String?) {
+        _advertCoordinatesLiveData.value = coordinates
     }
 }

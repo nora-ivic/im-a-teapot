@@ -35,8 +35,6 @@ class CreateAdvertFragment : Fragment() {
     private lateinit var pickAnImage: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var imageUri: Uri
 
-    private var messageCoordinates: String? = null
-
     private var _binding: CreateAdvertFragmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<CreateAdvertViewModel>()
@@ -150,23 +148,29 @@ class CreateAdvertFragment : Fragment() {
                     pet_color = petColorField.text.toString(),
                     pet_age = selectedAge,
                     date_time_lost = "2024-01-15T15:12:57.584Z",
-                    location_lost = messageCoordinates.toString(),
+                    location_lost = viewModel.advertCoordinatesLiveData.value,
                     description = descriptionField.text.toString(),
                 )
             }
 
 
             addLocationButton.setOnClickListener {
-
-                if (messageCoordinates != null) {
-                    messageCoordinates = null
-                    locationInfo.visibility = View.GONE
-                    addLocationButton.text =
-                        getString(R.string.add_location_image)
+                if (viewModel.advertCoordinatesLiveData.value != null) {
+                    viewModel.setAdvertCoordinates(null)
                 } else {
                     val direction =
                         CreateAdvertFragmentDirections.actionCreateAdvertFragmentToMapSelectLocationFragment()
                     findNavController().navigate(direction)
+                }
+            }
+
+            viewModel.advertCoordinatesLiveData.observe(viewLifecycleOwner) { advertCoordinates ->
+                if (advertCoordinates != null) {
+                    locationInfo.visibility = View.VISIBLE
+                    addLocationButton.text = getString(R.string.remove_location)
+                } else {
+                    locationInfo.visibility = View.GONE
+                    addLocationButton.text = getString(R.string.add_location)
                 }
             }
 
@@ -180,8 +184,7 @@ class CreateAdvertFragment : Fragment() {
             ?.observe(
                 viewLifecycleOwner
             ) { coordinates ->
-                messageCoordinates = coordinates
-                Log.d("Coordinates", messageCoordinates.toString())
+                viewModel.setAdvertCoordinates(coordinates)
             }
     }
 

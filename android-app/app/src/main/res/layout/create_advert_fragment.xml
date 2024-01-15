@@ -256,7 +256,7 @@
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_24dp"
             android:layout_marginTop="@dimen/margin_8dp"
-            android:text="@string/add_location_image"
+            android:text="@string/add_location"
             android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
             app:backgroundTint="@color/secondaryContainer"

@@ -1,5 +1,6 @@
 package progi.imateacup.nestaliljubimci.networking
 
+import okhttp3.RequestBody
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
@@ -33,12 +34,18 @@ interface PetsApiService {
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @POST("api/advert/create")
-    suspend fun addAdvert(@Body request: CreateAdvertRequest) : Response<CreateAdvertResponse>
+    suspend fun addAdvert(@Body request: CreateAdvertRequest): Response<CreateAdvertResponse>
+
     @POST("api/messages/{advert_id}/add")
     suspend fun addComment(
         @Path("advert_id") advertId: Int,
         @Body request: AddCommentRequest
     ): Response<AddCommentResponse>
+
+    @POST("api/pictures/upload")
+    suspend fun uploadImage(
+        @Body image: RequestBody
+    ): Response<String>
 
     @GET("api/advert/")
     suspend fun getPets(

@@ -16,6 +16,7 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -30,6 +31,7 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
+import okio.Path.Companion.toPath
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
@@ -39,11 +41,14 @@ import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
 import java.io.File
 
+const val PFP_URI_NAME_DECORATOR = "MessageImage"
+
 class AdvertDetailsFragment : Fragment() {
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var imagesAdapter: ImagesAdapter
+    private lateinit var renamedFile: File
 
     private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
     private var temporaryMessage: String = ""
@@ -183,7 +188,6 @@ class AdvertDetailsFragment : Fragment() {
             ?.observe(
                 viewLifecycleOwner
             ) { coordinates ->
-                Log.d("Coordinates",coordinates)
                 advertDetailsViewModel.setMessageCoordinates(coordinates)
                 dialog.show()
             }
@@ -270,8 +274,17 @@ class AdvertDetailsFragment : Fragment() {
                 dialogAddCommentBinding.addLocationButton.text = getString(R.string.remove_location)
             } else {
                 dialogAddCommentBinding.locationInfo.visibility = View.GONE
-                dialogAddCommentBinding.addLocationButton.text =
-                    getString(R.string.add_location_image)
+                dialogAddCommentBinding.addLocationButton.text = getString(R.string.add_location)
+            }
+        }
+
+        advertDetailsViewModel.pfpUrlLiveData.observe(viewLifecycleOwner) { pictureUrl ->
+            if (pictureUrl != null) {
+                dialogAddCommentBinding.imageInfo.visibility = View.VISIBLE
+                dialogAddCommentBinding.addImageButton.text = getString(R.string.remove_image)
+            } else {
+                dialogAddCommentBinding.imageInfo.visibility = View.GONE
+                dialogAddCommentBinding.addImageButton.text = getString(R.string.add_message_image)
             }
         }
 
@@ -347,11 +360,28 @@ class AdvertDetailsFragment : Fragment() {
         snapAnImage =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { pictureSaved ->
                 if (pictureSaved) {
+                    FileUtil.getImageFile(requireContext())
+
+                    //rename the file so profile pictures for different emails can be saved
+                    renamedFile = File(
+                        requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                        "${args.advertId}${System.currentTimeMillis()}${PFP_URI_NAME_DECORATOR}.jpg"
+                    )
+                    //file is never null since the snapAnImage.launch() is only called if the file was created successfully
+                    file!!.renameTo(renamedFile)
+
+                    //remember the profile picture for the given email
+                    sharedPreferences.edit { putString(createLiteral(args.advertId.toString()), renamedFile.path.toString()) }
+
                     uploadImage()
                 } else {
                     Log.e("SavePicture", "Picture not saved")
                 }
             }
+    }
+
+    private fun createLiteral(advertId: String): String {
+        return "${advertId}${PFP_URI_NAME_DECORATOR}"
     }
 
     private fun pickAnImageRegister() {
@@ -368,7 +398,10 @@ class AdvertDetailsFragment : Fragment() {
 
 
     private fun uploadImage() {
-        // advertDetailsViewModel.uploadImage(imageUri.toFile())
+        val picturePath = sharedPreferences.getString(createLiteral(args.advertId.toString()), null)?.toPath()
+        if (picturePath != null) {
+            advertDetailsViewModel.uploadImage(picturePath.toFile())
+        }
     }
 
     private fun showComments() {

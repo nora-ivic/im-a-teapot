@@ -1,11 +1,15 @@
 package progi.imateacup.nestaliljubimci.ui.advertDetails
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
@@ -33,6 +37,12 @@ class AdvertDetailsViewModel : ViewModel() {
 
     private val _messageCoordinatesLiveData = MutableLiveData<String?>()
     val messageCoordinatesLiveData: LiveData<String?> = _messageCoordinatesLiveData
+
+    private val _pfpUrlLiveData = MutableLiveData<Uri>()
+    val pfpUrlLiveData: LiveData<Uri> = _pfpUrlLiveData
+
+    private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
+    val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
 
     private var fetching = false
     private var page = 0
@@ -91,6 +101,30 @@ class AdvertDetailsViewModel : ViewModel() {
                 fetching = false
             }
         }
+    }
+
+    fun uploadImage(picture: File) {
+        viewModelScope.launch {
+            try {
+                val link = postImageRequest(picture)
+                _pfpUrlLiveData.value = Uri.parse(link)
+                _imageUploadSuccessLiveData.value = true
+            } catch (err: Exception) {
+                Log.e("EXCEPTION", err.toString())
+                _imageUploadSuccessLiveData.value = false
+            }
+
+        }
+    }
+
+    private suspend fun postImageRequest(picture: File): String? {
+        val requestFile = picture.asRequestBody("image/*".toMediaType())
+        Log.d("IMAGE", requestFile.toString())
+        val response = ApiModule.retrofit.uploadImage(requestFile)
+        if (!response.isSuccessful) {
+            throw IOException("Failed to upload picture")
+        }
+        return response.body()
     }
 
     private suspend fun fetchComments(advertId: Int): List<Comment>? {
