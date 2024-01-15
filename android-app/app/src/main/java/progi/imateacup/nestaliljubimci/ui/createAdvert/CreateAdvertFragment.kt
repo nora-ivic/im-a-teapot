@@ -24,7 +24,6 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import progi.imateacup.nestaliljubimci.ui.advertDetails.AdvertDetailsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import java.io.File
@@ -36,8 +35,7 @@ class CreateAdvertFragment : Fragment() {
     private lateinit var pickAnImage: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var imageUri: Uri
 
-    private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
-    private var temporaryMessage: String = ""
+    private var messageCoordinates: String? = null
 
     private var _binding: CreateAdvertFragmentBinding? = null
     private val binding get() = _binding!!
@@ -88,7 +86,8 @@ class CreateAdvertFragment : Fragment() {
             (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
 
             val categories = listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
-            val adapter2 = ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
+            val adapter2 =
+                ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
 
             val defaultCategory = "Izgubljen"
             val defaultCategoryPosition = categories.indexOf(defaultCategory)
@@ -97,6 +96,7 @@ class CreateAdvertFragment : Fragment() {
             }
             (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
         }
+        observeCoordinates()
     }
 
 
@@ -140,7 +140,8 @@ class CreateAdvertFragment : Fragment() {
                         null
                     }
                 }
-                val selectedAge = petAgeField.text.toString().takeIf { it.isNotBlank() }?.toIntOrNull()
+                val selectedAge =
+                    petAgeField.text.toString().takeIf { it.isNotBlank() }?.toIntOrNull()
 
                 viewModel.advertAdvert(
                     advert_category = categoryMapping[petCategoryField.text.toString()]!!,
@@ -149,14 +150,39 @@ class CreateAdvertFragment : Fragment() {
                     pet_color = petColorField.text.toString(),
                     pet_age = selectedAge,
                     date_time_lost = "2024-01-15T15:12:57.584Z",
-                    location_lost = "",
+                    location_lost = messageCoordinates.toString(),
                     description = descriptionField.text.toString(),
                 )
             }
 
 
+            addLocationButton.setOnClickListener {
+
+                if (messageCoordinates != null) {
+                    messageCoordinates = null
+                    locationInfo.visibility = View.GONE
+                    addLocationButton.text =
+                        getString(R.string.add_location_image)
+                } else {
+                    val direction =
+                        CreateAdvertFragmentDirections.actionCreateAdvertFragmentToMapSelectLocationFragment()
+                    findNavController().navigate(direction)
+                }
+            }
 
         }
+    }
+
+    private fun observeCoordinates() {
+        val navController = findNavController()
+
+        navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("coordinates")
+            ?.observe(
+                viewLifecycleOwner
+            ) { coordinates ->
+                messageCoordinates = coordinates
+                Log.d("Coordinates", messageCoordinates.toString())
+            }
     }
 
     private fun showAddPictureAlertDialog() {

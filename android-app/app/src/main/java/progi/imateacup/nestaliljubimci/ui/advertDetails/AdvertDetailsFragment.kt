@@ -45,12 +45,8 @@ class AdvertDetailsFragment : Fragment() {
     private lateinit var commentsAdapter: CommentsAdapter
     private lateinit var imagesAdapter: ImagesAdapter
 
-    private val RETURNED_FROM_MAP_FRAGMENT_KEY = "returned_from_map_fragment"
     private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
     private var temporaryMessage: String = ""
-    private var returnedFromSelectMap: Boolean = false
-
-    private var messageCoordinates: String? = null
 
     private var accessToken: String? = null
     private var _binding: FragmentAdvertDetailsBinding? = null
@@ -105,18 +101,9 @@ class AdvertDetailsFragment : Fragment() {
             topAppBarDetails.setNavigationOnClickListener {
                 findNavController().popBackStack()
             }
-            returnedFromSelectMap = sharedPreferences.getBoolean(RETURNED_FROM_MAP_FRAGMENT_KEY, false)
-            val dialog = buildCommentDialog(returnedFromSelectMap)
+            val dialog = buildCommentDialog()
             commentButton.setOnClickListener {
                 dialog.show()
-            }
-            if (returnedFromSelectMap) {
-                dialog.show()
-
-                returnedFromSelectMap = false
-                val editor = sharedPreferences.edit()
-                editor.putBoolean(RETURNED_FROM_MAP_FRAGMENT_KEY, returnedFromSelectMap)
-                editor.apply()
             }
         }
         observeCoordinates()
@@ -190,12 +177,15 @@ class AdvertDetailsFragment : Fragment() {
 
     private fun observeCoordinates() {
         val navController = findNavController()
+        val dialog = buildCommentDialog()
 
         navController.currentBackStackEntry?.savedStateHandle?.getLiveData<String>("coordinates")
             ?.observe(
                 viewLifecycleOwner
             ) { coordinates ->
-                messageCoordinates = coordinates
+                Log.d("Coordinates",coordinates)
+                advertDetailsViewModel.setMessageCoordinates(coordinates)
+                dialog.show()
             }
     }
 
@@ -258,7 +248,7 @@ class AdvertDetailsFragment : Fragment() {
         }
     }
 
-    private fun buildCommentDialog(returnedFromMap: Boolean): BottomSheetDialog {
+    private fun buildCommentDialog(): BottomSheetDialog {
 
         val dialog = BottomSheetDialog(requireContext())
         val dialogAddCommentBinding = DialogAddCommentBinding.inflate(layoutInflater)
@@ -269,14 +259,20 @@ class AdvertDetailsFragment : Fragment() {
             showAddPictureAlertDialog()
         }
 
-        if (returnedFromMap) {
-            dialogAddCommentBinding.locationInfo.visibility = View.VISIBLE
-            dialogAddCommentBinding.addLocationButton.text = getString(R.string.remove_location)
-        }
-
         temporaryMessage = sharedPreferences.getString(TEMPORARY_COMENT_TEXT_KEY, "") ?: ""
         if (temporaryMessage.isNotEmpty()) {
             dialogAddCommentBinding.messageInput.setText(temporaryMessage)
+        }
+
+        advertDetailsViewModel.messageCoordinatesLiveData.observe(viewLifecycleOwner) { messageCoordinates ->
+            if (messageCoordinates != null) {
+                dialogAddCommentBinding.locationInfo.visibility = View.VISIBLE
+                dialogAddCommentBinding.addLocationButton.text = getString(R.string.remove_location)
+            } else {
+                dialogAddCommentBinding.locationInfo.visibility = View.GONE
+                dialogAddCommentBinding.addLocationButton.text =
+                    getString(R.string.add_location_image)
+            }
         }
 
         dialogAddCommentBinding.addLocationButton.setOnClickListener {
@@ -286,11 +282,8 @@ class AdvertDetailsFragment : Fragment() {
             editor.putString(TEMPORARY_COMENT_TEXT_KEY, temporaryMessage)
             editor.apply()
 
-            if (messageCoordinates != null) {
-                messageCoordinates = null
-                dialogAddCommentBinding.locationInfo.visibility = View.GONE
-                dialogAddCommentBinding.addLocationButton.text =
-                    getString(R.string.add_location_image)
+            if (advertDetailsViewModel.messageCoordinatesLiveData.value != null) {
+                advertDetailsViewModel.setMessageCoordinates(null)
             } else {
                 dialog.dismiss()
                 val direction =
@@ -308,10 +301,11 @@ class AdvertDetailsFragment : Fragment() {
                 advertId = args.advertId,
                 text = dialogAddCommentBinding.messageInput.text.toString(),
                 pictureLinks = emptyList(),
-                location = messageCoordinates ?: ""
+                location = advertDetailsViewModel.messageCoordinatesLiveData.value.toString()
             )
             dialog.dismiss()
         }
+
 
         return dialog
     }

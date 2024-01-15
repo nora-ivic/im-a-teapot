@@ -31,6 +31,9 @@ class AdvertDetailsViewModel : ViewModel() {
     private val _commentsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
     val commentsDisplayStateLiveData: LiveData<PetsDisplayState> = _commentsDisplayStateLiveData
 
+    private val _messageCoordinatesLiveData = MutableLiveData<String?>()
+    val messageCoordinatesLiveData: LiveData<String?> = _messageCoordinatesLiveData
+
     private var fetching = false
     private var page = 0
 
@@ -142,5 +145,7 @@ class AdvertDetailsViewModel : ViewModel() {
         this.imageDir = imageDir
     }
 
-
+    fun setMessageCoordinates(coordinates: String?) {
+        _messageCoordinatesLiveData.value = coordinates
+    }
 }

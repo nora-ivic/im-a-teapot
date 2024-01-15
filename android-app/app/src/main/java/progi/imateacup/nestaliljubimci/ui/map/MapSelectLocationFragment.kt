@@ -14,8 +14,6 @@ import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 class MapSelectLocationFragment : Fragment() {
 
     private lateinit var _binding: FragmentSelectMapBinding
-    private val RETURNED_FROM_MAP_FRAGMENT_KEY = "returned_from_map_fragment"
-    private var returnedFromMap: Boolean = false
 
     private lateinit var sharedPreferences: SharedPreferences
 
@@ -37,12 +35,6 @@ class MapSelectLocationFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        returnedFromMap = true
-        val editor = sharedPreferences.edit()
-        editor.putBoolean(RETURNED_FROM_MAP_FRAGMENT_KEY, returnedFromMap)
-        editor.apply()
-
         handleMapClick()
     }
 

@@ -80,10 +80,13 @@
     <fragment
         android:id="@+id/createAdvertFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.createAdvert.CreateAdvertFragment"
-        android:label="CreateAdvertFragment" >
+        android:label="CreateAdvertFragment">
         <action
             android:id="@+id/action_createAdvertFragment_to_petsFragment"
             app:destination="@id/petsFragment" />
+        <action
+            android:id="@+id/action_createAdvertFragment_to_mapSelectLocationFragment"
+            app:destination="@id/mapSelectLocationFragment" />
     </fragment>
     <fragment
         android:id="@+id/mapSelectLocationFragment"
