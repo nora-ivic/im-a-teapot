@@ -73,18 +73,18 @@ class AdvertDetailsViewModel : ViewModel() {
                 val oldComments = _commentsLiveData.value
                 if (!newComments.isNullOrEmpty()) {
                     _commentsLiveData.value = oldComments!! + newComments
-                    _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                    _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
 
                 } else {
                     if (oldComments!!.isNotEmpty()) {
-                        _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESS
+                        _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
                     } else {
                         _commentsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
                     }
                 }
                 fetching = false
             } catch (err: Exception) {
-                _commentsDisplayStateLiveData.value = PetsDisplayState.ERROR
+                _commentsDisplayStateLiveData.value = PetsDisplayState.ERRORGET
                 fetching = false
             }
         }

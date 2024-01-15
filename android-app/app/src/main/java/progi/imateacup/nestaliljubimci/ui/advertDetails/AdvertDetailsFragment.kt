@@ -139,11 +139,11 @@ class AdvertDetailsFragment : Fragment() {
                         showLoading()
                     }
 
-                    PetsDisplayState.SUCCESS -> {
+                    PetsDisplayState.SUCCESSGET -> {
                         showComments()
                     }
 
-                    PetsDisplayState.ERROR -> {
+                    PetsDisplayState.ERRORGET -> {
                         showNoPosts()
                         Snackbar.make(
                             binding.root,
@@ -153,6 +153,10 @@ class AdvertDetailsFragment : Fragment() {
                     }
 
                     PetsDisplayState.NOPOSTS -> {
+                        showNoPosts()
+                    }
+
+                    else -> {
                         showNoPosts()
                     }
                 }
