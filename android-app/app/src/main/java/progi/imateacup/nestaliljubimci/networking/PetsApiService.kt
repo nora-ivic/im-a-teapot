@@ -10,7 +10,6 @@ import progi.imateacup.nestaliljubimci.model.networking.response.RegisterRespons
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.CreateAdvertResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.ListCommentsResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
 import retrofit2.http.Body
@@ -33,7 +32,7 @@ interface PetsApiService {
     @POST("api/authorization/signup")
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
-    @POST("api/advert")
+    @POST("api/advert/create")
     suspend fun advert(@Body request: CreateAdvertRequest) : Response<CreateAdvertResponse>
 
     @GET("api/advert/")

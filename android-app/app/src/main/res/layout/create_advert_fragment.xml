@@ -365,7 +365,7 @@
 
         </RelativeLayout>
         <Button
-            android:id="@+id/advertButton"
+            android:id="@+id/submitButton"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

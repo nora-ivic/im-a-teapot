@@ -120,7 +120,7 @@ class PetsFragment : Fragment() {
                 getPets(null, true, getString(R.string.mojiOglasi))
                 true
             }
-            dodajOglas.setOnClickListener {
+            addPost.setOnClickListener {
                 val direction = PetsFragmentDirections.actionPetsFragmentToCreateAdvertFragment()
                 findNavController().navigate(direction)
             }

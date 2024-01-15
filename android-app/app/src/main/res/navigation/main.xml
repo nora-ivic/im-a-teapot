@@ -79,7 +79,7 @@
         android:label="SearchFragment" />
     <fragment
         android:id="@+id/createAdvertFragment"
-        android:name="progi.imateacup.nestaliljubimci.ui.advertDetails.CreateAdvertFragment"
+        android:name="progi.imateacup.nestaliljubimci.ui.createAdvert.CreateAdvertFragment"
         android:label="CreateAdvertFragment" >
         <action
             android:id="@+id/action_createAdvertFragment_to_petsFragment"

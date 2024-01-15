@@ -1,4 +1,4 @@
-package progi.imateacup.nestaliljubimci.ui.advertDetails
+package progi.imateacup.nestaliljubimci.ui.createAdvert
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -17,7 +17,8 @@ class CreateAdvertViewModel : ViewModel() {
     private val _createAdvertResultLiveData = MutableLiveData<Boolean>()
     val createAdvertResultLiveData: LiveData<Boolean> = _createAdvertResultLiveData
     private val _accessTokenLiveData = MutableLiveData<String>()
-    var accessTokenLiveData : LiveData<String> = _accessTokenLiveData
+    var accessTokenLiveData: LiveData<String> = _accessTokenLiveData
+
     fun postCreateAdvert(
         advert_category: AdvertisementCategory,
         pet_name: String,
@@ -52,26 +53,27 @@ class CreateAdvertViewModel : ViewModel() {
 
     private suspend fun postCreateAdvertRequest(
         advert_category: AdvertisementCategory,
-        pet_name: String,
-        pet_species: PetSpecies,
-        pet_color: String,
-        pet_age: Int,
-        date_time_lost: String,
-        location_lost: String,
-        description: String,
-        is_in_shelter: Boolean
+        pet_name: String?,
+        pet_species: PetSpecies?,
+        pet_color: String?,
+        pet_age: Int?,
+        date_time_lost: String?,
+        location_lost: String?,
+        description: String?,
+        is_in_shelter: Boolean?
     ) {
-        val response = ApiModule.retrofit.advert(request = CreateAdvertRequest(
-            advert_category = advert_category,
-            pet_name = pet_name,
-            pet_species = pet_species,
-            pet_color = pet_color,
-            pet_age = pet_age,
-            date_time_lost = date_time_lost,
-            location_lost = location_lost,
-            description = description,
-            is_in_shelter = is_in_shelter
-        )
+        val response = ApiModule.retrofit.advert(
+            request = CreateAdvertRequest(
+                advert_category = advert_category,
+                pet_name = pet_name,
+                pet_species = pet_species,
+                pet_color = pet_color,
+                pet_age = pet_age,
+                date_time_lost = date_time_lost,
+                location_lost = location_lost,
+                description = description,
+                is_in_shelter = is_in_shelter
+            )
         )
         if (!response.isSuccessful) {
             throw IOException("Unsuccessful user registration")
