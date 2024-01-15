@@ -22,6 +22,7 @@ import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
+import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 
 class AdvertDetailsFragment : Fragment() {
 
@@ -81,10 +82,21 @@ class AdvertDetailsFragment : Fragment() {
                 dialog.show()
             }
         }
+        observeAccessToken()
         initRecyclerViewAdapter()
         displayAdvertDetails()
         displayImages()
         //displayComments()
+    }
+
+    private fun observeAccessToken() {
+        advertDetailsViewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+            if (accessTokenExpired) {
+                sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
+                val direction = AdvertDetailsFragmentDirections.actionAdvertDetailsFragmentToLoginFragment(true)
+                findNavController().navigate(direction)
+            }
+        }
     }
 
     private fun displayAdvertDetails() {
