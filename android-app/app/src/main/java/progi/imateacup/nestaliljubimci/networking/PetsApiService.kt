@@ -11,6 +11,7 @@ import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentRespo
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.Path
@@ -36,10 +37,22 @@ interface PetsApiService {
         @QueryMap filter: Map<String, String>
     ): Response<List<Pet>>
 
+    @GET("/api/advert/my_adverts")
+    suspend fun getMyPets(
+        @Query("page") page: Int = PAGE,
+        @Query("page_size") items: Int = PAGE_SIZE,
+    ): Response<List<Pet>>
+
     @GET("api/advert/{advert_id}/details")
     suspend fun getAdvertDetails(
         @Path("advert_id") advertId: Int,
     ): Response<Advert>
+
+    @GET("api/messages/{advert_id}")
+    @DELETE("/api/advert/{advert_id}/delete")
+    suspend fun deleteAdvert(
+        @Path("advert_id") advertId: Int,
+    ): Response<Unit>
 
     @GET("api/messages/{advert_id}")
     suspend fun getComments(
