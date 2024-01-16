@@ -542,6 +542,7 @@ class CreateEditAdvertFragment : Fragment() {
         pickAnImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 val path = getRealPathFromURI(uri, requireContext())
+                sharedPreferences.edit { putString(createLiteral(), path) }
                 val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 requireContext().contentResolver.takePersistableUriPermission(uri, flag)
                 uploadImage()
