@@ -34,6 +34,7 @@ class MessagingRepository:
             self.session.add(new_picture)
 
         self.session.commit()
+        self.session.close()
 
     def get_messages(
             self,
@@ -47,9 +48,11 @@ class MessagingRepository:
             .filter(Message.advert_id == advert_id)
         )
 
-        return (
+        return_data = (
             query
             .order_by(Message.date_time_mess)
             .limit(page_size).offset((page - 1) * page_size)
             .all()
         )
+        self.session.close()
+        return return_data

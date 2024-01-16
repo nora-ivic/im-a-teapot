@@ -54,6 +54,7 @@ class AdvertisementRepository:
         if pet:
             self.session.add(pet)
         self.session.commit()
+        self.session.close()
 
     def get_adverts(
             self,
@@ -100,12 +101,15 @@ class AdvertisementRepository:
             .filter(Advertisement.deleted == False, Advertisement.user_id == user_id)
         )
 
-        return (
+        return_data = (
             query
             .order_by(desc(Advertisement.date_time_adv))
             .limit(page_size).offset((page - 1) * page_size)
             .all()
         )
+
+        self.session.close()
+        return return_data
 
     def get_advert_by_id(self, advert_id: int):
         query = (
@@ -118,9 +122,10 @@ class AdvertisementRepository:
             .filter(Advertisement.id == advert_id)
         )
 
-        return (
-            query.first()
-        )
+        return_data = query.first()
+        self.session.close()
+
+        return return_data
 
     def is_shelter(self, user_id: int):
         auth_repo = AuthorizationRepository(session=self.session)
