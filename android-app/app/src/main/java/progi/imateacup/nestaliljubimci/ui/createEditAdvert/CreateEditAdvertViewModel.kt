@@ -39,6 +39,10 @@ class CreateEditAdvertViewModel : ViewModel() {
     private val _advertFetchSuccessLiveData = MutableLiveData<Boolean>()
     val advertFetchSuccessLiveData: LiveData<Boolean> = _advertFetchSuccessLiveData
 
+    private val _accessTokenExpiredLiveData = MutableLiveData<Boolean>()
+    val accessTokenExpiredLiveData: LiveData<Boolean> = _accessTokenExpiredLiveData
+
+
 
     fun advertAdvert(
         advert_category: AdvertisementCategory,
@@ -65,7 +69,9 @@ class CreateEditAdvertViewModel : ViewModel() {
                     pictureLinks
                 )?.advertId
             } catch (err: Exception) {
-                Log.e("Exception", err.toString())
+                if (err.localizedMessage == "Unauthorized") {
+                    _accessTokenExpiredLiveData.value = true
+                }
                 _advertIdLiveData.value = null
             }
         }
@@ -99,7 +105,10 @@ class CreateEditAdvertViewModel : ViewModel() {
                     pictureLinks
                 )?.advertId
             } catch (err: Exception) {
-                Log.e("Exception", err.toString())
+
+                if (err.localizedMessage == "Unauthorized") {
+                    _accessTokenExpiredLiveData.value = true
+                }
                 _advertIdLiveData.value = null
             }
         }
@@ -122,6 +131,10 @@ class CreateEditAdvertViewModel : ViewModel() {
 
     private suspend fun fetchAdvertDetails(advertId: Int): Advert? {
         val response = ApiModule.retrofit.getAdvertDetails(advertId = advertId)
+
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
 
         if (!response.isSuccessful)
             throw IOException("Failed to get advert details")
@@ -153,6 +166,10 @@ class CreateEditAdvertViewModel : ViewModel() {
                 picture.asRequestBody("image/*".toMediaType())
             )
         )
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
+
         if (!response.isSuccessful) {
             throw IOException("Failed to upload picture")
         }
@@ -184,6 +201,9 @@ class CreateEditAdvertViewModel : ViewModel() {
                 pictureLinks = pictureLinks
             )
         )
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
         if (!response.isSuccessful) {
             throw IOException("Neuspješno dodavanje oglasa.")
         }
@@ -217,9 +237,13 @@ class CreateEditAdvertViewModel : ViewModel() {
                 pictureLinks = pictureLinks
             )
         )
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
         if (!response.isSuccessful) {
             throw IOException("Neuspješno uređivanje oglasa.")
         }
+
         return response.body()
     }
 

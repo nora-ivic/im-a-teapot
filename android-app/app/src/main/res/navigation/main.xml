@@ -87,7 +87,7 @@
     <fragment
         android:id="@+id/searchFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.search.SearchFragment"
-        android:label="SearchFragment"></fragment>
+        android:label="SearchFragment" />
 
     <fragment
         android:id="@+id/createEditAdvertFragment"
@@ -101,8 +101,11 @@
             app:destination="@id/mapSelectLocationFragment" />
         <action
             android:id="@+id/action_createAdvertFragment_to_detailsFragment"
-            app:destination="@id/advertDetailsView"
+            app:destination="@id/advertDetailsFragment"
             app:popUpTo="@id/petsFragment" />
+        <action
+            android:id="@+id/action_createAdvertFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
         <argument
             android:name="advertId"
             android:defaultValue="-1"
@@ -126,6 +129,10 @@
     <dialog
         android:id="@+id/sheltersDialog"
         android:name="progi.imateacup.nestaliljubimci.ui.pets.SheltersDialog"
-        android:label="SheltersDialog" />
+        android:label="SheltersDialog">
+        <action
+            android:id="@+id/action_sheltersDialog_to_loginFragment"
+            app:destination="@id/loginFragment" />
+    </dialog>
 
 </navigation>

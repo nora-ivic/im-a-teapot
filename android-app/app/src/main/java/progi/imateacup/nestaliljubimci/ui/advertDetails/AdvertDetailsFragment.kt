@@ -114,7 +114,6 @@ class AdvertDetailsFragment : Fragment() {
             }
         }
         observeAccessToken()
-        initRecyclerViewAdapter()
         observeCoordinates()
         initRecyclerViews()
         displayAdvertDetails()

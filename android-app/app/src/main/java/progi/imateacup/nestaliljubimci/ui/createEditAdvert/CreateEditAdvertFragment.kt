@@ -35,7 +35,9 @@ import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
+import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
+import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import java.io.File
@@ -237,7 +239,14 @@ class CreateEditAdvertFragment : Fragment() {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
-
+            viewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+                if (accessTokenExpired) {
+                    sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
+                    val direction =
+                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToLoginFragment()
+                    findNavController().navigate(direction)
+                }
+            }
             dateField.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus)
                     datePicker.show(parentFragmentManager, "datePicker")
