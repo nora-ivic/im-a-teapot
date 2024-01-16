@@ -38,6 +38,7 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
+import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -112,6 +113,8 @@ class AdvertDetailsFragment : Fragment() {
                 dialog.show()
             }
         }
+        observeAccessToken()
+        initRecyclerViewAdapter()
         observeCoordinates()
         initRecyclerViews()
         displayAdvertDetails()
@@ -159,6 +162,16 @@ class AdvertDetailsFragment : Fragment() {
                     Snackbar.make(binding.root, R.string.comment_post_fail, Snackbar.LENGTH_SHORT)
                         .show()
                 }
+            }
+        }
+    }
+
+    private fun observeAccessToken() {
+        advertDetailsViewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+            if (accessTokenExpired) {
+                sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
+                val direction = AdvertDetailsFragmentDirections.actionAdvertDetailsFragmentToLoginFragment(true)
+                findNavController().navigate(direction)
             }
         }
     }

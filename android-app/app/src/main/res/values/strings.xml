@@ -129,4 +129,5 @@
     <string name="date">Datum</string>
     <string name="picture_text">Dodaj sliku</string>
     <string name="advert_unsuccessful">Neuspješno dodavanje oglasa.</string>
+    <string name="access_token_expired">Sjednica istekla, molimo vas ponovno se prijavite</string>
 </resources>

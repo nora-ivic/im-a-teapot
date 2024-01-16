@@ -285,6 +285,13 @@ class PetsFragment : Fragment() {
 
     private fun setLiveDataObservers() {
         with(viewModel) {
+            accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+                if (accessTokenExpired) {
+                    sharedPreferences.edit().remove(ACCESS_TOKEN).apply()
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment(true)
+                    findNavController().navigate(direction)
+                }
+            }
             petsLiveData.observe(viewLifecycleOwner) { pets ->
                 if (!pets.isNullOrEmpty()) {
                     if (pets != adapter.getPetsList()) {

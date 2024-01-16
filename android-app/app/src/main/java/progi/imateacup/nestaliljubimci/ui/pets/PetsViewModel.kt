@@ -30,6 +30,9 @@ class PetsViewModel : ViewModel() {
     private val _DisplayStateLiveData = MutableLiveData<DisplayState>()
     val displayStateLiveData: LiveData<DisplayState> = _DisplayStateLiveData
 
+    private val _accessTokenExpiredLiveData = MutableLiveData<Boolean>()
+    val accessTokenExpiredLiveData: LiveData<Boolean> = _accessTokenExpiredLiveData
+
     fun getPets(networkAvailable: Boolean, filter: SearchFilter, getMyPets: Boolean, reset: Boolean) {
         if (networkAvailable) {
             if (fetching) {
@@ -70,10 +73,11 @@ class PetsViewModel : ViewModel() {
                     }
                     fetching = false
                 } catch (err: Exception) {
-                    Log.d("PetsViewModel", "Failed to get pets: ${err.message}")
-                    Log.d("PetsViewModel", err.stackTraceToString())
                     _DisplayStateLiveData.value = DisplayState.ERRORGET
                     fetching = false
+                    if (err.localizedMessage == "Unauthorized") {
+                        _accessTokenExpiredLiveData.value = true
+                    }
                 }
             }
         } else {
@@ -85,6 +89,10 @@ class PetsViewModel : ViewModel() {
     private suspend fun sendGetMyPetsRequest(): List<Pet>? {
         val response = ApiModule.retrofit.getMyPets(page = page)
 
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
+
         if (!response.isSuccessful) {
             throw IOException("Failed to get my missing pets adds")
         } else {
@@ -94,6 +102,10 @@ class PetsViewModel : ViewModel() {
 
     private suspend fun sendGetPetsRequest(filter: SearchFilter): List<Pet>? {
         val response = ApiModule.retrofit.getPets(page = page, filter = filter.toQueryMap())
+
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
 
         if (!response.isSuccessful) {
             throw IOException("Failed to get missing pets adds")
@@ -109,6 +121,9 @@ class PetsViewModel : ViewModel() {
                     sendDeleteRequest(advertId)
                     _DisplayStateLiveData.value = DisplayState.SUCCESSDELETE
                 } catch (err: Exception) {
+                    if (err.localizedMessage == "Unauthorized") {
+                        _accessTokenExpiredLiveData.value = true
+                    }
                     _DisplayStateLiveData.value = DisplayState.ERRORDELETE
                 }
             }
@@ -119,6 +134,10 @@ class PetsViewModel : ViewModel() {
 
     private suspend fun sendDeleteRequest(advertId: Int): Response<Unit> {
         val response = ApiModule.retrofit.deleteAdvert(advertId)
+
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
 
         if (!response.isSuccessful) {
             throw IOException("Failed to delete advert")

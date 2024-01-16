@@ -11,6 +11,7 @@ import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentLoginBinding
@@ -31,6 +32,7 @@ class LoginFragment : Fragment() {
     private val binding get() = _binding!!
     private val viewModel by viewModels<LoginViewModel>()
     private lateinit var sharedPreferences: SharedPreferences
+    private val args by navArgs<LoginFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,9 +52,20 @@ class LoginFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        notifyAccessTokenExpired()
         setAccessTokenObserver()
         setOnLoginResultAction()
         initListeners()
+    }
+
+    private fun notifyAccessTokenExpired() {
+        if (args.accessTokenExpired) {
+            Snackbar.make(
+                binding.root,
+                R.string.access_token_expired,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun checkUserLoggedIn() {

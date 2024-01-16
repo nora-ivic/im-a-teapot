@@ -2,6 +2,7 @@ package progi.imateacup.nestaliljubimci.ui.advertDetails
 
 import android.net.Uri
 import android.util.Log
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -15,6 +16,7 @@ import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.networking.ApiModule
+import progi.imateacup.nestaliljubimci.ui.pets.PetsViewModel
 import java.io.File
 import java.io.IOException
 
@@ -47,6 +49,9 @@ class AdvertDetailsViewModel : ViewModel() {
     private var fetching = false
     private var page = 0
 
+    private val _accessTokenExpiredLiveData = MutableLiveData<Boolean>()
+    val accessTokenExpiredLiveData: LiveData<Boolean> = _accessTokenExpiredLiveData
+
     private var imageDir: File? = null
     fun getAdvertDetails(advertId: Int) {
         viewModelScope.launch {
@@ -57,7 +62,9 @@ class AdvertDetailsViewModel : ViewModel() {
                 _advertLiveData.value = advert
                 _advertFetchSuccessLiveData.value = true
             } catch (err: Exception) {
-                Log.e("EXCEPTION", err.toString())
+                if (err.localizedMessage == "Unauthorized") {
+                    _accessTokenExpiredLiveData.value = true
+                }
                 _advertFetchSuccessLiveData.value = false
             }
         }
@@ -65,6 +72,10 @@ class AdvertDetailsViewModel : ViewModel() {
 
     private suspend fun fetchAdvertDetails(advertId: Int): Advert? {
         val response = ApiModule.retrofit.getAdvertDetails(advertId = advertId)
+
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
 
         if (!response.isSuccessful)
             throw IOException("Failed to get advert details")
@@ -113,6 +124,9 @@ class AdvertDetailsViewModel : ViewModel() {
                 _imageLinkLiveData.value = Uri.parse(link)
                 _imageUploadSuccessLiveData.value = true
             } catch (err: Exception) {
+                if (err.localizedMessage == "Unauthorized") {
+                    _accessTokenExpiredLiveData.value = true
+                }
                 Log.e("EXCEPTION", err.toString())
                 _imageUploadSuccessLiveData.value = false
             }
@@ -136,6 +150,9 @@ class AdvertDetailsViewModel : ViewModel() {
 
     private suspend fun fetchComments(advertId: Int): List<Comment>? {
         val result = ApiModule.retrofit.getComments(advertId = advertId, page = page, items = 5)
+        if (result.code() == 401) {
+            throw IOException("Unauthorized")
+        }
         if (!result.isSuccessful) {
             throw IOException("Unable to get comments")
         } else {
@@ -155,7 +172,9 @@ class AdvertDetailsViewModel : ViewModel() {
                     postComment(advertId, text, pictureLinks, location)
 
             } catch (err: Exception) {
-                Log.e("EXCEPTION", err.toString())
+                if (err.localizedMessage == "Unauthorized") {
+                    _accessTokenExpiredLiveData.value = true
+                }
                 _commentAddedLiveData.value = false
             }
         }
@@ -175,6 +194,9 @@ class AdvertDetailsViewModel : ViewModel() {
                 location = location
             )
         )
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
         if (!response.isSuccessful) {
             throw IOException("Cannot add comment")
         }
