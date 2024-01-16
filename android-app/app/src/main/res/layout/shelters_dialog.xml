@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appBarLayoutShelters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/surface_container_highest"
+        android:paddingTop="5dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarPets"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            android:translationZ="80dp"
+            app:navigationIcon="@drawable/sharp_arrow_back"
+            app:title="@string/sklonista"
+            app:titleTextColor="@color/black">
+
+            <ProgressBar
+                android:id="@+id/sheltersLoadingProgressBar"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_gravity="end"
+                android:layout_marginHorizontal="@dimen/margin_8dp"
+                android:visibility="gone" />
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/shelters_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/surface_container_highest"
+        android:backgroundTint="@color/surface_container_highest"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        tools:listitem="@layout/shelters_card" />
+
+    <LinearLayout
+        android:id="@+id/noPostsDisplay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/surface_container_highest"
+        android:backgroundTint="@color/surface_container_highest"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:visibility="gone"
+        tools:visibility="visible">
+
+        <ImageView
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_gravity="center_vertical|center_horizontal"
+            android:contentDescription="@string/no_pets_image"
+            android:src="@drawable/paw_exc_wide_border_640" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/no_shelters"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text24sp" />
+
+        <Button
+            android:id="@+id/tryAgain"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginVertical="@dimen/margin_8dp"
+            android:text="@string/pokusaj_opet"
+            android:textColor="@color/black" />
+    </LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
