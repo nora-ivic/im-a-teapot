@@ -6,6 +6,7 @@ import settings
 
 class EngineManager:
     database = settings.DEFAULT_DATABASE
+    engine = None
 
     @classmethod
     def engine_wrapper(cls):
@@ -20,16 +21,20 @@ class EngineManager:
 
     @classmethod
     def get_engine(cls) -> Engine:
-        return create_engine(EngineManager.engine_wrapper())
+        if not cls.engine:
+            cls.engine = create_engine(EngineManager.engine_wrapper())
+        return cls.engine
 
     @classmethod
     def set_database(cls, database: str) -> None:
         EngineManager.database = database
+        EngineManager.engine = None
 
     @classmethod
     def unset_database(cls) -> None:
         EngineManager.database = settings.DEFAULT_DATABASE
+        EngineManager.engine = None
 
 
-def get_session():
+def get_session() -> Session:
     return Session(EngineManager.get_engine())
