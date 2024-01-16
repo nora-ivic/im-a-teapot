@@ -35,6 +35,12 @@ class CommentsAdapter(private var commentList: List<Comment>) :
                 locationIcon.setOnClickListener { view ->
                     view.findNavController().navigate(direction)
                 }
+
+                imageIcon.visibility = if (comment.pictureLinks.isEmpty()) {
+                    ViewGroup.GONE
+                } else {
+                    ViewGroup.VISIBLE
+                }
             }
         }
     }

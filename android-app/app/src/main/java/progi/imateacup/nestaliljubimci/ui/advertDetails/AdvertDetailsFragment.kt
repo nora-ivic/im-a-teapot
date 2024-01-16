@@ -216,6 +216,11 @@ class AdvertDetailsFragment : Fragment() {
 
     private fun initRecyclerViews() {
         with(binding) {
+            if (advertDetailsViewModel.advertLiveData.value?.pictureLinks?.isNotEmpty() == true) {
+                imageRecycler.visibility = View.VISIBLE
+            } else {
+                imageRecycler.visibility = View.GONE
+            }
             imagesAdapter = ImagesAdapter(emptyList())
             imageRecycler.adapter = imagesAdapter
 
@@ -260,7 +265,21 @@ class AdvertDetailsFragment : Fragment() {
         dialog.setContentView(dialogAddCommentBinding.root)
 
         dialogAddCommentBinding.addImageButton.setOnClickListener {
-            showAddPictureAlertDialog()
+            if (advertDetailsViewModel.imageLinkLiveData.value != null) {
+                advertDetailsViewModel.setImageLink(null)
+            } else {
+                showAddPictureAlertDialog()
+            }
+        }
+
+        advertDetailsViewModel.imageUploadSuccessLiveData.observe(viewLifecycleOwner) { success ->
+            if (!success) {
+                Snackbar.make(
+                    binding.root,
+                    "Došlo je do pogreške prilikom dodavanja slike",
+                    Snackbar.LENGTH_LONG
+                ).show()
+            }
         }
 
         temporaryMessage = sharedPreferences.getString(TEMPORARY_COMENT_TEXT_KEY, "") ?: ""
@@ -278,7 +297,7 @@ class AdvertDetailsFragment : Fragment() {
             }
         }
 
-        advertDetailsViewModel.pfpUrlLiveData.observe(viewLifecycleOwner) { pictureUrl ->
+        advertDetailsViewModel.imageLinkLiveData.observe(viewLifecycleOwner) { pictureUrl ->
             if (pictureUrl != null) {
                 dialogAddCommentBinding.imageInfo.visibility = View.VISIBLE
                 dialogAddCommentBinding.addImageButton.text = getString(R.string.remove_image)
@@ -313,8 +332,8 @@ class AdvertDetailsFragment : Fragment() {
             advertDetailsViewModel.advertComment(
                 advertId = args.advertId,
                 text = dialogAddCommentBinding.messageInput.text.toString(),
-                pictureLinks = emptyList(),
-                location = advertDetailsViewModel.messageCoordinatesLiveData.value.toString()
+                pictureLinks = listOf(advertDetailsViewModel.imageLinkLiveData.value.toString()),
+                location = advertDetailsViewModel.messageCoordinatesLiveData.value.orEmpty()
             )
             dialog.dismiss()
         }
@@ -371,7 +390,12 @@ class AdvertDetailsFragment : Fragment() {
                     file!!.renameTo(renamedFile)
 
                     //remember the profile picture for the given email
-                    sharedPreferences.edit { putString(createLiteral(args.advertId.toString()), renamedFile.path.toString()) }
+                    sharedPreferences.edit {
+                        putString(
+                            createLiteral(args.advertId.toString()),
+                            renamedFile.path.toString()
+                        )
+                    }
 
                     uploadImage()
                 } else {
@@ -398,7 +422,8 @@ class AdvertDetailsFragment : Fragment() {
 
 
     private fun uploadImage() {
-        val picturePath = sharedPreferences.getString(createLiteral(args.advertId.toString()), null)?.toPath()
+        val picturePath =
+            sharedPreferences.getString(createLiteral(args.advertId.toString()), null)?.toPath()
         if (picturePath != null) {
             advertDetailsViewModel.uploadImage(picturePath.toFile())
         }

@@ -1,15 +1,20 @@
 package progi.imateacup.nestaliljubimci.ui.createAdvert
 
+import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateAdvertRequest
 import progi.imateacup.nestaliljubimci.networking.ApiModule
+import java.io.File
 import java.io.IOException
 
 class CreateAdvertViewModel : ViewModel() {
@@ -20,6 +25,12 @@ class CreateAdvertViewModel : ViewModel() {
     private val _advertCoordinatesLiveData = MutableLiveData<String?>()
     val advertCoordinatesLiveData: LiveData<String?> = _advertCoordinatesLiveData
 
+    private val _imageLinkLiveData = MutableLiveData<Uri?>()
+    val imageLinkLiveData: LiveData<Uri?> = _imageLinkLiveData
+
+    private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
+    val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
+
     fun advertAdvert(
         advert_category: AdvertisementCategory,
         pet_name: String?,
@@ -29,6 +40,7 @@ class CreateAdvertViewModel : ViewModel() {
         date_time_lost: String?,
         location_lost: String?,
         description: String?,
+        pictureLinks: List<String>
     ) {
         viewModelScope.launch {
             try {
@@ -41,6 +53,7 @@ class CreateAdvertViewModel : ViewModel() {
                     date_time_lost,
                     location_lost,
                     description,
+                    pictureLinks
                 )
             } catch (err: Exception) {
                 Log.e("Exception", err.toString())
@@ -48,6 +61,36 @@ class CreateAdvertViewModel : ViewModel() {
             }
         }
     }
+
+    fun uploadImage(picture: File) {
+        viewModelScope.launch {
+            try {
+                val link = (ApiModule.BASE_URL.removeSuffix("/") + postImageRequest(picture))
+                Log.d("slika", link)
+                _imageLinkLiveData.value = Uri.parse(link)
+                _imageUploadSuccessLiveData.value = true
+            } catch (err: Exception) {
+                Log.e("EXCEPTION", err.toString())
+                _imageUploadSuccessLiveData.value = false
+            }
+
+        }
+    }
+
+    private suspend fun postImageRequest(picture: File): String? {
+        val response = ApiModule.retrofit.uploadImage(
+            MultipartBody.Part.createFormData(
+                "file",
+                picture.name,
+                picture.asRequestBody("image/*".toMediaType())
+            )
+        )
+        if (!response.isSuccessful) {
+            throw IOException("Failed to upload picture")
+        }
+        return response.body()?.link
+    }
+
 
     private suspend fun postAdvert(
         advert_category: AdvertisementCategory,
@@ -58,6 +101,7 @@ class CreateAdvertViewModel : ViewModel() {
         date_time_lost: String?,
         location_lost: String?,
         description: String?,
+        pictureLinks: List<String>
     ): Boolean {
         val response = ApiModule.retrofit.addAdvert(
             request = CreateAdvertRequest(
@@ -69,6 +113,7 @@ class CreateAdvertViewModel : ViewModel() {
                 date_time_lost = date_time_lost,
                 location_lost = location_lost,
                 description = description,
+                pictureLinks = pictureLinks
             )
         )
         if (!response.isSuccessful) {
@@ -79,5 +124,8 @@ class CreateAdvertViewModel : ViewModel() {
 
     fun setAdvertCoordinates(coordinates: String?) {
         _advertCoordinatesLiveData.value = coordinates
+    }
+    fun setImageLink(link: Uri?) {
+        _imageLinkLiveData.value = link
     }
 }

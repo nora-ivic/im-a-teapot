@@ -3,7 +3,6 @@ package progi.imateacup.nestaliljubimci.model.networking.request.auth
 import kotlinx.serialization.SerialName
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import java.time.format.DateTimeFormatter
 
 @kotlinx.serialization.Serializable
 data class CreateAdvertRequest(
@@ -15,4 +14,5 @@ data class CreateAdvertRequest(
     @SerialName("date_time_lost") val date_time_lost: String?,
     @SerialName("location_lost") val location_lost: String?,
     @SerialName("description") val description: String?,
-)
+    @SerialName("picture_links") val pictureLinks: List<String>,
+    )

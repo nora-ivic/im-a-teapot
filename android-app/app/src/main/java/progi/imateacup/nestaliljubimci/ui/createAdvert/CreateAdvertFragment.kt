@@ -1,10 +1,13 @@
 package progi.imateacup.nestaliljubimci.ui.createAdvert
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -15,15 +18,19 @@ import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
+import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
+import okio.Path.Companion.toPath
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
+import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
+import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import java.io.File
@@ -34,12 +41,17 @@ class CreateAdvertFragment : Fragment() {
     private lateinit var snapAnImage: ActivityResultLauncher<Uri>
     private lateinit var pickAnImage: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var imageUri: Uri
+    private lateinit var renamedFile: File
+
+    private lateinit var sharedPreferences: SharedPreferences
 
     private var _binding: CreateAdvertFragmentBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<CreateAdvertViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        sharedPreferences =
+            requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         handleAddImage()
     }
 
@@ -93,6 +105,16 @@ class CreateAdvertFragment : Fragment() {
                 (petCategoryField as? AutoCompleteTextView)?.setText(defaultCategory, false)
             }
             (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+            viewModel.imageUploadSuccessLiveData.observe(viewLifecycleOwner) { success ->
+                if (!success) {
+                    Snackbar.make(
+                        binding.root,
+                        "Došlo je do pogreške prilikom dodavanja slike",
+                        Snackbar.LENGTH_LONG
+                    ).show()
+                }
+            }
         }
         observeCoordinates()
     }
@@ -105,10 +127,6 @@ class CreateAdvertFragment : Fragment() {
                 val datePicker = MaterialDatePicker.Builder.datePicker()
                     .setTitleText("Select date")
                     .build()
-            }
-
-            addImageButton.setOnClickListener {
-                showAddPictureAlertDialog()
             }
 
             petNameField.setOnFocusChangeListener { _, hasFocus ->
@@ -150,9 +168,9 @@ class CreateAdvertFragment : Fragment() {
                     date_time_lost = "2024-01-15T15:12:57.584Z",
                     location_lost = viewModel.advertCoordinatesLiveData.value,
                     description = descriptionField.text.toString(),
+                    pictureLinks = listOf(viewModel.imageLinkLiveData.value.toString())
                 )
             }
-
 
             addLocationButton.setOnClickListener {
                 if (viewModel.advertCoordinatesLiveData.value != null) {
@@ -161,6 +179,24 @@ class CreateAdvertFragment : Fragment() {
                     val direction =
                         CreateAdvertFragmentDirections.actionCreateAdvertFragmentToMapSelectLocationFragment()
                     findNavController().navigate(direction)
+                }
+            }
+
+            addImageButton.setOnClickListener {
+                if (viewModel.imageLinkLiveData.value != null) {
+                    viewModel.setImageLink(null)
+                } else {
+                    showAddPictureAlertDialog()
+                }
+            }
+
+            viewModel.imageLinkLiveData.observe(viewLifecycleOwner) { pictureUrl ->
+                if (pictureUrl != null) {
+                    imageInfo.visibility = View.VISIBLE
+                    addImageButton.text = getString(R.string.remove_image)
+                } else {
+                    imageInfo.visibility = View.GONE
+                    addImageButton.text = getString(R.string.add_message_image)
                 }
             }
 
@@ -228,9 +264,28 @@ class CreateAdvertFragment : Fragment() {
 
     private fun snapAnImageRegister() {
 
+
         snapAnImage =
             registerForActivityResult(ActivityResultContracts.TakePicture()) { pictureSaved ->
                 if (pictureSaved) {
+                    FileUtil.getImageFile(requireContext())
+
+                    //rename the file so profile pictures for different emails can be saved
+                    renamedFile = File(
+                        requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES),
+                        "${"image"}${System.currentTimeMillis()}${PFP_URI_NAME_DECORATOR}.jpg"
+                    )
+                    //file is never null since the snapAnImage.launch() is only called if the file was created successfully
+                    file!!.renameTo(renamedFile)
+
+                    //remember the profile picture for the given email
+                    sharedPreferences.edit {
+                        putString(
+                            createLiteral(),
+                            renamedFile.path.toString()
+                        )
+                    }
+
                     uploadImage()
                 } else {
                     Log.e("SavePicture", "Picture not saved")
@@ -238,11 +293,14 @@ class CreateAdvertFragment : Fragment() {
             }
     }
 
+    private fun createLiteral(): String {
+        return "${"image"}${PFP_URI_NAME_DECORATOR}"
+    }
+
     private fun pickAnImageRegister() {
         pickAnImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 val path = getRealPathFromURI(uri, requireContext())
-                Log.i("PATH", path.toString())
                 val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 requireContext().contentResolver.takePersistableUriPermission(uri, flag)
                 uploadImage()
@@ -251,7 +309,11 @@ class CreateAdvertFragment : Fragment() {
     }
 
     private fun uploadImage() {
-        // advertDetailsViewModel.uploadImage(imageUri.toFile())
+        val picturePath =
+            sharedPreferences.getString(createLiteral(), null)?.toPath()
+        if (picturePath != null) {
+            viewModel.uploadImage(picturePath.toFile())
+        }
     }
 
     private fun updatePetAgeField() {

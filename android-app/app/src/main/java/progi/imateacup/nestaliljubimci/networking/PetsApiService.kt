@@ -11,6 +11,7 @@ import progi.imateacup.nestaliljubimci.model.networking.response.RegisterRespons
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.CreateAdvertResponse
+import progi.imateacup.nestaliljubimci.model.networking.response.ImageUploadResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
 import retrofit2.http.Body
@@ -48,7 +49,7 @@ interface PetsApiService {
     @POST("api/pictures/upload")
     suspend fun uploadImage(
         @Part image: MultipartBody.Part
-    ): Response<String>
+    ): Response<ImageUploadResponse>
 
     @GET("api/advert/")
     suspend fun getPets(

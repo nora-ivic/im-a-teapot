@@ -194,7 +194,8 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginVertical="@dimen/size16dp"
+            android:layout_marginTop="@dimen/size16dp"
+            android:layout_marginBottom="@dimen/margin_24dp"
             android:hint="@string/description_text"
             android:inputType="textMultiLine"
             android:minLines="5"
@@ -230,8 +231,22 @@
             android:textSize="16sp"
             android:visibility="gone"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/addImageButton"
+            app:layout_constraintBottom_toTopOf="@id/imageInfo"
             app:layout_constraintTop_toBottomOf="@id/descriptionFieldLayout" />
+
+        <TextView
+            android:id="@+id/imageInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/image_info"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/addImageButton"
+            app:layout_constraintTop_toBottomOf="@id/locationInfo" />
 
 
         <Button
@@ -240,14 +255,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_24dp"
-            android:layout_marginTop="@dimen/size32dp"
+            android:layout_marginTop="@dimen/size16dp"
             android:text="@string/add_message_image"
             android:textColor="@color/colorSecondary"
-
             android:textSize="@dimen/text16sp"
             app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/locationInfo" />
+            app:layout_constraintTop_toBottomOf="@id/imageInfo" />
 
         <Button
             android:id="@+id/addLocationButton"

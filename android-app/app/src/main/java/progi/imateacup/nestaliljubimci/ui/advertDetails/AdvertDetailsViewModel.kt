@@ -38,8 +38,8 @@ class AdvertDetailsViewModel : ViewModel() {
     private val _messageCoordinatesLiveData = MutableLiveData<String?>()
     val messageCoordinatesLiveData: LiveData<String?> = _messageCoordinatesLiveData
 
-    private val _pfpUrlLiveData = MutableLiveData<Uri>()
-    val pfpUrlLiveData: LiveData<Uri> = _pfpUrlLiveData
+    private val _imageLinkLiveData = MutableLiveData<Uri?>()
+    val imageLinkLiveData: LiveData<Uri?> = _imageLinkLiveData
 
     private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
     val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
@@ -97,6 +97,7 @@ class AdvertDetailsViewModel : ViewModel() {
                 }
                 fetching = false
             } catch (err: Exception) {
+                Log.d("dddddddd", err.toString())
                 _commentsDisplayStateLiveData.value = PetsDisplayState.ERRORGET
                 fetching = false
             }
@@ -106,8 +107,9 @@ class AdvertDetailsViewModel : ViewModel() {
     fun uploadImage(picture: File) {
         viewModelScope.launch {
             try {
-                val link = postImageRequest(picture)
-                _pfpUrlLiveData.value = Uri.parse(link)
+                val link = (ApiModule.BASE_URL.removeSuffix("/") + postImageRequest(picture))
+                Log.d("slika", link)
+                _imageLinkLiveData.value = Uri.parse(link)
                 _imageUploadSuccessLiveData.value = true
             } catch (err: Exception) {
                 Log.e("EXCEPTION", err.toString())
@@ -120,7 +122,7 @@ class AdvertDetailsViewModel : ViewModel() {
     private suspend fun postImageRequest(picture: File): String? {
         val response = ApiModule.retrofit.uploadImage(
             MultipartBody.Part.createFormData(
-                "image",
+                "file",
                 picture.name,
                 picture.asRequestBody("image/*".toMediaType())
             )
@@ -128,7 +130,7 @@ class AdvertDetailsViewModel : ViewModel() {
         if (!response.isSuccessful) {
             throw IOException("Failed to upload picture")
         }
-        return response.body()
+        return response.body()?.link
     }
 
     private suspend fun fetchComments(advertId: Int): List<Comment>? {
@@ -185,5 +187,8 @@ class AdvertDetailsViewModel : ViewModel() {
 
     fun setMessageCoordinates(coordinates: String?) {
         _messageCoordinatesLiveData.value = coordinates
+    }
+    fun setImageLink(link: Uri?) {
+        _imageLinkLiveData.value = link
     }
 }
