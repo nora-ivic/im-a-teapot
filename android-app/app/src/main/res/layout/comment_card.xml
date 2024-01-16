@@ -34,12 +34,12 @@
         android:id="@+id/locationIcon"
         android:layout_width="28dp"
         android:layout_height="28dp"
-        android:layout_marginStart="332dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginTop="68dp"
         android:contentDescription="@string/profile_picture"
         android:src="@drawable/location_icon"
-        android:visibility="gone"
-        app:layout_constraintStart_toStartOf="parent"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CornerSize50Percent" />
 
@@ -48,10 +48,11 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginTop="60dp"
+        android:layout_marginEnd="42dp"
         android:contentDescription="@string/profile_picture"
         android:src="@drawable/image_icon"
-        android:visibility="gone"
-        app:layout_constraintEnd_toStartOf="@id/locationIcon"
+        android:visibility="visible"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CornerSize50Percent" />
 
@@ -96,13 +97,25 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
-        android:layout_marginEnd="100dp"
         android:layout_marginTop="@dimen/size16dp"
+        android:layout_marginEnd="100dp"
         android:textColor="@color/black"
         android:textSize="@dimen/text16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/profilePicture"
         tools:text="To je bila moja pudla, i ona je nestala!" />
+
+    <ImageView
+        android:id="@+id/message_image"
+        android:layout_width="0dp"
+        android:layout_height="200dp"
+        android:contentDescription="@string/petImageDescription"
+        android:visibility="gone"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintDimensionRatio="H,1:1"
+        app:layout_constraintTop_toBottomOf="@id/commentText"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

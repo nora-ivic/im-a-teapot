@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.navigation.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import progi.imateacup.nestaliljubimci.databinding.CommentCardBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 
@@ -40,6 +41,17 @@ class CommentsAdapter(private var commentList: List<Comment>) :
                     ViewGroup.GONE
                 } else {
                     ViewGroup.VISIBLE
+                }
+
+                imageIcon.setOnClickListener {
+                    if (comment.pictureLinks.isNotEmpty() && messageImage.visibility == ViewGroup.GONE) {
+                        Glide.with(root.context)
+                            .load(comment.pictureLinks[0])
+                            .into(messageImage)
+                        messageImage.visibility = ViewGroup.VISIBLE
+                    } else {
+                        messageImage.visibility = ViewGroup.GONE
+                    }
                 }
             }
         }

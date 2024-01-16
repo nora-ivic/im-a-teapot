@@ -251,17 +251,30 @@
 
         <Button
             android:id="@+id/addImageButton"
-            style="@style/CustomButtonStyle"
+            style="@style/CustomButtonStyleLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_24dp"
             android:layout_marginTop="@dimen/size16dp"
             android:text="@string/add_message_image"
-            android:textColor="@color/colorSecondary"
             android:textSize="@dimen/text16sp"
-            app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/imageInfo" />
+
+        <Button
+            android:id="@+id/removeImagesButton"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:text="@string/remove_images"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text16sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/secondaryContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addImageButton" />
 
         <Button
             android:id="@+id/addLocationButton"
@@ -276,7 +289,7 @@
             app:backgroundTint="@color/secondaryContainer"
             app:layout_constraintEnd_toStartOf="@id/submitButton"
             app:layout_constraintStart_toEndOf="@id/addImageButton"
-            app:layout_constraintTop_toBottomOf="@id/addImageButton" />
+            app:layout_constraintTop_toBottomOf="@id/removeImagesButton" />
 
         <Button
             android:id="@+id/submitButton"

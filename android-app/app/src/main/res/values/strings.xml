@@ -43,6 +43,9 @@
     <string name="add_comment">Dodaj komentar:</string>
     <string name="location_info">Lokacija je priložena.</string>
     <string name="image_info">Slika je priložena.</string>
+    <string name="one_image">Priložena je jedna slika.</string>
+    <string name="two_images">Priložene su dvije slike.</string>
+    <string name="three_images">Postigli ste maksimum od tri slike.</string>
     <string name="comment">Upiši komentar…</string>
     <string name="comment_submit">Pošalji komentar…</string>
     <string name="advert_submit">Kreiraj oglas…</string>
@@ -50,6 +53,7 @@
     <string name="add_location">Dodaj lokaciju…</string>
     <string name="remove_location">Ukloni lokaciju…</string>
     <string name="remove_image">Ukloni sliku…</string>
+    <string name="remove_images">Ukloni slike…</string>
     <string name="advert_fetch_fail">Neuspješno dohvaćanje oglasa</string>
     <string name="pet_fetch_fail">Neuspješno dohvaćanje ljubimca</string>
     <string name="shelter_fetch_fail">Neuspješno dohvaćanje skloništa</string>
@@ -64,6 +68,7 @@
     <string name="colorText">Boja: </string>
     <string name="ageText">Starost: </string>
     <string name="locationLostText">Lokacija: </string>
+    <string name="location">Vidi lokaciju… </string>
     <string name="timeLostText">Vrijeme: </string>
     <string name="descriptionText">Opis: </string>
     <string name="shelterNameText">Naziv: </string>

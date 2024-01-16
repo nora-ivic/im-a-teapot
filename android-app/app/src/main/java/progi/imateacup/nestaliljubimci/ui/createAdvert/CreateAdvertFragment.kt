@@ -159,16 +159,18 @@ class CreateAdvertFragment : Fragment() {
                 val selectedAge =
                     petAgeField.text.toString().takeIf { it.isNotBlank() }?.toIntOrNull()
 
+                val uriList: List<Uri> = viewModel.imageLinksLiveData.value ?: emptyList()
+                val stringList: List<String> = uriList.map { uri -> uri.toString() }
                 viewModel.advertAdvert(
                     advert_category = categoryMapping[petCategoryField.text.toString()]!!,
-                    pet_name = petNameField.text.toString(),
+                    pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
                     pet_species = selectedSpecies,
-                    pet_color = petColorField.text.toString(),
+                    pet_color = petColorField.text.toString().ifBlank { null },
                     pet_age = selectedAge,
                     date_time_lost = "2024-01-15T15:12:57.584Z",
                     location_lost = viewModel.advertCoordinatesLiveData.value,
-                    description = descriptionField.text.toString(),
-                    pictureLinks = listOf(viewModel.imageLinkLiveData.value.toString())
+                    description = descriptionField.text.toString().ifBlank { null },
+                    pictureLinks = stringList
                 )
             }
 
@@ -182,21 +184,44 @@ class CreateAdvertFragment : Fragment() {
                 }
             }
 
-            addImageButton.setOnClickListener {
-                if (viewModel.imageLinkLiveData.value != null) {
-                    viewModel.setImageLink(null)
+            removeImagesButton.setOnClickListener {
+                val currentImageLinks = viewModel.imageLinksLiveData.value ?: emptyList()
+
+                if (currentImageLinks.isNotEmpty()) {
+                    viewModel.setImageLink(emptyList())
                 } else {
-                    showAddPictureAlertDialog()
+                    removeImagesButton.visibility = View.GONE
                 }
             }
 
-            viewModel.imageLinkLiveData.observe(viewLifecycleOwner) { pictureUrl ->
-                if (pictureUrl != null) {
+            addImageButton.setOnClickListener {
+                showAddPictureAlertDialog()
+            }
+
+            viewModel.imageLinksLiveData.observe(viewLifecycleOwner) { pictureUrls ->
+                if (pictureUrls.size == 1) {
                     imageInfo.visibility = View.VISIBLE
-                    addImageButton.text = getString(R.string.remove_image)
+                    imageInfo.text = getString(R.string.one_image)
+                    imageInfo.visibility = View.VISIBLE
+                    addImageButton.isEnabled = true
+                    removeImagesButton.text = getString(R.string.remove_image)
+                    removeImagesButton.visibility = View.VISIBLE
+                } else if ((pictureUrls.size == 2)) {
+                    imageInfo.text = getString(R.string.two_images)
+                    imageInfo.visibility = View.VISIBLE
+                    addImageButton.isEnabled = true
+                    removeImagesButton.text = getString(R.string.remove_images)
+                    removeImagesButton.visibility = View.VISIBLE
+                } else if ((pictureUrls.size > 2)) {
+                    imageInfo.text = getString(R.string.three_images)
+                    imageInfo.visibility = View.VISIBLE
+                    addImageButton.isEnabled = false
+                    removeImagesButton.text = getString(R.string.remove_images)
+                    removeImagesButton.visibility = View.VISIBLE
                 } else {
                     imageInfo.visibility = View.GONE
-                    addImageButton.text = getString(R.string.add_message_image)
+                    addImageButton.isEnabled = true
+                    removeImagesButton.visibility = View.GONE
                 }
             }
 

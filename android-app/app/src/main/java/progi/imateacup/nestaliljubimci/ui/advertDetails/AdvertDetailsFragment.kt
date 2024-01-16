@@ -31,6 +31,7 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputEditText
 import okio.Path.Companion.toPath
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
@@ -50,7 +51,6 @@ class AdvertDetailsFragment : Fragment() {
     private lateinit var imagesAdapter: ImagesAdapter
     private lateinit var renamedFile: File
 
-    private val TEMPORARY_COMENT_TEXT_KEY = "temporary_comment_text"
     private var temporaryMessage: String = ""
 
     private var accessToken: String? = null
@@ -207,20 +207,30 @@ class AdvertDetailsFragment : Fragment() {
             shelterNameValue.text = advert.shelterName ?: "Nepoznato"
             shelterEmailValue.text = advert.shelterEmail ?: "Nepoznato"
             shelterPhoneValue.text = advert.shelterPhone ?: "Nepoznato"
-            locationLostValue.text = advert.locationLost ?: "Nepoznato"
             timeLostValue.text = if (advert.dateTimeLost != null)
                 LocalDateTime.parse(advert.dateTimeLost, oldTimeFormat)
                     .format(newTimeFormat) else "Nepoznato"
+            if (advert.locationLost == null) {
+                locationLostValue.apply {
+                    text = "Nepoznato"
+                    setTextColor(resources.getColor(R.color.black, null))
+                }
+            } else {
+                locationLostValue.setOnClickListener {
+                    val direction =
+                        AdvertDetailsFragmentDirections.actionAdvertDetailsViewToMapDisplayLocationFragment(
+                            advert.locationLost
+                        )
+                    findNavController().navigate(direction)
+                }
+
+
+            }
         }
     }
 
     private fun initRecyclerViews() {
         with(binding) {
-            if (advertDetailsViewModel.advertLiveData.value?.pictureLinks?.isNotEmpty() == true) {
-                imageRecycler.visibility = View.VISIBLE
-            } else {
-                imageRecycler.visibility = View.GONE
-            }
             imagesAdapter = ImagesAdapter(emptyList())
             imageRecycler.adapter = imagesAdapter
 
@@ -252,8 +262,12 @@ class AdvertDetailsFragment : Fragment() {
     private fun displayImages() {
 
         advertDetailsViewModel.advertLiveData.observe(viewLifecycleOwner) { advert ->
-            if (advert.pictureLinks.isNotEmpty())
+            if (advert.pictureLinks.isNotEmpty()) {
                 imagesAdapter.updateData(advert.pictureLinks)
+                binding.imageRecycler.visibility = View.VISIBLE
+            } else {
+                binding.imageRecycler.visibility = View.GONE
+            }
         }
     }
 
@@ -282,7 +296,6 @@ class AdvertDetailsFragment : Fragment() {
             }
         }
 
-        temporaryMessage = sharedPreferences.getString(TEMPORARY_COMENT_TEXT_KEY, "") ?: ""
         if (temporaryMessage.isNotEmpty()) {
             dialogAddCommentBinding.messageInput.setText(temporaryMessage)
         }
@@ -310,9 +323,6 @@ class AdvertDetailsFragment : Fragment() {
         dialogAddCommentBinding.addLocationButton.setOnClickListener {
 
             temporaryMessage = dialogAddCommentBinding.messageInput.text.toString()
-            val editor = sharedPreferences.edit()
-            editor.putString(TEMPORARY_COMENT_TEXT_KEY, temporaryMessage)
-            editor.apply()
 
             if (advertDetailsViewModel.messageCoordinatesLiveData.value != null) {
                 advertDetailsViewModel.setMessageCoordinates(null)
@@ -329,10 +339,14 @@ class AdvertDetailsFragment : Fragment() {
         }
 
         dialogAddCommentBinding.submitButton.setOnClickListener {
+            val uriLink = advertDetailsViewModel.imageLinkLiveData.value
+            val uriList = if (uriLink != null) listOf(uriLink) else emptyList()
+            val stringList: List<String> = uriList.map { uri -> uri.toString() }
+
             advertDetailsViewModel.advertComment(
                 advertId = args.advertId,
                 text = dialogAddCommentBinding.messageInput.text.toString(),
-                pictureLinks = listOf(advertDetailsViewModel.imageLinkLiveData.value.toString()),
+                pictureLinks = stringList,
                 location = advertDetailsViewModel.messageCoordinatesLiveData.value.orEmpty()
             )
             dialog.dismiss()

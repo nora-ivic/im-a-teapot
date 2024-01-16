@@ -177,7 +177,9 @@ class AdvertDetailsViewModel : ViewModel() {
         if (!response.isSuccessful) {
             throw IOException("Cannot add comment")
         }
-        getAdvertDetails(advertId)
+        _commentsLiveData.value = emptyList()
+        page = 0
+        getComments(advertId)
         return true
     }
 

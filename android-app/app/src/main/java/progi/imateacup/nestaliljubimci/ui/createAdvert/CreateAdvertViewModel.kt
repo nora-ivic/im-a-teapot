@@ -25,8 +25,8 @@ class CreateAdvertViewModel : ViewModel() {
     private val _advertCoordinatesLiveData = MutableLiveData<String?>()
     val advertCoordinatesLiveData: LiveData<String?> = _advertCoordinatesLiveData
 
-    private val _imageLinkLiveData = MutableLiveData<Uri?>()
-    val imageLinkLiveData: LiveData<Uri?> = _imageLinkLiveData
+    private val _imageLinksLiveData = MutableLiveData<List<Uri>>()
+    val imageLinksLiveData: LiveData<List<Uri>> = _imageLinksLiveData
 
     private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
     val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
@@ -66,8 +66,9 @@ class CreateAdvertViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val link = (ApiModule.BASE_URL.removeSuffix("/") + postImageRequest(picture))
-                Log.d("slika", link)
-                _imageLinkLiveData.value = Uri.parse(link)
+                val currentList = _imageLinksLiveData.value ?: emptyList()
+                val newList = currentList.toMutableList().apply { add(Uri.parse(link)) }
+                _imageLinksLiveData.value = newList
                 _imageUploadSuccessLiveData.value = true
             } catch (err: Exception) {
                 Log.e("EXCEPTION", err.toString())
@@ -125,7 +126,7 @@ class CreateAdvertViewModel : ViewModel() {
     fun setAdvertCoordinates(coordinates: String?) {
         _advertCoordinatesLiveData.value = coordinates
     }
-    fun setImageLink(link: Uri?) {
-        _imageLinkLiveData.value = link
+    fun setImageLink(links: List<Uri>) {
+        _imageLinksLiveData.value = links
     }
 }
