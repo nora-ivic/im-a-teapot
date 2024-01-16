@@ -6,6 +6,7 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
@@ -23,7 +24,7 @@ import progi.imateacup.nestaliljubimci.databinding.DialogProfileBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentPetsBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
-import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment.Companion.ACCESS_TOKEN
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
@@ -76,16 +77,21 @@ class PetsFragment : Fragment() {
     private fun handleDifferentUsersDisplay() {
         with (binding) {
             if (accessToken == null) {
-                topAppBarPets.menu.removeItem(R.id.pronadeni)
-                topAppBarPets.menu.removeItem(R.id.trazi_po_sklonistu)
-                topAppBarPets.menu.removeItem(R.id.prekinutoTrazenje)
-                topAppBarPets.menu.removeItem(R.id.uSklonistu)
-                topAppBarPets.menu.removeItem(R.id.uginuli)
+                with (topAppBarPets) {
+                    menu.removeItem(R.id.pronadeni)
+                    menu.removeItem(R.id.prekinutoTrazenje)
+                    menu.removeItem(R.id.uSklonistu)
+                    menu.removeItem(R.id.uginuli)
 
-                topAppBarPets.setNavigationOnClickListener {
-                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
-                    findNavController().navigate(direction)
+                    val menuItem: MenuItem = menu.findItem(R.id.serach_submenu)
+                    menuItem.subMenu?.removeItem(R.id.trazi_po_sklonistu)
+
+                    setNavigationOnClickListener {
+                        val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment()
+                        findNavController().navigate(direction)
+                    }
                 }
+
 
                 bottomAppBar.visibility = View.GONE
                 addPost.visibility = View.GONE
@@ -217,6 +223,12 @@ class PetsFragment : Fragment() {
                         true
                     }
 
+                    R.id.svaSkonista -> {
+                        val direction = PetsFragmentDirections.actionPetsFragmentToSheltersDialog()
+                        findNavController().navigate(direction)
+                        true
+                    }
+
                     R.id.po_ljubimcu -> {
                         val direction = PetsFragmentDirections.actionPetsFragmentToSearchFragment()
                         findNavController().navigate(direction)
@@ -282,17 +294,17 @@ class PetsFragment : Fragment() {
                     adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value?: false)
                 }
             }
-            petsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
+            displayStateLiveData.observe(viewLifecycleOwner) { state ->
                 when (state) {
-                    PetsDisplayState.LOADING -> {
+                    DisplayState.LOADING -> {
                         showLoading()
                     }
 
-                    PetsDisplayState.SUCCESSGET -> {
+                    DisplayState.SUCCESSGET -> {
                         showPets()
                     }
 
-                    PetsDisplayState.ERRORGET -> {
+                    DisplayState.ERRORGET -> {
                         showNoPosts()
                         Snackbar.make(
                             binding.root,
@@ -300,7 +312,7 @@ class PetsFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    PetsDisplayState.SUCCESSDELETE -> {
+                    DisplayState.SUCCESSDELETE -> {
                         Snackbar.make(
                             binding.root,
                             "Oglas je uspješno obrisan",
@@ -308,14 +320,14 @@ class PetsFragment : Fragment() {
                         ).show()
                         getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null, true)
                     }
-                    PetsDisplayState.ERRORDELETE -> {
+                    DisplayState.ERRORDELETE -> {
                         Snackbar.make(
                             binding.root,
                             "Došlo je do pogreške prilikom brisanja oglasa",
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
-                    PetsDisplayState.NOPOSTS -> {
+                    DisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
                 }

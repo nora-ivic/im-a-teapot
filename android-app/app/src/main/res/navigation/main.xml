@@ -72,12 +72,14 @@
         <action
             android:id="@+id/action_petsFragment_to_createEditAdvertFragment"
             app:destination="@id/createEditAdvertFragment" />
+        <action
+            android:id="@+id/action_petsFragment_to_sheltersDialog"
+            app:destination="@id/sheltersDialog" />
     </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="progi.imateacup.nestaliljubimci.ui.search.SearchFragment"
-        android:label="SearchFragment">
-    </fragment>
+        android:label="SearchFragment"></fragment>
 
     <fragment
         android:id="@+id/createEditAdvertFragment"
@@ -113,5 +115,9 @@
             android:defaultValue="0.0,0.0"
             app:argType="string" />
     </fragment>
+    <dialog
+        android:id="@+id/sheltersDialog"
+        android:name="progi.imateacup.nestaliljubimci.ui.pets.SheltersDialog"
+        android:label="SheltersDialog" />
 
 </navigation>

@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/shelterCard"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="@dimen/margin_40dp"
+    android:background="@color/surface_container_highest"
+    android:backgroundTint="@color/surface_container_highest"
+    android:maxHeight="200dp"
+    android:paddingBottom="8dp">
+
+    <ImageView
+        android:id="@+id/shelterIcon"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="@dimen/margin_16dp"
+        android:src="@drawable/baseline_home_filled_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/shelterName"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="22dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/shelterIcon"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="Shelter name" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/divider"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_8dp"
+        android:layout_marginBottom="@dimen/margin_16dp"
+        app:dividerColor="@color/black"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
+        app:dividerThickness="1dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shelterIcon" />
+
+    <ImageView
+        android:id="@+id/shelterPhoneIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:src="@drawable/baseline_local_phone_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/divider" />
+
+
+    <TextView
+        android:id="@+id/shelterPhoneNumber"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:maxWidth="300dp"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text16sp"
+        app:layout_constraintStart_toEndOf="@id/shelterPhoneIcon"
+        app:layout_constraintTop_toBottomOf="@id/divider"
+        tools:text="1111-213-1562-14" />
+
+    <ImageView
+        android:id="@+id/shelterEmailIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:src="@drawable/baseline_email_24"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shelterPhoneIcon" />
+
+    <TextView
+        android:id="@+id/shelterEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:maxWidth="300dp"
+        android:maxLines="2"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text16sp"
+        app:layout_constraintStart_toEndOf="@id/shelterEmailIcon"
+        app:layout_constraintTop_toBottomOf="@id/shelterPhoneNumber"
+        tools:text="this.is@anEmail.com" />
+
+    <ImageView
+        android:id="@+id/shelterUserIcon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="@dimen/margin_8dp"
+        android:layout_marginStart="@dimen/margin_16dp"
+        android:src="@drawable/icons_user_big"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shelterEmail" />
+
+    <TextView
+        android:id="@+id/shelterUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="@dimen/margin_8dp"
+        android:layout_marginTop="@dimen/margin_8dp"
+        android:maxWidth="300dp"
+        android:maxLines="3"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text16sp"
+        app:layout_constraintStart_toEndOf="@id/shelterUserIcon"
+        app:layout_constraintTop_toBottomOf="@id/shelterEmail"
+        tools:text="this Is A shelter" />
+
+    <com.google.android.material.divider.MaterialDivider
+        android:id="@+id/dividerBottom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/margin_8dp"
+        app:dividerColor="@color/black"
+        app:dividerInsetEnd="16dp"
+        app:dividerInsetStart="16dp"
+        app:dividerThickness="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/shelterUsername" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

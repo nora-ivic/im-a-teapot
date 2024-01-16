@@ -13,6 +13,7 @@ import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentRespo
 import progi.imateacup.nestaliljubimci.model.networking.response.CreateEditAdvertResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.ImageUploadResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
+import progi.imateacup.nestaliljubimci.model.networking.response.ShelterResponse
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.DELETE
@@ -70,6 +71,12 @@ interface PetsApiService {
         @Query("page") page: Int = PAGE,
         @Query("page_size") items: Int = PAGE_SIZE,
     ): Response<List<Pet>>
+
+    @GET("api/authorization/shelters")
+    suspend fun getShelters(
+        @Query("page") page: Int = PAGE,
+        @Query("page_size") items: Int = PAGE_SIZE
+    ): Response<List<ShelterResponse>>
 
     @GET("api/advert/{advert_id}/details")
     suspend fun getAdvertDetails(
