@@ -45,7 +45,7 @@
     <string name="image_info">Slika je priložena.</string>
     <string name="one_image">Priložena je jedna slika.</string>
     <string name="two_images">Priložene su dvije slike.</string>
-    <string name="three_images">Postigli ste maksimum od tri slike.</string>
+    <string name="three_images">Učitali ste maksimalan broj slika.</string>
     <string name="comment">Upiši komentar…</string>
     <string name="comment_submit">Pošalji komentar…</string>
     <string name="advert_submit">Kreiraj oglas…</string>
@@ -70,7 +70,7 @@
     <string name="ageText">Starost: </string>
     <string name="locationLostText">Lokacija: </string>
     <string name="location">Vidi lokaciju… </string>
-    <string name="timeLostText">Vrijeme: </string>
+    <string name="dateLostText">Datum: </string>
     <string name="descriptionText">Opis: </string>
     <string name="shelterNameText">Naziv: </string>
     <string name="shelterText">Sklonište </string>
@@ -108,7 +108,7 @@
     <string name="mojiOglasi">Moji Oglasi</string>
     <string name="filtriranje_po_ljubimcu">Filtriranje po ljubimcu</string>
     <string name="uginuli">Uginuli</string>
-    <string name="edit_advert">Uredi</string>
+    <string name="edit_advert">Uredi oglas…</string>
     <string name="delete_advert">Izbriši</string>
     <string name="odustani">Odustani</string>
     <string name="izbrisi">Izbriši</string>
@@ -119,7 +119,7 @@
     <string name="no_shelters">Ne možemo pronaći niti jedno sklonište</string>
     <string name="pet_name">Ime</string>
     <string name="pet_color">Boja</string>
-    <string name="pet_age">Dob</string>
+    <string name="pet_age">Dob u godinama</string>
     <string name="advert">Oglas za ljubimca</string>
     <string name="post_text">Objavi oglas</string>
     <string name="description_text">Opis oglasa</string>

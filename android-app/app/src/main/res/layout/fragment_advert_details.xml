@@ -268,7 +268,7 @@
                     android:layout_width="80dp"
                     android:layout_height="wrap_content"
                     android:layout_marginHorizontal="@dimen/margin_24dp"
-                    android:text="@string/timeLostText"
+                    android:text="@string/dateLostText"
                     android:textColor="@color/black"
                     android:textSize="17sp" />
 

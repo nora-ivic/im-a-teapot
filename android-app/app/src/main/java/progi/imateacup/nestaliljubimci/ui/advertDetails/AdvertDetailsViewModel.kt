@@ -12,7 +12,7 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
 import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
-import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 import java.io.File
@@ -23,8 +23,8 @@ class AdvertDetailsViewModel : ViewModel() {
     private val _commentsLiveData = MutableLiveData<List<Comment>>()
     val commentsLiveData: LiveData<List<Comment>> = _commentsLiveData
 
-    private val _advertLiveData = MutableLiveData<Advert>()
-    val advertLiveData: LiveData<Advert> = _advertLiveData
+    private val _advertLiveData = MutableLiveData<Advert?>()
+    val advertLiveData: LiveData<Advert?> = _advertLiveData
 
     private val _commentAddedLiveData = MutableLiveData<Boolean>()
     val commentAddedLiveData: LiveData<Boolean> = _commentAddedLiveData
@@ -32,8 +32,8 @@ class AdvertDetailsViewModel : ViewModel() {
     private val _advertFetchSuccessLiveData = MutableLiveData<Boolean>()
     val advertFetchSuccessLiveData: LiveData<Boolean> = _advertFetchSuccessLiveData
 
-    private val _commentsDisplayStateLiveData = MutableLiveData<PetsDisplayState>()
-    val commentsDisplayStateLiveData: LiveData<PetsDisplayState> = _commentsDisplayStateLiveData
+    private val _commentsDisplayStateLiveData = MutableLiveData<DisplayState>()
+    val commentsDisplayStateLiveData: LiveData<DisplayState> = _commentsDisplayStateLiveData
 
     private val _messageCoordinatesLiveData = MutableLiveData<String?>()
     val messageCoordinatesLiveData: LiveData<String?> = _messageCoordinatesLiveData
@@ -51,7 +51,10 @@ class AdvertDetailsViewModel : ViewModel() {
     fun getAdvertDetails(advertId: Int) {
         viewModelScope.launch {
             try {
-                _advertLiveData.value = fetchAdvertDetails(advertId)
+                val advert = fetchAdvertDetails(advertId)
+                if (advert?.petName == "?")
+                    advert.petName = null
+                _advertLiveData.value = advert
                 _advertFetchSuccessLiveData.value = true
             } catch (err: Exception) {
                 Log.e("EXCEPTION", err.toString())
@@ -73,7 +76,7 @@ class AdvertDetailsViewModel : ViewModel() {
         if (fetching) {
             return
         }
-        _commentsDisplayStateLiveData.value = PetsDisplayState.LOADING
+        _commentsDisplayStateLiveData.value = DisplayState.LOADING
         fetching = true
         page++
 
@@ -86,19 +89,18 @@ class AdvertDetailsViewModel : ViewModel() {
                 val oldComments = _commentsLiveData.value
                 if (!newComments.isNullOrEmpty()) {
                     _commentsLiveData.value = oldComments!! + newComments
-                    _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
+                    _commentsDisplayStateLiveData.value = DisplayState.SUCCESSGET
 
                 } else {
                     if (oldComments!!.isNotEmpty()) {
-                        _commentsDisplayStateLiveData.value = PetsDisplayState.SUCCESSGET
+                        _commentsDisplayStateLiveData.value = DisplayState.SUCCESSGET
                     } else {
-                        _commentsDisplayStateLiveData.value = PetsDisplayState.NOPOSTS
+                        _commentsDisplayStateLiveData.value = DisplayState.NOPOSTS
                     }
                 }
                 fetching = false
             } catch (err: Exception) {
-                Log.d("dddddddd", err.toString())
-                _commentsDisplayStateLiveData.value = PetsDisplayState.ERRORGET
+                _commentsDisplayStateLiveData.value = DisplayState.ERRORGET
                 fetching = false
             }
         }
@@ -108,7 +110,6 @@ class AdvertDetailsViewModel : ViewModel() {
         viewModelScope.launch {
             try {
                 val link = (ApiModule.BASE_URL.removeSuffix("/") + postImageRequest(picture))
-                Log.d("slika", link)
                 _imageLinkLiveData.value = Uri.parse(link)
                 _imageUploadSuccessLiveData.value = true
             } catch (err: Exception) {

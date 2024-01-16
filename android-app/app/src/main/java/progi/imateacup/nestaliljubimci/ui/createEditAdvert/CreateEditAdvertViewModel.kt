@@ -33,8 +33,8 @@ class CreateEditAdvertViewModel : ViewModel() {
     private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
     val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
 
-    private val _advertLiveData = MutableLiveData<Advert>()
-    val advertLiveData: LiveData<Advert> = _advertLiveData
+    private val _advertLiveData = MutableLiveData<Advert?>()
+    val advertLiveData: LiveData<Advert?> = _advertLiveData
 
     private val _advertFetchSuccessLiveData = MutableLiveData<Boolean>()
     val advertFetchSuccessLiveData: LiveData<Boolean> = _advertFetchSuccessLiveData
@@ -108,7 +108,10 @@ class CreateEditAdvertViewModel : ViewModel() {
     fun getAdvertDetails(advertId: Int) {
         viewModelScope.launch {
             try {
-                _advertLiveData.value = fetchAdvertDetails(advertId)
+                val advert = fetchAdvertDetails(advertId)
+                if (advert?.petName == "?")
+                    advert.petName = null
+                _advertLiveData.value = advert
                 _advertFetchSuccessLiveData.value = true
             } catch (err: Exception) {
                 Log.e("EXCEPTION", err.toString())
@@ -188,7 +191,6 @@ class CreateEditAdvertViewModel : ViewModel() {
     }
 
 
-
     private suspend fun putAdvert(
         advert_id: Int,
         advert_category: AdvertisementCategory,
@@ -200,7 +202,7 @@ class CreateEditAdvertViewModel : ViewModel() {
         location_lost: String?,
         description: String?,
         pictureLinks: List<String>
-    ): CreateEditAdvertResponse?  {
+    ): CreateEditAdvertResponse? {
         val response = ApiModule.retrofit.putAdvert(
             advertId = advert_id,
             request = CreateEditAdvertRequest(

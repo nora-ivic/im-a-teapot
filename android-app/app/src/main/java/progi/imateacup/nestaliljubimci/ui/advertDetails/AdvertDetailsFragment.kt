@@ -32,7 +32,9 @@ import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
 import okio.Path.Companion.toPath
-import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
+import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
+import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
+import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
@@ -126,15 +128,15 @@ class AdvertDetailsFragment : Fragment() {
             }
             commentsDisplayStateLiveData.observe(viewLifecycleOwner) { state ->
                 when (state) {
-                    PetsDisplayState.LOADING -> {
+                    DisplayState.LOADING -> {
                         showLoading()
                     }
 
-                    PetsDisplayState.SUCCESSGET -> {
+                    DisplayState.SUCCESSGET -> {
                         showComments()
                     }
 
-                    PetsDisplayState.ERRORGET -> {
+                    DisplayState.ERRORGET -> {
                         showNoPosts()
                         Snackbar.make(
                             binding.root,
@@ -143,7 +145,7 @@ class AdvertDetailsFragment : Fragment() {
                         ).show()
                     }
 
-                    PetsDisplayState.NOPOSTS -> {
+                    DisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
 
@@ -166,9 +168,11 @@ class AdvertDetailsFragment : Fragment() {
 
             commentButton.isVisible = accessToken != null
 
-            advertDetailsViewModel.advertLiveData.observe(viewLifecycleOwner) { advert: Advert ->
-                setAdvertDisplayValues(advert)
-                shelterDetails.isVisible = advert.isInShelter
+            advertDetailsViewModel.advertLiveData.observe(viewLifecycleOwner) { advert: Advert? ->
+                if (advert != null) {
+                    setAdvertDisplayValues(advert)
+                    shelterDetails.isVisible = advert.isInShelter
+                }
             }
             advertDetailsViewModel.advertFetchSuccessLiveData.observe(viewLifecycleOwner) { fetchSuccess ->
                 if (!fetchSuccess) {
@@ -194,14 +198,17 @@ class AdvertDetailsFragment : Fragment() {
 
     private fun setAdvertDisplayValues(advert: Advert) {
         val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
-        val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")
+        val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.")
         with(binding) {
-            petStatusValue.text = advert.category.toString()
+            petStatusValue.text = categoryMapping.entries.find { it.value == advert.category }?.key
+                ?: "Nepoznato"
             petSpeciesValue.text =
-                if (advert.petSpecies != null) advert.petSpecies.toString() else "Nepoznato"
+                speciesMapping.entries.find { it.value == advert.petSpecies }?.key
+                    ?: "Nepoznato"
             petNameValue.text = advert.petName ?: "Nepoznato"
             petColorValue.text = advert.petColor ?: "Nepoznato"
-            petAgeValue.text = if (advert.petAge != null) advert.petAge.toString() else "Nepoznato"
+            petAgeValue.text =
+                if (advert.petAge != null) advert.petAge.toString() + " godina" else "Nepoznato"
             petDescriptionValue.text = advert.description ?: "Nepoznato"
             shelterNameValue.text = advert.shelterName ?: "Nepoznato"
             shelterEmailValue.text = advert.shelterEmail ?: "Nepoznato"
@@ -261,11 +268,13 @@ class AdvertDetailsFragment : Fragment() {
     private fun displayImages() {
 
         advertDetailsViewModel.advertLiveData.observe(viewLifecycleOwner) { advert ->
-            if (advert.pictureLinks.isNotEmpty()) {
-                imagesAdapter.updateData(advert.pictureLinks)
-                binding.imageRecycler.visibility = View.VISIBLE
-            } else {
-                binding.imageRecycler.visibility = View.GONE
+            if (advert != null) {
+                if (advert.pictureLinks.isNotEmpty()) {
+                    imagesAdapter.updateData(advert.pictureLinks)
+                    binding.imageRecycler.visibility = View.VISIBLE
+                } else {
+                    binding.imageRecycler.visibility = View.GONE
+                }
             }
         }
     }
@@ -425,7 +434,7 @@ class AdvertDetailsFragment : Fragment() {
         pickAnImage = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { uri ->
             if (uri != null) {
                 val path = getRealPathFromURI(uri, requireContext())
-                Log.i("PATH", path.toString())
+                sharedPreferences.edit { putString(createLiteral(args.advertId.toString()), path) }
                 val flag = Intent.FLAG_GRANT_READ_URI_PERMISSION
                 requireContext().contentResolver.takePersistableUriPermission(uri, flag)
                 uploadImage()
@@ -465,4 +474,23 @@ class AdvertDetailsFragment : Fragment() {
             noCommentsMessage.visibility = View.VISIBLE
         }
     }
+
+    val speciesMapping = mapOf(
+        "Ptica" to PetSpecies.bird,
+        "Mačka" to PetSpecies.cat,
+        "Pas" to PetSpecies.dog,
+        "Gušter" to PetSpecies.lizard,
+        "Ostalo" to PetSpecies.other,
+        "Zec" to PetSpecies.rabbit,
+        "Glodavac" to PetSpecies.rodent,
+        "Zmija" to PetSpecies.snake,
+    )
+
+    val categoryMapping = mapOf(
+        "Izgubljen" to AdvertisementCategory.lost,
+        "Pronađen" to AdvertisementCategory.found,
+        "Napušten" to AdvertisementCategory.abandoned,
+        "U skloništu" to AdvertisementCategory.sheltered,
+        "Mrtav" to AdvertisementCategory.dead,
+    )
 }

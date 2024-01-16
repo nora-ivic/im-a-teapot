@@ -8,7 +8,7 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 data class Advert(
     @SerialName("advert_id") val id: Int,
     @SerialName("advert_category") val category: AdvertisementCategory,
-    @SerialName("pet_name") val petName: String?,
+    @SerialName("pet_name") var petName: String?,
     @SerialName("pet_species") val petSpecies: PetSpecies?,
     @SerialName("pet_color") val petColor: String?,
     @SerialName("pet_age") val petAge: Int?,

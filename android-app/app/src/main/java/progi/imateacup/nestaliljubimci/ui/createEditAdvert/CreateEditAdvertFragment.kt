@@ -101,63 +101,72 @@ class CreateEditAdvertFragment : Fragment() {
 
             viewModel.advertLiveData.observe(viewLifecycleOwner) { advert ->
                 with(binding) {
-                    petNameField.setText(advert.petName)
-                    petColorField.setText(advert.petColor)
-                    descriptionField.setText(advert.description)
-                    petAgeField.setText(advert.petAge.toString())
+                    if (advert != null) {
+                        petNameField.setText(advert.petName)
+                        petColorField.setText(advert.petColor)
+                        descriptionField.setText(advert.description)
+                        petAgeField.setText(advert.petAge?.toString() ?: "")
 
-                    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
-                    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-                    try {
-                        val date = advert.dateTimeLost?.let { inputFormat.parse(it) }
-                        dateField.setText(outputFormat.format(date!!))
-                    } catch (e: ParseException) {
-                        e.printStackTrace()
+                        if (advert.dateTimeLost != null) {
+                            val inputFormat =
+                                SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                            val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                            try {
+                                val date = advert.dateTimeLost?.let { inputFormat.parse(it) }
+                                dateField.setText(outputFormat.format(date!!))
+                            } catch (e: ParseException) {
+                                e.printStackTrace()
+                            }
+                        }
+
+                        val pictureLinks = advert.pictureLinks
+                        val uriList: List<Uri> = pictureLinks.map { Uri.parse(it) }
+                        viewModel.setImageLinks(uriList)
+
+                        viewModel.setAdvertCoordinates(advert.locationLost)
+
+                        val species =
+                            listOf(
+                                "Ptica",
+                                "Mačka",
+                                "Pas",
+                                "Gušter",
+                                "Zec",
+                                "Glodavac",
+                                "Zmija",
+                                "Ostalo"
+                            )
+                        val adapter1 =
+                            ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
+                        (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
+
+                        val categories =
+                            listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
+                        val adapter2 =
+                            ArrayAdapter(
+                                requireContext(),
+                                R.layout.advert_chategory_list,
+                                categories
+                            )
+
+                        val category =
+                            categoryMapping.entries.find { it.value == advert.category }?.key ?: ""
+                        val categoryPosition = categories.indexOf(category)
+                        if (categoryPosition != -1) {
+                            (petCategoryField as? AutoCompleteTextView)?.setText(category, false)
+                        }
+                        (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+                        val specie =
+                            speciesMapping.entries.find { it.value == advert.petSpecies }?.key ?: ""
+                        val speciesPosition = species.indexOf(specie)
+                        if (speciesPosition != -1) {
+                            (petSpeciesField as? AutoCompleteTextView)?.setText(specie, false)
+                        }
+                        (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+                        submitButton.text = getString(R.string.edit_advert)
                     }
-
-                    val pictureLinks = advert.pictureLinks
-                    val uriList: List<Uri> = pictureLinks.map { Uri.parse(it) }
-                    viewModel.setImageLinks(uriList)
-
-                    viewModel.setAdvertCoordinates(advert.locationLost)
-
-                    val species =
-                        listOf(
-                            "Ptica",
-                            "Mačka",
-                            "Pas",
-                            "Gušter",
-                            "Zec",
-                            "Glodavac",
-                            "Zmija",
-                            "Ostalo"
-                        )
-                    val adapter1 =
-                        ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
-                    (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
-
-                    val categories =
-                        listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
-                    val adapter2 =
-                        ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
-
-                    val category =
-                        categoryMapping.entries.find { it.value == advert.category }?.key ?: ""
-                    val categoryPosition = categories.indexOf(category)
-                    if (categoryPosition != -1) {
-                        (petCategoryField as? AutoCompleteTextView)?.setText(category, false)
-                    }
-                    (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
-
-                    val specie =
-                        speciesMapping.entries.find { it.value == advert.petSpecies }?.key ?: ""
-                    val speciesPosition = species.indexOf(specie)
-                    if (speciesPosition != -1) {
-                        (petSpeciesField as? AutoCompleteTextView)?.setText(specie, false)
-                    }
-                    (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
-
-                    submitButton.text = getString(R.string.edit_advert)
                 }
             }
         }
@@ -321,13 +330,15 @@ class CreateEditAdvertFragment : Fragment() {
                 val selectedAge =
                     petAgeField.text.toString().takeIf { it.isNotBlank() }?.toIntOrNull()
 
-                var date: Date?
                 var formattedDate: String? = null
-                try {
-                    date = inputFormat.parse(dateField.text.toString())
-                    formattedDate = outputFormat.format(date!!)
-                } catch (e: ParseException) {
-                    e.printStackTrace()
+                if (dateField.text.toString().isNotBlank()) {
+                    val date: Date?
+                    try {
+                        date = inputFormat.parse(dateField.text.toString())
+                        formattedDate = outputFormat.format(date!!)
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
                 }
 
                 val uriList: List<Uri> = viewModel.imageLinksLiveData.value ?: emptyList()
@@ -336,7 +347,7 @@ class CreateEditAdvertFragment : Fragment() {
                 if (args.advertId == -1) {
                     viewModel.advertAdvert(
                         advert_category = categoryMapping[petCategoryField.text.toString()]!!,
-                        pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
+                        pet_name = petNameField.text.toString(),
                         pet_species = selectedSpecies,
                         pet_color = petColorField.text.toString().ifBlank { null },
                         pet_age = selectedAge,
@@ -348,7 +359,7 @@ class CreateEditAdvertFragment : Fragment() {
                 } else {
                     viewModel.editAdvert(
                         advert_category = categoryMapping[petCategoryField.text.toString()]!!,
-                        pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
+                        pet_name = petNameField.text.toString(),
                         pet_species = selectedSpecies,
                         pet_color = petColorField.text.toString().ifBlank { null },
                         pet_age = selectedAge,

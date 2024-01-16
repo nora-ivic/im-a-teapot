@@ -83,7 +83,6 @@ interface PetsApiService {
         @Path("advert_id") advertId: Int,
     ): Response<Advert>
 
-    @GET("api/messages/{advert_id}")
     @DELETE("/api/advert/{advert_id}/delete")
     suspend fun deleteAdvert(
         @Path("advert_id") advertId: Int,
