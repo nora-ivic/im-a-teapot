@@ -31,7 +31,6 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.DialogAddCommentBinding
 import progi.imateacup.nestaliljubimci.databinding.FragmentAdvertDetailsBinding
 import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.textfield.TextInputEditText
 import okio.Path.Companion.toPath
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetsDisplayState
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
@@ -194,7 +193,7 @@ class AdvertDetailsFragment : Fragment() {
     }
 
     private fun setAdvertDisplayValues(advert: Advert) {
-        val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSSSS")
+        val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy. HH:mm")
         with(binding) {
             petStatusValue.text = advert.category.toString()

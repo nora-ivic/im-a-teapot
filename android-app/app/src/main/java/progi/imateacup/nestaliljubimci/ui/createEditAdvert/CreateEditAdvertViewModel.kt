@@ -1,4 +1,4 @@
-package progi.imateacup.nestaliljubimci.ui.createAdvert
+package progi.imateacup.nestaliljubimci.ui.createEditAdvert
 
 import android.net.Uri
 import android.util.Log
@@ -12,15 +12,17 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateAdvertRequest
+import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateEditAdvertRequest
+import progi.imateacup.nestaliljubimci.model.networking.response.Advert
+import progi.imateacup.nestaliljubimci.model.networking.response.CreateEditAdvertResponse
 import progi.imateacup.nestaliljubimci.networking.ApiModule
 import java.io.File
 import java.io.IOException
 
-class CreateAdvertViewModel : ViewModel() {
+class CreateEditAdvertViewModel : ViewModel() {
 
-    private val _advertAddedLiveData = MutableLiveData<Boolean>()
-    val advertAddedLiveData: LiveData<Boolean> = _advertAddedLiveData
+    private val _advertIdLiveData = MutableLiveData<Int?>()
+    val advertIdLiveData: LiveData<Int?> = _advertIdLiveData
 
     private val _advertCoordinatesLiveData = MutableLiveData<String?>()
     val advertCoordinatesLiveData: LiveData<String?> = _advertCoordinatesLiveData
@@ -30,6 +32,13 @@ class CreateAdvertViewModel : ViewModel() {
 
     private val _imageUploadSuccessLiveData = MutableLiveData<Boolean>()
     val imageUploadSuccessLiveData: LiveData<Boolean> = _imageUploadSuccessLiveData
+
+    private val _advertLiveData = MutableLiveData<Advert>()
+    val advertLiveData: LiveData<Advert> = _advertLiveData
+
+    private val _advertFetchSuccessLiveData = MutableLiveData<Boolean>()
+    val advertFetchSuccessLiveData: LiveData<Boolean> = _advertFetchSuccessLiveData
+
 
     fun advertAdvert(
         advert_category: AdvertisementCategory,
@@ -44,7 +53,7 @@ class CreateAdvertViewModel : ViewModel() {
     ) {
         viewModelScope.launch {
             try {
-                _advertAddedLiveData.value = postAdvert(
+                _advertIdLiveData.value = postAdvert(
                     advert_category,
                     pet_name,
                     pet_species,
@@ -54,12 +63,67 @@ class CreateAdvertViewModel : ViewModel() {
                     location_lost,
                     description,
                     pictureLinks
-                )
+                )?.advertId
             } catch (err: Exception) {
                 Log.e("Exception", err.toString())
-                _advertAddedLiveData.value = false
+                _advertIdLiveData.value = null
             }
         }
+    }
+
+
+    fun editAdvert(
+        advert_id: Int,
+        advert_category: AdvertisementCategory,
+        pet_name: String?,
+        pet_species: PetSpecies?,
+        pet_color: String?,
+        pet_age: Int?,
+        date_time_lost: String?,
+        location_lost: String?,
+        description: String?,
+        pictureLinks: List<String>
+    ) {
+        viewModelScope.launch {
+            try {
+                _advertIdLiveData.value = putAdvert(
+                    advert_id,
+                    advert_category,
+                    pet_name,
+                    pet_species,
+                    pet_color,
+                    pet_age,
+                    date_time_lost,
+                    location_lost,
+                    description,
+                    pictureLinks
+                )?.advertId
+            } catch (err: Exception) {
+                Log.e("Exception", err.toString())
+                _advertIdLiveData.value = null
+            }
+        }
+    }
+
+    fun getAdvertDetails(advertId: Int) {
+        viewModelScope.launch {
+            try {
+                _advertLiveData.value = fetchAdvertDetails(advertId)
+                _advertFetchSuccessLiveData.value = true
+            } catch (err: Exception) {
+                Log.e("EXCEPTION", err.toString())
+                _advertFetchSuccessLiveData.value = false
+            }
+        }
+    }
+
+    private suspend fun fetchAdvertDetails(advertId: Int): Advert? {
+        val response = ApiModule.retrofit.getAdvertDetails(advertId = advertId)
+
+        if (!response.isSuccessful)
+            throw IOException("Failed to get advert details")
+        else
+            return response.body()
     }
 
     fun uploadImage(picture: File) {
@@ -103,9 +167,9 @@ class CreateAdvertViewModel : ViewModel() {
         location_lost: String?,
         description: String?,
         pictureLinks: List<String>
-    ): Boolean {
+    ): CreateEditAdvertResponse? {
         val response = ApiModule.retrofit.addAdvert(
-            request = CreateAdvertRequest(
+            request = CreateEditAdvertRequest(
                 advert_category = advert_category,
                 pet_name = pet_name,
                 pet_species = pet_species,
@@ -118,15 +182,50 @@ class CreateAdvertViewModel : ViewModel() {
             )
         )
         if (!response.isSuccessful) {
-            throw IOException("Unsuccessful user registration")
+            throw IOException("Neuspješno dodavanje oglasa.")
         }
-        return true
+        return response.body()
+    }
+
+
+
+    private suspend fun putAdvert(
+        advert_id: Int,
+        advert_category: AdvertisementCategory,
+        pet_name: String?,
+        pet_species: PetSpecies?,
+        pet_color: String?,
+        pet_age: Int?,
+        date_time_lost: String?,
+        location_lost: String?,
+        description: String?,
+        pictureLinks: List<String>
+    ): CreateEditAdvertResponse?  {
+        val response = ApiModule.retrofit.putAdvert(
+            advertId = advert_id,
+            request = CreateEditAdvertRequest(
+                advert_category = advert_category,
+                pet_name = pet_name,
+                pet_species = pet_species,
+                pet_color = pet_color,
+                pet_age = pet_age,
+                date_time_lost = date_time_lost,
+                location_lost = location_lost,
+                description = description,
+                pictureLinks = pictureLinks
+            )
+        )
+        if (!response.isSuccessful) {
+            throw IOException("Neuspješno uređivanje oglasa.")
+        }
+        return response.body()
     }
 
     fun setAdvertCoordinates(coordinates: String?) {
         _advertCoordinatesLiveData.value = coordinates
     }
-    fun setImageLink(links: List<Uri>) {
+
+    fun setImageLinks(links: List<Uri>) {
         _imageLinksLiveData.value = links
     }
 }

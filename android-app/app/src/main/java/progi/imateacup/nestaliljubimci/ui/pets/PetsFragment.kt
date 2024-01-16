@@ -121,7 +121,7 @@ class PetsFragment : Fragment() {
                 true
             }
             addPost.setOnClickListener {
-                val direction = PetsFragmentDirections.actionPetsFragmentToCreateAdvertFragment()
+                val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment()
                 findNavController().navigate(direction)
             }
             val layoutManager = LinearLayoutManager(context)
@@ -251,9 +251,9 @@ class PetsFragment : Fragment() {
             { advert ->
                 /**
                  * ako treba jos neke paramtere dodati ih i prilagoditi kod ispod ili u PetsAdapter.kt
-                 * val direction = <ime fragmenta za add i edit post>.actionPetsFragmentTo<ime fragmenta za add i edit post>(advert.advertId)
-                 * findNavController().navigate(direction)
                  */
+                 val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment(advert.advertId)
+                 findNavController().navigate(direction)
             },
             onDeletePostClickCallback =
             {

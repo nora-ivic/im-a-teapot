@@ -5,12 +5,12 @@ import progi.imateacup.nestaliljubimci.model.networking.entities.Comment
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.LoginRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.RegisterRequest
 import progi.imateacup.nestaliljubimci.model.networking.request.auth.AddCommentRequest
-import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateAdvertRequest
+import progi.imateacup.nestaliljubimci.model.networking.request.auth.CreateEditAdvertRequest
 import progi.imateacup.nestaliljubimci.model.networking.response.LoginResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.RegisterResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.model.networking.response.AddCommentResponse
-import progi.imateacup.nestaliljubimci.model.networking.response.CreateAdvertResponse
+import progi.imateacup.nestaliljubimci.model.networking.response.CreateEditAdvertResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.ImageUploadResponse
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import retrofit2.Response
@@ -19,6 +19,7 @@ import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.Multipart
 import retrofit2.http.POST
+import retrofit2.http.PUT
 import retrofit2.http.Part
 import retrofit2.http.Path
 import retrofit2.http.Query
@@ -37,7 +38,13 @@ interface PetsApiService {
     suspend fun register(@Body request: RegisterRequest): Response<RegisterResponse>
 
     @POST("api/advert/create")
-    suspend fun addAdvert(@Body request: CreateAdvertRequest): Response<CreateAdvertResponse>
+    suspend fun addAdvert(@Body request: CreateEditAdvertRequest): Response<CreateEditAdvertResponse>
+
+    @PUT("api/advert/{advert_id}/edit")
+    suspend fun putAdvert(
+        @Path("advert_id") advertId: Int,
+        @Body request: CreateEditAdvertRequest
+    ): Response<CreateEditAdvertResponse>
 
     @POST("api/messages/{advert_id}/add")
     suspend fun addComment(

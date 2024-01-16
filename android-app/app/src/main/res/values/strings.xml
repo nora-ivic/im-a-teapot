@@ -49,6 +49,7 @@
     <string name="comment">Upiši komentar…</string>
     <string name="comment_submit">Pošalji komentar…</string>
     <string name="advert_submit">Kreiraj oglas…</string>
+    <string name="advert_edit">Uredi oglas…</string>
     <string name="add_message_image">Dodaj sliku…</string>
     <string name="add_location">Dodaj lokaciju…</string>
     <string name="remove_location">Ukloni lokaciju…</string>
@@ -124,5 +125,5 @@
     <string name="shelter_text">U skloništu</string>
     <string name="date">Datum</string>
     <string name="picture_text">Dodaj sliku</string>
-    <string name="advert_unsuccessful">Oglas ima nedovoljno podataka</string>
+    <string name="advert_unsuccessful">Neuspješno dodavanje oglasa.</string>
 </resources>

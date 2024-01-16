@@ -1,4 +1,4 @@
-package progi.imateacup.nestaliljubimci.ui.createAdvert
+package progi.imateacup.nestaliljubimci.ui.createEditAdvert
 
 import android.app.AlertDialog
 import android.content.Context
@@ -8,6 +8,8 @@ import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,6 +24,9 @@ import androidx.core.content.edit
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
+import com.google.android.material.datepicker.CalendarConstraints
+import com.google.android.material.datepicker.DateValidatorPointBackward
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.snackbar.Snackbar
 import okio.Path.Companion.toPath
@@ -34,25 +39,34 @@ import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import java.io.File
+import java.text.ParseException
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class CreateAdvertFragment : Fragment() {
+class CreateEditAdvertFragment : Fragment() {
 
     private var file: File? = null
     private lateinit var snapAnImage: ActivityResultLauncher<Uri>
     private lateinit var pickAnImage: ActivityResultLauncher<PickVisualMediaRequest>
     private lateinit var imageUri: Uri
     private lateinit var renamedFile: File
+    private lateinit var datePicker: MaterialDatePicker<Long>
 
     private lateinit var sharedPreferences: SharedPreferences
 
+    private val args by navArgs<CreateEditAdvertFragmentArgs>()
+    private var isEditing = false
+
     private var _binding: CreateAdvertFragmentBinding? = null
     private val binding get() = _binding!!
-    private val viewModel by viewModels<CreateAdvertViewModel>()
+    private val viewModel by viewModels<CreateEditAdvertViewModel>()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         sharedPreferences =
             requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
         handleAddImage()
+        initDatePicker()
     }
 
     override fun onCreateView(
@@ -66,16 +80,96 @@ class CreateAdvertFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        autofill()
         setOnAdvertResultAction()
+        setSubmitButton()
         initListeners()
         init()
     }
 
+    private fun autofill() {
+        if (args.advertId != -1) {
+            isEditing = true
+            viewModel.getAdvertDetails(args.advertId)
+
+            viewModel.advertFetchSuccessLiveData.observe(viewLifecycleOwner) { fetchSuccess ->
+                if (!fetchSuccess) {
+                    Snackbar.make(binding.root, R.string.advert_fetch_fail, Snackbar.LENGTH_SHORT)
+                        .show()
+                }
+            }
+
+            viewModel.advertLiveData.observe(viewLifecycleOwner) { advert ->
+                with(binding) {
+                    petNameField.setText(advert.petName)
+                    petColorField.setText(advert.petColor)
+                    descriptionField.setText(advert.description)
+                    petAgeField.setText(advert.petAge.toString())
+
+                    val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
+                    val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+                    try {
+                        val date = advert.dateTimeLost?.let { inputFormat.parse(it) }
+                        dateField.setText(outputFormat.format(date!!))
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
+
+                    val pictureLinks = advert.pictureLinks
+                    val uriList: List<Uri> = pictureLinks.map { Uri.parse(it) }
+                    viewModel.setImageLinks(uriList)
+
+                    viewModel.setAdvertCoordinates(advert.locationLost)
+
+                    val species =
+                        listOf(
+                            "Ptica",
+                            "Mačka",
+                            "Pas",
+                            "Gušter",
+                            "Zec",
+                            "Glodavac",
+                            "Zmija",
+                            "Ostalo"
+                        )
+                    val adapter1 =
+                        ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
+                    (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
+
+                    val categories =
+                        listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
+                    val adapter2 =
+                        ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
+
+                    val category =
+                        categoryMapping.entries.find { it.value == advert.category }?.key ?: ""
+                    val categoryPosition = categories.indexOf(category)
+                    if (categoryPosition != -1) {
+                        (petCategoryField as? AutoCompleteTextView)?.setText(category, false)
+                    }
+                    (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+                    val specie =
+                        speciesMapping.entries.find { it.value == advert.petSpecies }?.key ?: ""
+                    val speciesPosition = species.indexOf(specie)
+                    if (speciesPosition != -1) {
+                        (petSpeciesField as? AutoCompleteTextView)?.setText(specie, false)
+                    }
+                    (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+                    submitButton.text = getString(R.string.edit_advert)
+                }
+            }
+        }
+    }
+
     private fun setOnAdvertResultAction() {
-        viewModel.advertAddedLiveData.observe(viewLifecycleOwner) { isAdvertSuccessful ->
-            if (isAdvertSuccessful) {
+        viewModel.advertIdLiveData.observe(viewLifecycleOwner) { advertId ->
+            if (advertId != null) {
                 val direction =
-                    CreateAdvertFragmentDirections.actionCreateAdvertFragmentToPetsFragment()
+                    CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToDetailsFragment(
+                        advertId
+                    )
                 findNavController().navigate(direction)
             } else {
                 Snackbar.make(
@@ -119,14 +213,33 @@ class CreateAdvertFragment : Fragment() {
         observeCoordinates()
     }
 
+    private fun initDatePicker() {
+        val constraintsBuilder =
+            CalendarConstraints.Builder()
+                .setValidator(DateValidatorPointBackward.now())
+        datePicker = MaterialDatePicker.Builder.datePicker()
+            .setTitleText("Odaberite datum nestanka")
+            .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+            .setCalendarConstraints(constraintsBuilder.build())
+            .build()
+    }
 
     private fun initListeners() {
+        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
 
+            dateField.setOnFocusChangeListener { _, hasFocus ->
+                if (hasFocus)
+                    datePicker.show(parentFragmentManager, "datePicker")
+            }
+
             dateField.setOnClickListener {
-                val datePicker = MaterialDatePicker.Builder.datePicker()
-                    .setTitleText("Select date")
-                    .build()
+                datePicker.show(parentFragmentManager, "datePicker")
+            }
+
+            datePicker.addOnPositiveButtonClickListener {
+                dateField.setText(datePicker.headerText)
             }
 
             petNameField.setOnFocusChangeListener { _, hasFocus ->
@@ -134,6 +247,22 @@ class CreateAdvertFragment : Fragment() {
                     updatePetNameField()
                 }
             }
+            petNameField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    setSubmitButton()
+                }
+            })
             petColorField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     updatePetColorField()
@@ -144,11 +273,44 @@ class CreateAdvertFragment : Fragment() {
                     updatePetAgeField()
                 }
             }
+            petSpeciesField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    setSubmitButton()
+                }
+            })
             descriptionField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     updateDescriptionField()
                 }
             }
+
+            descriptionField.addTextChangedListener(object : TextWatcher {
+                override fun beforeTextChanged(
+                    s: CharSequence?,
+                    start: Int,
+                    count: Int,
+                    after: Int
+                ) {
+                }
+
+                override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                }
+
+                override fun afterTextChanged(s: Editable?) {
+                    setSubmitButton()
+                }
+            })
 
             submitButton.setOnClickListener {
                 val selectedSpecies = petSpeciesField.text.toString().let {
@@ -159,19 +321,44 @@ class CreateAdvertFragment : Fragment() {
                 val selectedAge =
                     petAgeField.text.toString().takeIf { it.isNotBlank() }?.toIntOrNull()
 
+                var date: Date?
+                var formattedDate: String? = null
+                try {
+                    date = inputFormat.parse(dateField.text.toString())
+                    formattedDate = outputFormat.format(date!!)
+                } catch (e: ParseException) {
+                    e.printStackTrace()
+                }
+
                 val uriList: List<Uri> = viewModel.imageLinksLiveData.value ?: emptyList()
                 val stringList: List<String> = uriList.map { uri -> uri.toString() }
-                viewModel.advertAdvert(
-                    advert_category = categoryMapping[petCategoryField.text.toString()]!!,
-                    pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
-                    pet_species = selectedSpecies,
-                    pet_color = petColorField.text.toString().ifBlank { null },
-                    pet_age = selectedAge,
-                    date_time_lost = "2024-01-15T15:12:57.584Z",
-                    location_lost = viewModel.advertCoordinatesLiveData.value,
-                    description = descriptionField.text.toString().ifBlank { null },
-                    pictureLinks = stringList
-                )
+
+                if (args.advertId == -1) {
+                    viewModel.advertAdvert(
+                        advert_category = categoryMapping[petCategoryField.text.toString()]!!,
+                        pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
+                        pet_species = selectedSpecies,
+                        pet_color = petColorField.text.toString().ifBlank { null },
+                        pet_age = selectedAge,
+                        date_time_lost = formattedDate,
+                        location_lost = viewModel.advertCoordinatesLiveData.value,
+                        description = descriptionField.text.toString().ifBlank { null },
+                        pictureLinks = stringList
+                    )
+                } else {
+                    viewModel.editAdvert(
+                        advert_category = categoryMapping[petCategoryField.text.toString()]!!,
+                        pet_name = petNameField.text.toString().ifBlank { "Nepoznato" },
+                        pet_species = selectedSpecies,
+                        pet_color = petColorField.text.toString().ifBlank { null },
+                        pet_age = selectedAge,
+                        date_time_lost = formattedDate,
+                        location_lost = viewModel.advertCoordinatesLiveData.value,
+                        description = descriptionField.text.toString().ifBlank { null },
+                        pictureLinks = stringList,
+                        advert_id = args.advertId
+                    )
+                }
             }
 
             addLocationButton.setOnClickListener {
@@ -179,7 +366,7 @@ class CreateAdvertFragment : Fragment() {
                     viewModel.setAdvertCoordinates(null)
                 } else {
                     val direction =
-                        CreateAdvertFragmentDirections.actionCreateAdvertFragmentToMapSelectLocationFragment()
+                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToMapSelectLocationFragment()
                     findNavController().navigate(direction)
                 }
             }
@@ -188,7 +375,7 @@ class CreateAdvertFragment : Fragment() {
                 val currentImageLinks = viewModel.imageLinksLiveData.value ?: emptyList()
 
                 if (currentImageLinks.isNotEmpty()) {
-                    viewModel.setImageLink(emptyList())
+                    viewModel.setImageLinks(emptyList())
                 } else {
                     removeImagesButton.visibility = View.GONE
                 }
@@ -199,6 +386,7 @@ class CreateAdvertFragment : Fragment() {
             }
 
             viewModel.imageLinksLiveData.observe(viewLifecycleOwner) { pictureUrls ->
+                setSubmitButton()
                 if (pictureUrls.size == 1) {
                     imageInfo.visibility = View.VISIBLE
                     imageInfo.text = getString(R.string.one_image)
@@ -235,6 +423,23 @@ class CreateAdvertFragment : Fragment() {
                 }
             }
 
+        }
+    }
+
+    private fun setSubmitButton() {
+        with(binding) {
+            val uriList: List<Uri> = viewModel.imageLinksLiveData.value ?: emptyList()
+            val stringList: List<String> = uriList.map { uri -> uri.toString() }
+
+            val selectedSpecies = petSpeciesField.text.toString().let {
+                speciesMapping[it] ?: run {
+                    null
+                }
+            }
+            val petName = petNameField.text.toString()
+            val description = descriptionField.text.toString()
+            binding.submitButton.isEnabled =
+                (petName.isNotBlank() || selectedSpecies != null || description.isNotBlank() || stringList.isNotEmpty())
         }
     }
 

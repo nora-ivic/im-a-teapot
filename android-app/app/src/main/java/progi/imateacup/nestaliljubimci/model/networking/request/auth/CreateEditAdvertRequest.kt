@@ -5,7 +5,7 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCateg
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 
 @kotlinx.serialization.Serializable
-data class CreateAdvertRequest(
+data class CreateEditAdvertRequest(
     @SerialName("advert_category") val advert_category: AdvertisementCategory,
     @SerialName("pet_name") val pet_name: String?,
     @SerialName("pet_species") val pet_species: PetSpecies?,
