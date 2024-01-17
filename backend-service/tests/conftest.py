@@ -45,6 +45,5 @@ def test_session():
     test_session = test_session_mold()
     yield test_session
 
-    close_all_sessions()
     Base.metadata.drop_all(engine)
     EngineManager.unset_database()

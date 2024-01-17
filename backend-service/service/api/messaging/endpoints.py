@@ -28,6 +28,7 @@ def add_message(
     except SQLAlchemyError:
         raise HTTPException(status_code=404, detail="Advert not found")
 
+    repo.session.close()
     return {'detail': 'Message successfully sent!'}
 
 
@@ -47,4 +48,5 @@ def fetch_messages(
     for db_message in db_messages:
         output_messages.append(map_to_output_message(db_message))
 
+    repo.session.close()
     return output_messages

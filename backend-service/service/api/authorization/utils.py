@@ -40,10 +40,11 @@ def validate_token(authentication: Annotated[str, Header()] = None):
     if not authentication:
         return None
 
+    repo = AuthorizationRepository()
     try:
         decoded = jwt.decode(jwt=authentication, key=settings.SECRET_KEY, algorithms=[settings.ALGORITHM])
         token_username: str = decoded.get("username")
-        repo = AuthorizationRepository()
+
         if not repo.check_existing_user(token_username):
             raise jwt.InvalidTokenError
 
@@ -56,6 +57,7 @@ def validate_token(authentication: Annotated[str, Header()] = None):
     except jwt.InvalidTokenError:
         raise HTTPException(status_code=401, detail="Invalid token")
 
+    repo.session.close()
     return decoded["id"]
 
 

@@ -25,6 +25,7 @@ def home_page(
     for db_advert in db_adverts:
         output_adverts.append(map_to_output_advert_short(db_advert))
 
+    repo.session.close()
     return output_adverts
 
 
@@ -44,6 +45,7 @@ def user_adverts(
     for db_user_advert in db_user_adverts:
         output_user_adverts.append(map_to_output_advert_short(db_user_advert))
 
+    repo.session.close()
     return output_user_adverts
 
 
@@ -60,6 +62,7 @@ def details(
 
     output_advert = map_to_output_advert_full(db_advert)
 
+    repo.session.close()
     return output_advert
 
 
@@ -78,7 +81,9 @@ def in_shelter(
     except AdvertNotFoundException:
         raise HTTPException(status_code=404, detail="Advert not found!")
 
-    return map_to_output_advert_full(edited_advert)
+    output_advert = map_to_output_advert_full(edited_advert)
+    repo.session.close()
+    return output_advert
 
 
 @advert_router.post('/create')
@@ -92,7 +97,10 @@ def create_advert(
     repo = AdvertisementRepository()
 
     db_advert = repo.create_advert(advert_input, user_id)
-    return map_to_output_advert_full(db_advert)
+    advert_output = map_to_output_advert_full(db_advert)
+
+    repo.session.close()
+    return advert_output
 
 
 @advert_router.put('/{advert_id}/edit')
@@ -113,7 +121,10 @@ def edit_advert(
     except AdvertNotFoundException:
         raise HTTPException(status_code=404, detail="Advert not found")
 
-    return map_to_output_advert_full(db_advert)
+    advert_output = map_to_output_advert_full(db_advert)
+
+    repo.session.close()
+    return advert_output
 
 
 @advert_router.delete('/{advert_id}/delete')
@@ -133,4 +144,5 @@ def delete_advert(
     except AdvertNotFoundException:
         raise HTTPException(status_code=404, detail="Advert not found")
 
+    repo.session.close()
     return {'detail': 'Advert deleted successfully.'}
