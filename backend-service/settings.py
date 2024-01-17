@@ -5,7 +5,7 @@ load_dotenv()
 
 
 APP_NAME = "Nestali ljubimci"
-APP_VERSION = "1.0"
+APP_VERSION = "2.0"
 
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
@@ -18,3 +18,6 @@ TEST_DATABASE = "lost_pets_test"
 SECRET_KEY = os.getenv('SECRET_KEY')
 ALGORITHM = "HS256"
 TOKEN_EXPIRE_MINUTES = 120
+
+PICTURE_FOLDER = 'service/api/pictures/media/'
+PICTURE_PATH = '/media/'

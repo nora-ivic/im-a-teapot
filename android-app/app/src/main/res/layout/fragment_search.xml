@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/surface"
+    android:backgroundTint="@color/surface">
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:backgroundTint="@color/surface_container"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="?attr/actionBarSize"
+            app:navigationIcon="@drawable/sharp_arrow_back"
+            app:title="@string/pretrazi_ljubimce"
+            app:titleCentered="true"
+            app:titleTextColor="@color/black" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="?actionBarSize"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="?actionBarSize"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_16dp"
+                android:text="@string/unesite_podatke_o_zeljenom_ljubimcu"
+                android:textSize="@dimen/text20sp"
+                android:textStyle="bold" />
+
+            <com.google.android.material.divider.MaterialDivider
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_16dp"
+                app:dividerColor="@color/black"
+                app:dividerInsetEnd="16dp"
+                app:dividerInsetStart="16dp"
+                app:dividerThickness="2dp" />
+
+            <com.google.android.material.card.MaterialCardView
+                style="?attr/materialCardViewElevatedStyle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/margin_12dp"
+                android:backgroundTint="@color/surface_container"
+                app:cardElevation="2dp"
+                app:contentPaddingBottom="@dimen/margin_16dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/paw"
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginTop="@dimen/margin_32dp"
+                        android:contentDescription="@string/cat_paw"
+                        android:src="@drawable/cat_footprint"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/filledTextFieldIme"
+                        style="?attr/textInputFilledStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:layout_marginTop="@dimen/margin_24dp"
+                        android:hint="@string/ime"
+                        app:boxBackgroundColor="@color/surface_container_highest"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toTopOf="parent"
+                        >
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/textInputEditTextIme"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="text"
+                            android:maxLines="1"
+                            />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/filledTextFieldVrsta"
+                        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:hint="@string/vrsta"
+                        app:boxBackgroundColor="@color/surface_container_highest"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toBottomOf="@id/filledTextFieldIme">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autocompleteTextVrsta"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            app:simpleItems="@array/species" />
+
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/filledTextFieldBoja"
+                        style="@style/Widget.Material3.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:hint="@string/boja"
+                        app:boxBackgroundColor="@color/surface_container_highest"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toBottomOf="@+id/filledTextFieldVrsta">
+
+                        <AutoCompleteTextView
+                            android:id="@+id/autocompleteTextBoja"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:inputType="none"
+                            app:simpleItems="@array/colors" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
+                    <TextView
+                        android:id="@+id/starostText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:layout_marginTop="@dimen/margin_16dp"
+                        android:text="@string/starost"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/text20sp"
+                        app:layout_constraintStart_toEndOf="@id/paw"
+                        app:layout_constraintTop_toBottomOf="@id/filledTextFieldBoja" />
+
+                    <com.google.android.material.slider.RangeSlider
+                        android:id="@+id/starostSlider"
+                        android:layout_width="300dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:stepSize="1"
+                        android:valueFrom="0.0"
+                        android:valueTo="75.0"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toBottomOf="@id/starostText" />
+
+                    <EditText
+                        android:id="@+id/ageTextField"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:background="@drawable/surface_highest_with_border"
+                        android:inputType="number"
+                        android:maxLength="2"
+                        android:minWidth="46dp"
+                        android:minHeight="46dp"
+                        android:text="@string/_0"
+                        android:textAlignment="center"
+                        android:textSize="@dimen/text24sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toBottomOf="@id/starostSlider" />
+
+                    <TextView
+                        android:id="@+id/odaberiDatumText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginVertical="@dimen/margin_48dp"
+                        android:text="@string/izgubljen_od"
+                        android:textSize="@dimen/text20sp"
+                        android:textStyle="bold"
+                        app:layout_constraintStart_toEndOf="@id/cardView"
+                        app:layout_constraintTop_toBottomOf="@id/ageTextField" />
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cardView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_16dp"
+                        android:layout_marginVertical="@dimen/margin_54dp"
+                        android:backgroundTint="@color/secondaryContainer"
+                        app:cardCornerRadius="50dp"
+                        app:cardElevation="2dp"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/ageTextField">
+
+                        <ImageView
+                            android:id="@+id/calendarIcon"
+                            android:layout_width="48dp"
+                            android:layout_height="48dp"
+                            android:layout_gravity="center"
+                            android:layout_margin="4dp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:padding="8dp"
+                            android:scaleType="centerInside"
+                            android:src="@drawable/schedule_calendar_icon" />
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:id="@+id/chosenDatumDisplay"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginHorizontal="@dimen/margin_24dp"
+                        android:layout_marginVertical="@dimen/margin_8dp"
+                        android:textSize="@dimen/text32sp"
+                        app:layout_constraintStart_toEndOf="@id/cardView"
+                        app:layout_constraintTop_toBottomOf="@id/odaberiDatumText"
+                        tools:text="21.12.2021" />
+
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/filledTextFieldOpis"
+                        style="?attr/textInputFilledStyle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/margin_32dp"
+                        android:layout_marginTop="@dimen/margin_24dp"
+                        android:hint="@string/opis"
+                        app:boxBackgroundColor="@color/surface_container_highest"
+                        app:layout_constraintStart_toEndOf="@+id/paw"
+                        app:layout_constraintTop_toBottomOf="@id/chosenDatumDisplay">
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/textInputEditTextOpis"
+                            android:layout_width="270dp"
+                            android:layout_height="wrap_content"
+                            android:imeOptions="actionDone"
+                            android:inputType="textMultiLine|textCapSentences"
+                            android:maxLines="10"
+                            android:minLines="2" />
+                    </com.google.android.material.textfield.TextInputLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <Button
+                android:id="@+id/searchButton"
+                style="@style/CustomButtonStyle"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginVertical="28dp"
+                android:background="@drawable/button_secondary"
+                android:text="@string/pretrazi"
+                android:textColor="@color/surface"
+                android:textSize="@dimen/text16sp" />
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

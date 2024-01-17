@@ -11,6 +11,7 @@ import androidx.core.content.edit
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.FragmentLoginBinding
@@ -22,19 +23,22 @@ class LoginFragment : Fragment() {
 
     companion object {
         const val ACCESS_TOKEN = "ACCESS_TOKEN"
+        const val USERNAME = "USERNAME"
+        const val EMAIL = "EMAIL"
+        const val PHONE_NUMBER = "PHONE_NUMBER"
     }
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
     private val viewModel by viewModels<LoginViewModel>()
     private lateinit var sharedPreferences: SharedPreferences
+    private val args by navArgs<LoginFragmentArgs>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        sharedPreferences = requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
-        sharedPreferences.edit {
-            putString(ACCESS_TOKEN, null)
-        }
+        sharedPreferences =
+            requireContext().getSharedPreferences(PREFERENCES_NAME, Context.MODE_PRIVATE)
+        checkUserLoggedIn()
         ApiModule.initRetrofit()
     }
 
@@ -45,11 +49,35 @@ class LoginFragment : Fragment() {
         _binding = FragmentLoginBinding.inflate(inflater, container, false)
         return binding.root
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        notifyAccessTokenExpired()
         setAccessTokenObserver()
         setOnLoginResultAction()
         initListeners()
+    }
+
+    private fun notifyAccessTokenExpired() {
+        if (args.accessTokenExpired) {
+            Snackbar.make(
+                binding.root,
+                R.string.access_token_expired,
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
+    }
+
+    private fun checkUserLoggedIn() {
+        if (sharedPreferences.getString(ACCESS_TOKEN, null) != null) {
+            ApiModule.setSessionInfo(sharedPreferences.getString(ACCESS_TOKEN, "")!!)
+            val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment(
+                sharedPreferences.getString(USERNAME, "")!!,
+                sharedPreferences.getString(PHONE_NUMBER, "")!!,
+                sharedPreferences.getString(EMAIL, "")!!
+            )
+            findNavController().navigate(direction)
+        }
     }
 
     private fun setAccessTokenObserver() {
@@ -61,16 +89,32 @@ class LoginFragment : Fragment() {
     }
 
     private fun setOnLoginResultAction() {
-        viewModel.loginResultLiveData.observe(viewLifecycleOwner) { isLoginSuccessful ->
-            if (isLoginSuccessful) {
-                val direction = LoginFragmentDirections.actionLoginFragmentToPetsFragment()
-                findNavController().navigate(direction)
-            } else {
-                Snackbar.make(
-                    binding.root,
-                    R.string.login_unsuccessful,
-                    Snackbar.LENGTH_SHORT
-                ).show()
+        with(viewModel) {
+            loginResultLiveData.observe(viewLifecycleOwner) { loginResultData ->
+                if (!loginResultData) {
+                    Snackbar.make(
+                        binding.root,
+                        R.string.login_unsuccessful,
+                        Snackbar.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            loginResponseLiveData.observe(viewLifecycleOwner) { loginResponseData ->
+                if (loginResponseData.username != null && loginResponseData.email != null && loginResponseData.phoneNumber != null) {
+                    sharedPreferences.edit {
+                        putString(USERNAME, loginResponseData.username)
+                        putString(EMAIL, loginResponseData.email)
+                        putString(PHONE_NUMBER, loginResponseData.phoneNumber)
+
+                    }
+                    val direction =
+                        LoginFragmentDirections.actionLoginFragmentToPetsFragment(
+                            loginResponseData.username!!,
+                            loginResponseData.phoneNumber!!,
+                            loginResponseData.email!!
+                        )
+                    findNavController().navigate(direction)
+                }
             }
         }
     }
@@ -121,12 +165,13 @@ class LoginFragment : Fragment() {
             }
         }
     }
+
     private fun updateUsernameField() {
         with(binding) {
             if (!validateUsername(usernameField.text.toString().trim())) {
                 usernameFieldLayout.error =
-                    getString(progi.imateacup.nestaliljubimci.R.string.username_error_message)
-                usernameFieldLayout.setErrorTextAppearance(progi.imateacup.nestaliljubimci.R.style.ErrorTextAppearance)
+                    getString(R.string.username_error_message)
+                usernameFieldLayout.setErrorTextAppearance(R.style.ErrorTextAppearance)
             } else {
                 usernameFieldLayout.error = null
             }

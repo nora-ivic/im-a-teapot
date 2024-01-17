@@ -8,17 +8,18 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiModule {
-    private const val BASE_URL = "https://lost-pets-progi-backend-2023-2024.onrender.com/"
+    const val BASE_URL = "https://lost-pets-progi-backend-2023-2024.onrender.com/"
 
     lateinit var retrofit: PetsApiService
 
     private val json = Json { ignoreUnknownKeys = true }
 
-    private  var accessToken: String = ""
+    private var accessToken: String = ""
 
-    fun setSessionInfo (accessToken: String){
+    fun setSessionInfo(accessToken: String) {
         this.accessToken = accessToken
     }
+
     fun initRetrofit() {
         val okhttp = OkHttpClient.Builder()
             .addInterceptor { chain ->

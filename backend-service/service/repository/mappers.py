@@ -28,6 +28,7 @@ class UserCustom(Base):
     login_info: Mapped["UserAuth"] = relationship(back_populates="user_info", foreign_keys="UserAuth.username")
     messages_sent: Mapped[List["Message"]] = relationship(back_populates="user_sent", foreign_keys="Message.user_id")
     adverts_posted: Mapped[List["Advertisement"]] = relationship(back_populates="user_posted", foreign_keys="Advertisement.user_id")
+    shelter_posted: Mapped[List["Advertisement"]] = relationship(back_populates="shelter", foreign_keys="Advertisement.shelter_id")
 
     def __repr__(self) -> str:
         return (f"UserCustom(id={self.id!r}, username={self.username!r}, is_shelter={self.is_shelter!r}, "
@@ -38,7 +39,7 @@ class UserCustom(Base):
 class UserAuth(Base):
     __tablename__ = "user_auth"
 
-    username: Mapped[str] = mapped_column(ForeignKey("user_custom.id"), primary_key=True)
+    username: Mapped[str] = mapped_column(ForeignKey("user_custom.username"), primary_key=True)
     password: Mapped[str] = mapped_column(String(128), nullable=False)
 
     user_info: Mapped["UserCustom"] = relationship(back_populates="login_info", foreign_keys=[username])
@@ -77,12 +78,14 @@ class Advertisement(Base):
     pet_id: Mapped[int] = mapped_column(ForeignKey("pet.id"), nullable=False)
     date_time_adv: Mapped[datetime] = mapped_column(DateTime(timezone=False), insert_default=datetime.now())
     is_in_shelter: Mapped[bool] = mapped_column(types.Boolean, insert_default=False)
-    shelter_id: Mapped[int] = mapped_column(types.Integer, nullable=True)
+    shelter_id: Mapped[int] = mapped_column(ForeignKey("user_custom.id"), nullable=True)
 
     pet_posted: Mapped["Pet"] = relationship(back_populates="advert_posted", foreign_keys=[pet_id])
     picture_posted: Mapped[List["Picture"]] = relationship(back_populates="advert_posted", foreign_keys="Picture.advert_id")
     communication: Mapped[List["Message"]] = relationship(back_populates="advert_posted", foreign_keys="Message.advert_id")
     user_posted: Mapped["UserCustom"] = relationship(back_populates="adverts_posted", foreign_keys=[user_id])
+    shelter: Mapped["UserCustom"] = relationship(back_populates="shelter_posted", foreign_keys=[shelter_id])
+
 
     def __repr__(self) -> str:
         return (f"Advertisement(id={self.id!r}, category={self.category!r}, deleted={self.deleted!r}, "

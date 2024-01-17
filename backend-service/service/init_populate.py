@@ -65,14 +65,10 @@ def init_populate(database: str):
                    "                            AND date_time_adv = '2023-11-14 10:40:07.527194'"
                    "                            AND is_in_shelter = TRUE AND shelter_id = 2)")
 
-    cursor.execute("INSERT INTO picture (advert_id, link)"
-                   "    SELECT 1, 'https://images.pexels.com/photos/3812207/pexels-photo-3812207.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
-                   "    WHERE NOT EXISTS (SELECT * FROM picture"
-                   "                        WHERE advert_id = 1 AND link = 'https://images.pexels.com/photos/3812207/pexels-photo-3812207.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')")
+    cursor.execute("DELETE FROM picture "
+                   "WHERE advert_id = 1 AND link = 'https://images.pexels.com/photos/3812207/pexels-photo-3812207.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'")
 
-    cursor.execute("INSERT INTO picture (advert_id, link)"
-                   "    SELECT 2, 'https://images.pexels.com/photos/2261538/pexels-photo-2261538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'"
-                   "    WHERE NOT EXISTS (SELECT * FROM picture"
-                   "                        WHERE advert_id = 2 AND link = 'https://images.pexels.com/photos/2261538/pexels-photo-2261538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1')")
+    cursor.execute("DELETE FROM picture "
+                   "WHERE advert_id = 2 AND link = 'https://images.pexels.com/photos/2261538/pexels-photo-2261538.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1'")
 
     conn.commit()
