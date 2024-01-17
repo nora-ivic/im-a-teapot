@@ -52,7 +52,6 @@ class AuthorizationRepository:
 
         self.session.add(new_auth_user)
         self.session.commit()
-        self.session.close()
 
     def login_user(self, user_login: UserLogin):
         existing_user = self._get_existing_user(user_login.username)
@@ -62,9 +61,7 @@ class AuthorizationRepository:
         if not self.pwd_context.verify(user_login.password, existing_user.password):
             raise InvalidLoginException
 
-        return_data = self._get_user_custom(username=existing_user.username)
-        self.session.close()
-        return return_data
+        return self._get_user_custom(username=existing_user.username)
 
     def get_shelters(
             self,
@@ -76,11 +73,9 @@ class AuthorizationRepository:
             .filter(UserCustom.is_shelter == True)
         )
 
-        return_data = (
+        return (
             query
             .order_by(UserCustom.shelter_name)
             .limit(page_size).offset((page - 1) * page_size)
             .all()
         )
-        self.session.close()
-        return return_data
