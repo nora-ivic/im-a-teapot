@@ -111,7 +111,8 @@ class SearchFragment : Fragment() {
     }
 
     private fun fillFilter(): SearchFilter {
-        val inputFormat = SimpleDateFormat("MMM dd, yyyyy", Locale.getDefault())
+        val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val noCommaInputFormat = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
 
 
@@ -119,10 +120,16 @@ class SearchFragment : Fragment() {
             var date: Date?
             var formattedDate: String? = null
             try {
-                date = inputFormat.parse(chosenDatumDisplay.text.toString())
+                date = noCommaInputFormat.parse(chosenDatumDisplay.text.toString())
                 formattedDate = outputFormat.format(date!!)
             } catch (e: ParseException) {
-                date = null
+                try {
+                    date = inputFormat.parse(chosenDatumDisplay.text.toString())
+                    formattedDate = outputFormat.format(date!!)
+                }
+                catch (e: ParseException) {
+                    date = null
+                }
             }
 
             return SearchFilter(

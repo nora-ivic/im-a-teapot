@@ -235,6 +235,7 @@ class CreateEditAdvertFragment : Fragment() {
 
     private fun initListeners() {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val noCommaInputFormat = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
             viewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
@@ -336,12 +337,18 @@ class CreateEditAdvertFragment : Fragment() {
 
                 var formattedDate: String? = null
                 if (dateField.text.toString().isNotBlank()) {
-                    val date: Date?
+                    var date: Date?
                     try {
-                        date = inputFormat.parse(dateField.text.toString())
+                        date = noCommaInputFormat.parse(dateField.text.toString())
                         formattedDate = outputFormat.format(date!!)
                     } catch (e: ParseException) {
-                        e.printStackTrace()
+                        try {
+                            date = inputFormat.parse(dateField.text.toString())
+                            formattedDate = outputFormat.format(date!!)
+                        }
+                        catch (e: ParseException) {
+                            date = null
+                        }
                     }
                 }
 
