@@ -50,18 +50,6 @@ class MapDisplayLocationFragment : Fragment() {
         mapView?.getMapboxMap()?.loadStyleUri(
             Style.MAPBOX_STREETS
         ) { addAnnotationToMap() }
-        centerCameraOnPoint()
-    }
-
-
-    private fun centerCameraOnPoint() {
-        val coordinateString = args.coordinates
-        val (lng, lat) = parseCoordinateString(coordinateString)
-        val zoomLevel = 10.0
-        mapView?.getMapboxMap()?.setCamera(CameraOptions.Builder()
-            .center(Point.fromLngLat(lat, lng))
-            .zoom(zoomLevel)
-            .build())
     }
 
     private fun addAnnotationToMap() {

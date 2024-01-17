@@ -389,7 +389,7 @@ class PetsFragment : Fragment() {
             }
         }.setNegativeButton("Odustani") { dialog, _ ->
             dialog.dismiss()
-        }.setView(R.layout.filter_input_dialog).setTitle("Unesite ime traženog skloništa").create()
+        }.setView(R.layout.filter_input_dialog).setTitle("Unesite traženo ime skloništa").create()
 
         shelterDialogBinding.outlineTextFieldLayout.hint = "Ime skloništa"
         shelterDialog.setView(shelterDialogBinding.root)
