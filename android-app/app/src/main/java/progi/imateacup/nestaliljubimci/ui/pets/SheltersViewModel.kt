@@ -21,6 +21,9 @@ class SheltersViewModel: ViewModel() {
     private val _DisplayStateLiveData = MutableLiveData<DisplayState>()
     val displayStateLiveData: LiveData<DisplayState> = _DisplayStateLiveData
 
+    private val _accessTokenExpiredLiveData = MutableLiveData<Boolean>()
+    val accessTokenExpiredLiveData: LiveData<Boolean> = _accessTokenExpiredLiveData
+
     fun getShelters(networkAvailable: Boolean) {
         if (networkAvailable) {
             if (fetching) {
@@ -48,7 +51,10 @@ class SheltersViewModel: ViewModel() {
                         }
                     }
                     fetching = false
-                } catch (e: IOException) {
+                } catch (err: IOException) {
+                    if (err.localizedMessage == "Unauthorized") {
+                        _accessTokenExpiredLiveData.value = true
+                    }
                     _DisplayStateLiveData.value = DisplayState.ERRORGET
                     fetching = false
                 }
@@ -61,6 +67,10 @@ class SheltersViewModel: ViewModel() {
 
     private suspend fun sendGetSheltersRequest(): List<ShelterResponse> {
         val sheltersResponse =  ApiModule.retrofit.getShelters(page)
+
+        if (sheltersResponse.code() == 401) {
+            throw IOException("Unauthorized")
+        }
 
         if (sheltersResponse.isSuccessful) {
             return sheltersResponse.body()!!

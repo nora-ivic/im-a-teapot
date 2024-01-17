@@ -3,14 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="match_parent"
+    android:background="@color/surface">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingVertical="32dp"
-        android:background="@color/surface"
-        tools:context=".ui.authentication/RegisterAsUserFragment">
+        tools:context=".ui.authentication/AdvertFragment">
+
 
         <RelativeLayout
             android:id="@+id/logo"
@@ -34,274 +35,277 @@
                 android:layout_alignTop="@id/logoImage"
                 android:layout_marginStart="16dp"
                 android:layout_toEndOf="@id/logoImage"
-                android:text="@string/nestali_ljubimci"
+                android:text="@string/advert"
                 android:textColor="@color/black"
                 android:textSize="34sp"
                 android:textStyle="bold" />
-
         </RelativeLayout>
 
-        <TextView
-            android:id="@+id/registerText"
-            android:layout_width="wrap_content"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/petNameFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="0dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="0dp"
-            android:text="@string/register_text"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/pet_name"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/logo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/petNameField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/petSpeciesFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/species_text"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petNameFieldLayout">
+
+            <AutoCompleteTextView
+                android:id="@+id/petSpeciesField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/petCategoryFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/category_text"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petSpeciesFieldLayout">
+
+            <AutoCompleteTextView
+                android:id="@+id/petCategoryField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/petColorFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/pet_color"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petCategoryFieldLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/petColorField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="text"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/petAgeFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/pet_age"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petColorFieldLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/petAgeField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:imeOptions="actionDone"
+                android:inputType="numberSigned"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/dateFieldLayout"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginVertical="@dimen/size16dp"
+            android:hint="@string/date"
+            android:textColorHint="@color/black"
+            app:boxStrokeColor="@color/selector_textfield_stroke"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/petAgeFieldLayout">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/dateField"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="none"
+                android:textColor="@color/black"
+                android:textSize="@dimen/text16sp">
+
+            </com.google.android.material.textfield.TextInputEditText>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/descriptionFieldLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_54dp"
+            android:layout_marginTop="@dimen/size16dp"
+            android:layout_marginBottom="@dimen/margin_24dp"
+            android:hint="@string/description_text"
+            android:inputType="textMultiLine"
+            android:minLines="5"
             android:textColor="@color/black"
-            android:textSize="34sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/logo" />
-
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/registerTypeButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            app:checkedButton="@id/registerAsPersonButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerText"
-            app:selectionRequired="true"
-            app:singleSelection="true">
-
-            <Button
-                android:id="@+id/registerAsPersonButton"
-                style="@style/RegisterTypeButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/register_type_button_color"
-                android:text="@string/register_as_person" />
-
-            <Button
-                android:id="@+id/registerAsShelterButton"
-                style="@style/RegisterTypeButtonStyle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/register_type_button_color"
-                android:text="@string/register_as_shelter" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/usernameFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/username_text"
             android:textColorHint="@color/black"
+            android:textSize="@dimen/text16sp"
             app:boxStrokeColor="@color/selector_textfield_stroke"
             app:hintTextColor="@color/black"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/registerTypeButton">
+            app:layout_constraintTop_toBottomOf="@id/dateFieldLayout">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/usernameField"
+                android:id="@+id/descriptionField"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
+                android:gravity="top|start"
+                android:inputType="textMultiLine"
+                android:minLines="5"
                 android:textColor="@color/black"
                 android:textSize="@dimen/text16sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/passwordFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+
+        <TextView
+            android:id="@+id/locationInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/password_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/black"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/location_info"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/imageInfo"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/usernameFieldLayout">
+            app:layout_constraintTop_toBottomOf="@id/descriptionFieldLayout" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/passwordField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/repeatPasswordFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        <TextView
+            android:id="@+id/imageInfo"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/repeat_password_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:endIconMode="password_toggle"
-            app:endIconTint="@color/black"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginStart="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_16dp"
+            android:text="@string/image_info"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/addImageButton"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/passwordFieldLayout">
+            app:layout_constraintTop_toBottomOf="@id/locationInfo" />
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repeatPasswordField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textPassword"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/emailFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/email_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/repeatPasswordFieldLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/emailField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/phoneFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginVertical="20dp"
-            android:hint="@string/phone_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/emailFieldLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/phoneField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/firstNameFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/first_name_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/phoneFieldLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/firstNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/lastNameFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="20dp"
-            android:hint="@string/last_name_text"
-            android:textColorHint="@color/black"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/firstNameFieldLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/lastNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/shelterNameFieldLayout"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:hint="@string/shelter_name_text"
-            android:textColorHint="@color/black"
-            app:layout_goneMarginTop="20dp"
-            app:boxStrokeColor="@color/selector_textfield_stroke"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/lastNameFieldLayout">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/shelterNameField"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="gone"
-                android:imeOptions="actionDone"
-                android:inputType="textEmailAddress"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text16sp" />
-        </com.google.android.material.textfield.TextInputLayout>
 
         <Button
-            android:id="@+id/registerButton"
-            style="@style/CustomButtonStyle"
-            android:layout_width="0dp"
+            android:id="@+id/addImageButton"
+            style="@style/CustomButtonStyleLogin"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/margin_54dp"
-            android:layout_marginTop="28dp"
-            android:text="@string/register_text"
-            android:textColor="@color/surface"
+            android:layout_marginHorizontal="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/size16dp"
+            android:text="@string/add_message_image"
             android:textSize="@dimen/text16sp"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/shelterNameFieldLayout" />
+            app:layout_constraintTop_toBottomOf="@id/imageInfo" />
+
+        <Button
+            android:id="@+id/removeImagesButton"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:text="@string/remove_images"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text16sp"
+            android:visibility="gone"
+            app:backgroundTint="@color/secondaryContainer"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/addImageButton" />
+
+        <Button
+            android:id="@+id/addLocationButton"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:text="@string/add_location"
+            android:textColor="@color/colorSecondary"
+            android:textSize="@dimen/text16sp"
+            app:backgroundTint="@color/secondaryContainer"
+            app:layout_constraintEnd_toStartOf="@id/submitButton"
+            app:layout_constraintStart_toEndOf="@id/addImageButton"
+            app:layout_constraintTop_toBottomOf="@id/removeImagesButton" />
+
+        <Button
+            android:id="@+id/submitButton"
+            style="@style/CustomButtonStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_24dp"
+            android:layout_marginTop="@dimen/margin_8dp"
+            android:text="@string/advert_submit"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/addLocationButton"
+            app:layout_constraintTop_toBottomOf="@id/addLocationButton" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

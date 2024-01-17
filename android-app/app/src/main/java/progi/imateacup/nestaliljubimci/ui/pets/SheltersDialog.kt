@@ -8,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.databinding.SheltersDialogBinding
 import progi.imateacup.nestaliljubimci.model.networking.entities.SearchFilter
 import progi.imateacup.nestaliljubimci.model.networking.enums.DisplayState
+import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
 
@@ -79,20 +81,31 @@ class SheltersDialog : DialogFragment() {
 
     private fun setObservers() {
         with(viewModelShelters) {
+            accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+                if (accessTokenExpired) {
+                    sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
+                    val direction = SheltersDialogDirections.actionSheltersDialogToLoginFragment()
+                    findNavController().navigate(direction)
+                }
+            }
             displayStateLiveData.observe(viewLifecycleOwner) { state ->
                 when (state) {
                     DisplayState.LOADING -> {
                         showLoading()
                     }
+
                     DisplayState.ERRORGET -> {
                         showError()
                     }
+
                     DisplayState.SUCCESSGET -> {
                         showShelters()
                     }
+
                     DisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
+
                     else -> {
                         showNoPosts()
                     }
@@ -106,20 +119,22 @@ class SheltersDialog : DialogFragment() {
     }
 
     fun showLoading() {
-        with (binding) {
+        with(binding) {
             sheltersLoadingProgressBar.visibility = View.VISIBLE
             noPostsDisplay.visibility = View.GONE
         }
     }
+
     fun showShelters() {
-        with (binding) {
+        with(binding) {
             sheltersLoadingProgressBar.visibility = View.GONE
             noPostsDisplay.visibility = View.GONE
             sheltersRecyclerView.visibility = View.VISIBLE
         }
     }
+
     fun showError() {
-        with (binding) {
+        with(binding) {
             sheltersLoadingProgressBar.visibility = View.GONE
             noPostsDisplay.visibility = View.VISIBLE
             sheltersRecyclerView.visibility = View.GONE
@@ -130,8 +145,9 @@ class SheltersDialog : DialogFragment() {
             ).show()
         }
     }
+
     fun showNoPosts() {
-        with (binding) {
+        with(binding) {
             sheltersLoadingProgressBar.visibility = View.GONE
             noPostsDisplay.visibility = View.VISIBLE
             sheltersRecyclerView.visibility = View.GONE

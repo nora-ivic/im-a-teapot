@@ -127,8 +127,8 @@ class PetsFragment : Fragment() {
                 true
             }
             addPost.setOnClickListener {
-                /*val direction = PetsFragmentDirections.actionPetsFragmentToHandlePostFragment()
-                findNavController().navigate(direction)*/
+                val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment()
+                findNavController().navigate(direction)
             }
             val layoutManager = LinearLayoutManager(context)
             recyclerView.layoutManager = layoutManager
@@ -263,9 +263,9 @@ class PetsFragment : Fragment() {
             { advert ->
                 /**
                  * ako treba jos neke paramtere dodati ih i prilagoditi kod ispod ili u PetsAdapter.kt
-                 * val direction = <ime fragmenta za add i edit post>.actionPetsFragmentTo<ime fragmenta za add i edit post>(advert.advertId)
-                 * findNavController().navigate(direction)
                  */
+                 val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment(advert.advertId)
+                 findNavController().navigate(direction)
             },
             onDeletePostClickCallback =
             {
@@ -285,6 +285,13 @@ class PetsFragment : Fragment() {
 
     private fun setLiveDataObservers() {
         with(viewModel) {
+            accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
+                if (accessTokenExpired) {
+                    sharedPreferences.edit().remove(ACCESS_TOKEN).apply()
+                    val direction = PetsFragmentDirections.actionPetsFragmentToLoginFragment(true)
+                    findNavController().navigate(direction)
+                }
+            }
             petsLiveData.observe(viewLifecycleOwner) { pets ->
                 if (!pets.isNullOrEmpty()) {
                     if (pets != adapter.getPetsList()) {

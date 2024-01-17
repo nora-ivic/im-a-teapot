@@ -8,7 +8,7 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 
 object ApiModule {
-    private const val BASE_URL = "https://lost-pets-progi-backend-2023-2024.onrender.com/"
+    const val BASE_URL = "https://lost-pets-progi-backend-2023-2024.onrender.com/"
 
     lateinit var retrofit: PetsApiService
 
