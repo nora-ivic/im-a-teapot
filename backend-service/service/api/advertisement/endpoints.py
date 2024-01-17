@@ -25,6 +25,7 @@ def home_page(
     for db_advert in db_adverts:
         output_adverts.append(map_to_output_advert_short(db_advert))
 
+    repo.session.close()
     return output_adverts
 
 
@@ -44,6 +45,7 @@ def user_adverts(
     for db_user_advert in db_user_adverts:
         output_user_adverts.append(map_to_output_advert_short(db_user_advert))
 
+    repo.session.close()
     return output_user_adverts
 
 
@@ -56,10 +58,12 @@ def details(
     db_advert = repo.get_advert_by_id(advert_id)
 
     if not db_advert:
+        repo.session.close()
         raise HTTPException(status_code=404, detail='Advert not found!')
 
     output_advert = map_to_output_advert_full(db_advert)
 
+    repo.session.close()
     return output_advert
 
 
@@ -71,14 +75,18 @@ def in_shelter(
     repo = AdvertisementRepository()
 
     if not repo.is_shelter(user_id):
+        repo.session.close()
         raise HTTPException(status_code=403, detail='Only shelters have this option!')
 
     try:
         edited_advert = repo.make_sheltered(advert_id, user_id)
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found!")
 
-    return map_to_output_advert_full(edited_advert)
+    output_advert = map_to_output_advert_full(edited_advert)
+    repo.session.close()
+    return output_advert
 
 
 @advert_router.post('/create')
@@ -92,7 +100,10 @@ def create_advert(
     repo = AdvertisementRepository()
 
     db_advert = repo.create_advert(advert_input, user_id)
-    return map_to_output_advert_full(db_advert)
+    advert_output = map_to_output_advert_full(db_advert)
+
+    repo.session.close()
+    return advert_output
 
 
 @advert_router.put('/{advert_id}/edit')
@@ -109,11 +120,16 @@ def edit_advert(
     try:
         db_advert = repo.edit_advert(advert_input, advert_id, user_id)
     except PermissionDeniedException:
+        repo.session.close()
         raise HTTPException(status_code=403, detail="Cannot edit other user's advertisement")
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found")
 
-    return map_to_output_advert_full(db_advert)
+    advert_output = map_to_output_advert_full(db_advert)
+
+    repo.session.close()
+    return advert_output
 
 
 @advert_router.delete('/{advert_id}/delete')
@@ -129,8 +145,11 @@ def delete_advert(
     try:
         repo.delete_advert(advert_id, user_id)
     except PermissionDeniedException:
+        repo.session.close()
         raise HTTPException(status_code=403, detail="Cannot delete other user's advertisement")
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found")
 
+    repo.session.close()
     return {'detail': 'Advert deleted successfully.'}

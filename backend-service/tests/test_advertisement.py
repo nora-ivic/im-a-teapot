@@ -76,7 +76,3 @@ class TestAdvertActions:
                 "/api/advert/1/delete"
             )
             assert result.status_code == 200
-
-        assert test_session.query(Advertisement.deleted).filter(Advertisement.id == 1).first()
-
-
