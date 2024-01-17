@@ -58,6 +58,7 @@ def details(
     db_advert = repo.get_advert_by_id(advert_id)
 
     if not db_advert:
+        repo.session.close()
         raise HTTPException(status_code=404, detail='Advert not found!')
 
     output_advert = map_to_output_advert_full(db_advert)
@@ -74,11 +75,13 @@ def in_shelter(
     repo = AdvertisementRepository()
 
     if not repo.is_shelter(user_id):
+        repo.session.close()
         raise HTTPException(status_code=403, detail='Only shelters have this option!')
 
     try:
         edited_advert = repo.make_sheltered(advert_id, user_id)
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found!")
 
     output_advert = map_to_output_advert_full(edited_advert)
@@ -117,8 +120,10 @@ def edit_advert(
     try:
         db_advert = repo.edit_advert(advert_input, advert_id, user_id)
     except PermissionDeniedException:
+        repo.session.close()
         raise HTTPException(status_code=403, detail="Cannot edit other user's advertisement")
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found")
 
     advert_output = map_to_output_advert_full(db_advert)
@@ -140,8 +145,10 @@ def delete_advert(
     try:
         repo.delete_advert(advert_id, user_id)
     except PermissionDeniedException:
+        repo.session.close()
         raise HTTPException(status_code=403, detail="Cannot delete other user's advertisement")
     except AdvertNotFoundException:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found")
 
     repo.session.close()

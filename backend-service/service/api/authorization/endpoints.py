@@ -18,6 +18,7 @@ def log_in(user_login: UserLogin):
         current_user = repo.login_user(user_login)
 
     except InvalidLoginException:
+        repo.session.close()
         raise HTTPException(status_code=401, detail="Username or password incorrect!")
 
     token = generate_token(current_user)
@@ -39,6 +40,7 @@ def sign_up(user_signup: UserSignup):
     repo = AuthorizationRepository()
 
     if repo.check_existing_user(user_signup.username):
+        repo.session.close()
         raise HTTPException(status_code=400, detail="Username already exists")
 
     repo.save_new_user(user_signup)

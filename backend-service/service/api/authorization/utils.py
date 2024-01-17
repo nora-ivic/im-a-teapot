@@ -52,9 +52,11 @@ def validate_token(authentication: Annotated[str, Header()] = None):
             raise jwt.ExpiredSignatureError
 
     except jwt.ExpiredSignatureError:
+        repo.session.close()
         raise HTTPException(status_code=401, detail="Expired token")
 
     except jwt.InvalidTokenError:
+        repo.session.close()
         raise HTTPException(status_code=401, detail="Invalid token")
 
     repo.session.close()

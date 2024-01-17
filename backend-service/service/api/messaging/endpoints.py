@@ -26,6 +26,7 @@ def add_message(
     try:
         repo.post_message(advert_id, user_id, message_input)
     except SQLAlchemyError:
+        repo.session.close()
         raise HTTPException(status_code=404, detail="Advert not found")
 
     repo.session.close()
