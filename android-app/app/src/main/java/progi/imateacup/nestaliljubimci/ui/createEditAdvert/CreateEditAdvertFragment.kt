@@ -243,7 +243,7 @@ class CreateEditAdvertFragment : Fragment() {
                 if (accessTokenExpired) {
                     sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
                     val direction =
-                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToLoginFragment()
+                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToLoginFragment(true)
                     findNavController().navigate(direction)
                 }
             }
