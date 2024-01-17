@@ -44,6 +44,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import progi.imateacup.nestaliljubimci.BuildConfig
 
 class CreateEditAdvertFragment : Fragment() {
 
@@ -482,7 +483,7 @@ class CreateEditAdvertFragment : Fragment() {
         if (file != null) {
             imageUri = FileProvider.getUriForFile(
                 requireContext(),
-                "${requireContext().applicationContext.packageName}.provider",
+                "${BuildConfig.APPLICATION_ID}.provider",
                 file!!
             )
         }
