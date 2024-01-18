@@ -37,6 +37,8 @@ def map_to_output_advert_full(db_advert: Advertisement):
         description=pet.description,
         is_in_shelter=db_advert.is_in_shelter,
         username=user.username,
+        user_email=user.email,
+        user_phone_number=user.phone_number,
         picture_links=[picture.link for picture in pictures],
         shelter_name=shelter.shelter_name if shelter else None,
         shelter_username=shelter.username if shelter else None,
