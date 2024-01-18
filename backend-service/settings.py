@@ -7,6 +7,7 @@ load_dotenv()
 APP_NAME = "Nestali ljubimci"
 APP_VERSION = "2.0.1"
 
+
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
 POSTGRES_HOST = os.getenv('POSTGRES_HOST')
