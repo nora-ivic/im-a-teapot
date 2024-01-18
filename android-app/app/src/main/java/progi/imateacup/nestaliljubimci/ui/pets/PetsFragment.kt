@@ -10,6 +10,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.view.MenuCompat
+import androidx.core.view.setPadding
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -92,6 +93,7 @@ class PetsFragment : Fragment() {
 
                 bottomAppBar.visibility = View.GONE
                 addPost.visibility = View.GONE
+                recyclerView.setPadding(0, 0, 0, 0)
 
             } else {
                 topAppBarPets.setNavigationIcon(R.drawable.icons_user_big)
