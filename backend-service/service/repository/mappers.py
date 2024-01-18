@@ -76,7 +76,7 @@ class Advertisement(Base):
     deleted: Mapped[bool] = mapped_column(types.Boolean, insert_default=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("user_custom.id"), nullable=True)
     pet_id: Mapped[int] = mapped_column(ForeignKey("pet.id"), nullable=False)
-    date_time_adv: Mapped[datetime] = mapped_column(DateTime(timezone=False), insert_default=datetime.now())
+    date_time_adv: Mapped[datetime] = mapped_column(DateTime(timezone=False))
     is_in_shelter: Mapped[bool] = mapped_column(types.Boolean, insert_default=False)
     shelter_id: Mapped[int] = mapped_column(ForeignKey("user_custom.id"), nullable=True)
 
@@ -101,7 +101,7 @@ class Message(Base):
     advert_id: Mapped[int] = mapped_column(ForeignKey("advertisement.id"), nullable=False)
     text: Mapped[str] = mapped_column(String, nullable=True)
     location: Mapped[str] = mapped_column(String(256), nullable=True)
-    date_time_mess: Mapped[datetime] = mapped_column(DateTime(timezone=False), insert_default=datetime.now())
+    date_time_mess: Mapped[datetime] = mapped_column(DateTime(timezone=False))
 
     picture_posted: Mapped[List["Picture"]] = relationship(back_populates="message_posted", foreign_keys="Picture.message_id")
     user_sent: Mapped["UserCustom"] = relationship(back_populates="messages_sent", foreign_keys=[user_id])

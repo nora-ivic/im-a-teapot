@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
+from datetime import datetime
 
 from service.api.messaging.models import MessageInput
 from service.repository.engine_manager import get_session
@@ -20,7 +21,8 @@ class MessagingRepository:
             user_id=user_id,
             advert_id=advert_id,
             text=message_input.text,
-            location=message_input.location
+            location=message_input.location,
+            date_time_mess=datetime.now()
         )
 
         self.session.add(new_message)
