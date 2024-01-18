@@ -296,6 +296,8 @@
 			\eject
 		\section{Dijagram komponenti}
 		
+			Na slici \ref{fig:dKomponenti} prikazan je dijagram komponenti naše mobilne aplikacije.  Opisuje organizaciju i međuovisnost komponenti. Instalacijom aplikacije na mobilni uređaj korisnika, na uređaju se nalaze sve datoteke koje pripadaju \textit{frontend} dijelu aplikacije. \textit{Frontend} dio aplikacije sastoji se od niza Kotlin datoteka koje su raspoređene u logičke cjeline s obzirom na funkcionalnosti koje ostvaruju. Sve Kotlin datoteke ovise o nizu Kotlin biblioteka. PetsAPIService je komponenta koja dohvaća podatke sa poslužitelja i određuje koji fragment mobilne aplikacije se prikazuje korisniku. Sustavu se pristupa preko dva sučelja. Preko sučelja za dohvat JSON podataka pristupa se FastApi komponenti. Ona poslužuje podatke koji pripadaju \textit{backend} dijelu aplikacije. SQLAlchemy je zadužen za dohvaćanje tablica iz baze preko SQL upita. Pristigli podaci dalje se šalju MVC arhitekturi u obliku DTO (\textit{Data transfer object}). Sučelje za dohvaćanje slika pristupa Media komponenti na poslužitelju u kojoj se nalaze spremljene sve fotografije aplikacije. Aplikacija preko dostupnih sučelja komunicira s poslužiteljem te ovisno o korisničkim akcijama dohvaća nove podatke ili slike.
+
 			\begin{figure}[H]
 				\includegraphics[scale=0.48]{dijagrami/dijagramKomponenti/dKomponenti.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
