@@ -16,6 +16,7 @@ class LoginResponseData {
     var username: String? = null
     var email: String? = null
     var phoneNumber: String? = null
+    var isShelter: Boolean? = null
 }
 class LoginViewModel : ViewModel() {
     private val _loginResponseLiveData = MutableLiveData<LoginResponseData>()
@@ -37,6 +38,7 @@ class LoginViewModel : ViewModel() {
                 loginResponseData.username = response.body()?.username
                 loginResponseData.email = response.body()?.email
                 loginResponseData.phoneNumber = response.body()?.phoneNumber
+                loginResponseData.isShelter = response.body()?.isShelter
 
                 _loginResponseLiveData.value = loginResponseData
 

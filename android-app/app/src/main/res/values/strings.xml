@@ -33,6 +33,10 @@
     <string name="registration_unsuccessful">Neuspješna registracija. Probajte ponovo!</string>
     <string name="comments">Komentari</string>
     <string name="basicInfo">Osnovne informacije</string>
+    <string name="userInfo">Informacije o korisniku</string>
+    <string name="username">Korisničko ime:</string>
+    <string name="phone">Broj telefona:</string>
+    <string name="email">E-mail:</string>
     <string name="missingPetInfo">Informacije o nestanku</string>
     <string name="no_comments_yet">Za sada ne postoji niti jedan komentar.</string>
     <string name="write_a_comment">Napiši komentar</string>

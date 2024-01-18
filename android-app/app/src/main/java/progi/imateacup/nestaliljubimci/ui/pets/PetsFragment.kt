@@ -12,7 +12,6 @@ import android.view.ViewGroup
 import androidx.core.view.MenuCompat
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -39,8 +38,6 @@ class PetsFragment : Fragment() {
 
     private var accessToken: String? = null
     private var _binding: FragmentPetsBinding? = null
-
-    private val args by navArgs<PetsFragmentArgs>()
 
     private val binding get() = _binding!!
 
@@ -165,9 +162,9 @@ class PetsFragment : Fragment() {
         }
 
         with(dialogProfileBinding) {
-            textViewEmail.text = args.email
-            textViewUsername.text = args.username
-            textViewPhoneNumber.text = args.phoneNumber
+            textViewEmail.text = sharedPreferences.getString("EMAIL", "")
+            textViewUsername.text = sharedPreferences.getString("USERNAME", "")
+            textViewPhoneNumber.text = sharedPreferences.getString("PHONE_NUMBER", "")
         }
 
         return dialog
