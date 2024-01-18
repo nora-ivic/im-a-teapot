@@ -2,6 +2,7 @@ from sqlalchemy import Date
 from sqlalchemy import desc, select
 from sqlalchemy.orm import Session, joinedload
 from typing import Optional
+from datetime import datetime
 
 from service.api.advertisement.filters import AdvertisementFilter
 from service.api.advertisement.models import AdvertisementInput
@@ -180,6 +181,7 @@ class AdvertisementRepository:
                 if category == AdvertisementCategory.SHELTERED.value
                 else None
             ),
+            date_time_adv=datetime.now()
         )
         self.session.add(new_advert)
         self.session.flush()
