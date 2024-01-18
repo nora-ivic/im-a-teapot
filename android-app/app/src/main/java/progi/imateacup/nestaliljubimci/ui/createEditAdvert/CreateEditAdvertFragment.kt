@@ -251,7 +251,7 @@ class CreateEditAdvertFragment : Fragment() {
 
     private fun initListeners() {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val noCommaInputFormat = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
+        val noCommaInputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
             viewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
