@@ -77,7 +77,7 @@
     <string name="dateLostText">Datum: </string>
     <string name="descriptionText">Opis: </string>
     <string name="shelterNameText">Naziv: </string>
-    <string name="shelterText">Sklonište </string>
+    <string name="shelterText">Informacije o skloništu: </string>
     <string name="shelterPhoneText">Mobitel: </string>
     <string name="petImageDescription">Slika ljubimca</string>
     <string name="shelterEmail">E-mail: </string>
@@ -113,7 +113,8 @@
     <string name="filtriranje_po_ljubimcu">Filtriranje po ljubimcu</string>
     <string name="uginuli">Uginuli</string>
     <string name="edit_advert">Uredi oglas…</string>
-    <string name="delete_advert">Izbriši</string>
+    <string name="delete_advert">Izbriši oglas…</string>
+    <string name="add_to_shelter">Dodaj u sklonište…</string>
     <string name="odustani">Odustani</string>
     <string name="izbrisi">Izbriši</string>
     <string name="potvrda_brisanja_oglasa">Jeste li sigurni da želite obrisati oglas?</string>

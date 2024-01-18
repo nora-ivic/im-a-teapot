@@ -1,6 +1,5 @@
 package progi.imateacup.nestaliljubimci.ui.pets
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -27,11 +26,14 @@ class PetsViewModel : ViewModel() {
     private val _petsLiveData = MutableLiveData<List<Pet>?>()
     val petsLiveData: LiveData<List<Pet>?> = _petsLiveData
 
-    private val _DisplayStateLiveData = MutableLiveData<DisplayState>()
-    val displayStateLiveData: LiveData<DisplayState> = _DisplayStateLiveData
+    private val _displayStateLiveData = MutableLiveData<DisplayState>()
+    val displayStateLiveData: LiveData<DisplayState> = _displayStateLiveData
 
     private val _accessTokenExpiredLiveData = MutableLiveData<Boolean>()
     val accessTokenExpiredLiveData: LiveData<Boolean> = _accessTokenExpiredLiveData
+    fun setStateToNOSTATE() {
+        _displayStateLiveData.value = DisplayState.NOSTATE
+    }
 
     fun getPets(networkAvailable: Boolean, filter: SearchFilter, getMyPets: Boolean, reset: Boolean) {
         if (networkAvailable) {
@@ -45,7 +47,7 @@ class PetsViewModel : ViewModel() {
                 page = 0
                 _petsLiveData.value = null
             }
-            _DisplayStateLiveData.value = DisplayState.LOADING
+            _displayStateLiveData.value = DisplayState.LOADING
             fetching = true
             page++
 
@@ -57,23 +59,23 @@ class PetsViewModel : ViewModel() {
                         sendGetPetsRequest(filter)
                     }
                     if (_petsLiveData.value == null) {
-                        _petsLiveData.value = listOf<Pet>()
+                        _petsLiveData.value = listOf()
                     }
                     val oldPosts = _petsLiveData.value
                     if (!newPosts.isNullOrEmpty()) {
                         _petsLiveData.value = oldPosts!! + newPosts
-                        _DisplayStateLiveData.value = DisplayState.SUCCESSGET
+                        _displayStateLiveData.value = DisplayState.SUCCESSGET
                     } else {
                         page--
                         if (oldPosts!!.isNotEmpty()) {
-                            _DisplayStateLiveData.value = DisplayState.SUCCESSGET
+                            _displayStateLiveData.value = DisplayState.SUCCESSGET
                         } else {
-                            _DisplayStateLiveData.value = DisplayState.NOPOSTS
+                            _displayStateLiveData.value = DisplayState.NOPOSTS
                         }
                     }
                     fetching = false
                 } catch (err: Exception) {
-                    _DisplayStateLiveData.value = DisplayState.ERRORGET
+                    _displayStateLiveData.value = DisplayState.ERRORGET
                     fetching = false
                     if (err.localizedMessage == "Unauthorized") {
                         _accessTokenExpiredLiveData.value = true
@@ -82,7 +84,7 @@ class PetsViewModel : ViewModel() {
             }
         } else {
             fetching = false
-            _DisplayStateLiveData.value = DisplayState.ERRORGET
+            _displayStateLiveData.value = DisplayState.ERRORGET
         }
     }
 
@@ -119,16 +121,16 @@ class PetsViewModel : ViewModel() {
             viewModelScope.launch {
                 try {
                     sendDeleteRequest(advertId)
-                    _DisplayStateLiveData.value = DisplayState.SUCCESSDELETE
+                    _displayStateLiveData.value = DisplayState.SUCCESSDELETE
                 } catch (err: Exception) {
                     if (err.localizedMessage == "Unauthorized") {
                         _accessTokenExpiredLiveData.value = true
                     }
-                    _DisplayStateLiveData.value = DisplayState.ERRORDELETE
+                    _displayStateLiveData.value = DisplayState.ERRORDELETE
                 }
             }
         } else {
-            _DisplayStateLiveData.value = DisplayState.ERRORDELETE
+            _displayStateLiveData.value = DisplayState.ERRORDELETE
         }
     }
 
@@ -141,6 +143,37 @@ class PetsViewModel : ViewModel() {
 
         if (!response.isSuccessful) {
             throw IOException("Failed to delete advert")
+        }
+        return response
+    }
+
+    fun addToShelter(advertId: Int, networkAvailable: Boolean) {
+        if (networkAvailable) {
+            viewModelScope.launch {
+                try {
+                    sendAddToShelterRequest(advertId)
+                    _displayStateLiveData.value = DisplayState.SUCCESSPOST
+                } catch (err: Exception) {
+                    if (err.localizedMessage == "Unauthorized") {
+                        _accessTokenExpiredLiveData.value = true
+                    }
+                    _displayStateLiveData.value = DisplayState.ERRORPOST
+                }
+            }
+        } else {
+            _displayStateLiveData.value = DisplayState.ERRORPOST
+        }
+    }
+
+    private suspend fun sendAddToShelterRequest(advertId: Int): Response<Unit> {
+        val response = ApiModule.retrofit.addToShelter(advertId)
+
+        if (response.code() == 401) {
+            throw IOException("Unauthorized")
+        }
+
+        if (!response.isSuccessful) {
+            throw IOException("Failed to add pet to shelter")
         }
         return response
     }

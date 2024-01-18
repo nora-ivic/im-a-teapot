@@ -72,9 +72,9 @@ class PetsFragment : Fragment() {
     }
 
     private fun handleDifferentUsersDisplay() {
-        with (binding) {
+        with(binding) {
             if (accessToken == null) {
-                with (topAppBarPets) {
+                with(topAppBarPets) {
                     menu.removeItem(R.id.pronadeni)
                     menu.removeItem(R.id.prekinutoTrazenje)
                     menu.removeItem(R.id.uSklonistu)
@@ -116,7 +116,11 @@ class PetsFragment : Fragment() {
             }
 
             tryAgain.setOnClickListener {
-                getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null)
+                getPets(
+                    viewModel.filterLiveData.value,
+                    viewModel.fetchMyPetsLiveData.value ?: false,
+                    null
+                )
             }
 
             bottomAppBar.menu.findItem(R.id.mojiOglasi).setOnMenuItemClickListener {
@@ -124,7 +128,8 @@ class PetsFragment : Fragment() {
                 true
             }
             addPost.setOnClickListener {
-                val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment()
+                val direction =
+                    PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment()
                 findNavController().navigate(direction)
             }
             val layoutManager = LinearLayoutManager(context)
@@ -142,7 +147,7 @@ class PetsFragment : Fragment() {
                         if (isInternetAvailable(requireContext())) {
                             getPets(
                                 viewModel.filterLiveData.value,
-                                viewModel.fetchMyPetsLiveData.value?: false,
+                                viewModel.fetchMyPetsLiveData.value ?: false,
                                 null
                             )
                         }
@@ -249,7 +254,8 @@ class PetsFragment : Fragment() {
     }
 
     private fun initRecyclerViewAdapter() {
-        adapter = PetsAdapter(emptyList(),
+        adapter = PetsAdapter(
+            emptyList(),
             onPetPostClickCallback =
             { advert ->
                 val direction =
@@ -258,25 +264,31 @@ class PetsFragment : Fragment() {
             },
             onEditPostClickCallback =
             { advert ->
-                /**
-                 * ako treba jos neke paramtere dodati ih i prilagoditi kod ispod ili u PetsAdapter.kt
-                 */
-                 val direction = PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment(advert.advertId)
-                 findNavController().navigate(direction)
+                val direction =
+                    PetsFragmentDirections.actionPetsFragmentToCreateEditAdvertFragment(advert.advertId)
+                findNavController().navigate(direction)
             },
             onDeletePostClickCallback =
-            {
-                advert ->
-                    AlertDialog.Builder(requireContext())
-                        .setTitle(getString(R.string.brisanje_oglasa))
-                        .setMessage(getString(R.string.potvrda_brisanja_oglasa))
-                        .setPositiveButton(getString(R.string.izbrisi)) { _, _ ->
-                            viewModel.deleteAdvert(advert.advertId, isInternetAvailable(requireContext()))
-                        }
-                        .setNegativeButton(getString(R.string.odustani)) { dialog, _ ->
-                            dialog.dismiss()
-                        }.show()
-            })
+            { advert ->
+                AlertDialog.Builder(requireContext())
+                    .setTitle(getString(R.string.brisanje_oglasa))
+                    .setMessage(getString(R.string.potvrda_brisanja_oglasa))
+                    .setPositiveButton(getString(R.string.izbrisi)) { _, _ ->
+                        viewModel.deleteAdvert(
+                            advert.advertId,
+                            isInternetAvailable(requireContext())
+                        )
+                    }
+                    .setNegativeButton(getString(R.string.odustani)) { dialog, _ ->
+                        dialog.dismiss()
+                    }.show()
+            },
+            onAddToShelterPostClickCallback =
+            { advert ->
+                viewModel.addToShelter(advert.advertId, isInternetAvailable(requireContext()))
+            },
+            sharedPreferences
+        )
         binding.recyclerView.adapter = adapter
     }
 
@@ -292,14 +304,17 @@ class PetsFragment : Fragment() {
             petsLiveData.observe(viewLifecycleOwner) { pets ->
                 if (!pets.isNullOrEmpty()) {
                     if (pets != adapter.getPetsList()) {
-                        adapter.updateData(pets, viewModel.fetchMyPetsLiveData.value?: false)
+                        adapter.updateData(pets, viewModel.fetchMyPetsLiveData.value ?: false)
                     }
                 } else {
-                    adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value?: false)
+                    adapter.updateData(listOf<Pet>(), viewModel.fetchMyPetsLiveData.value ?: false)
                 }
             }
             displayStateLiveData.observe(viewLifecycleOwner) { state ->
                 when (state) {
+                    DisplayState.NOSTATE -> {
+                    }
+
                     DisplayState.LOADING -> {
                         showLoading()
                     }
@@ -316,14 +331,38 @@ class PetsFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
+
+                    DisplayState.ERRORPOST -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Došlo je do pogreške prilikom dodavanja ljubimca skloništu",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                    }
+
                     DisplayState.SUCCESSDELETE -> {
                         Snackbar.make(
                             binding.root,
                             "Oglas je uspješno obrisan",
                             Snackbar.LENGTH_LONG
                         ).show()
-                        getPets(viewModel.filterLiveData.value, viewModel.fetchMyPetsLiveData.value?: false, null, true)
+                        getPets(
+                            viewModel.filterLiveData.value,
+                            viewModel.fetchMyPetsLiveData.value ?: false,
+                            null,
+                            true
+                        )
                     }
+
+                    DisplayState.SUCCESSPOST -> {
+                        Snackbar.make(
+                            binding.root,
+                            "Ljubimac je uspješno dodan u sklonište.",
+                            Snackbar.LENGTH_LONG
+                        ).show()
+                        viewModel.setStateToNOSTATE()
+                    }
+
                     DisplayState.ERRORDELETE -> {
                         Snackbar.make(
                             binding.root,
@@ -331,6 +370,7 @@ class PetsFragment : Fragment() {
                             Snackbar.LENGTH_LONG
                         ).show()
                     }
+
                     DisplayState.NOPOSTS -> {
                         showNoPosts()
                     }
@@ -350,7 +390,11 @@ class PetsFragment : Fragment() {
             ?.observe(
                 viewLifecycleOwner
             ) { filterJson ->
-                getPets(Json.decodeFromString(filterJson), false, getString(R.string.filtriranje_po_ljubimcu))
+                getPets(
+                    Json.decodeFromString(filterJson),
+                    false,
+                    getString(R.string.filtriranje_po_ljubimcu)
+                )
                 navController.currentBackStackEntry?.savedStateHandle?.remove<String>("filter")
             }
     }
@@ -391,22 +435,28 @@ class PetsFragment : Fragment() {
         shelterDialogBinding.outlineTextFieldLayout.hint = "Ime skloništa"
         shelterDialog.setView(shelterDialogBinding.root)
     }
-    private fun getPets(newFilter: SearchFilter?, gettingMyPets: Boolean, filterDisplayText: String?, reset: Boolean = false) {
-        //filter has to be set to null if clear so that the live data gets updated below
+
+    private fun getPets(
+        newFilter: SearchFilter?,
+        gettingMyPets: Boolean,
+        filterDisplayText: String?,
+        reset: Boolean = false
+    ) {
         viewModel.filterLiveData.value = newFilter
         viewModel.fetchMyPetsLiveData.value = gettingMyPets
         if (filterDisplayText != null) {
             binding.currentFilter.text = filterDisplayText
             sharedPreferences.edit().putString("lastFilterTitle", filterDisplayText)
-            .apply()
+                .apply()
         }
         viewModel.getPets(
             isInternetAvailable(requireContext()),
             viewModel.filterLiveData.value ?: SearchFilter(),
-            viewModel.fetchMyPetsLiveData.value?: false,
+            viewModel.fetchMyPetsLiveData.value ?: false,
             reset
         )
-        viewModel.filterPresentLiveData.value = (viewModel.filterLiveData.value != null || viewModel.fetchMyPetsLiveData.value?: false)
+        viewModel.filterPresentLiveData.value =
+            (viewModel.filterLiveData.value != null || viewModel.fetchMyPetsLiveData.value ?: false)
     }
 
     private fun showPets() {

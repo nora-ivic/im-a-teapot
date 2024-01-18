@@ -35,12 +35,12 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import progi.imateacup.nestaliljubimci.ui.advertDetails.AdvertDetailsFragment.Companion.PFP_URI_NAME_DECORATOR
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.BuildConfig
+import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
@@ -139,7 +139,7 @@ class CreateEditAdvertFragment : Fragment() {
                             if (sharedPreferences.getBoolean(IS_SHELTER, false)) {
                                 listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Uginuo")
                             } else {
-                                listOf("Izgubljen", "U skloništu", "Pronađen")
+                                listOf("Izgubljen", "Pronađen", "Napušten", "Uginuo")
                             }
 
                         val adapter2 =

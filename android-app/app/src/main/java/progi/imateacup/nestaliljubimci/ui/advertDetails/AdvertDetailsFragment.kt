@@ -43,14 +43,9 @@ import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
 import java.io.File
 
+const val PFP_URI_NAME_DECORATOR = "MessageImage"
 
 class AdvertDetailsFragment : Fragment() {
-    companion object {
-        const val PFP_URI_NAME_DECORATOR = "MessageImage"
-        const val USERNAME = "USERNAME"
-        const val EMAIL = "EMAIL"
-        const val PHONE_NUMBER = "PHONE_NUMBER"
-    }
 
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var commentsAdapter: CommentsAdapter
@@ -217,10 +212,9 @@ class AdvertDetailsFragment : Fragment() {
         val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.")
         with(binding) {
-            usernameTextValue.text = sharedPreferences.getString(USERNAME, "") ?: "Nepoznato"
-            emailTextValue.text = sharedPreferences.getString(EMAIL, "") ?: "Nepoznato"
-            phoneValue.text =
-                sharedPreferences.getString(PHONE_NUMBER, "") ?: "Nepoznato"
+            usernameTextValue.text = advert.username ?: "Nepoznato"
+            emailTextValue.text = advert.userEmail ?: "Nepoznato"
+            phoneValue.text = advert.userPhone ?: "Nepoznato"
             petStatusValue.text = categoryMapping.entries.find { it.value == advert.category }?.key
                 ?: "Nepoznato"
             petSpeciesValue.text =
