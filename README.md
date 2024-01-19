@@ -3,9 +3,11 @@ PROGI - 2023/24 - I'm a teapot
 
 ### ANDROID APP
 - poveznica za preuzimanje aplikacije: `https://www.amazon.com/gp/product/B0CLKBFN9N`
+- napomena: u trenutku predaje Amazon još nije prihvatio novu verziju aplikacije, pa se u slučaju problema ista može downloadati iz foldera android-app/app/release
 
 ### WEB SERVER
 - poveznica na Swagger dokumentaciju backenda: `https://lost-pets-progi-backend-2023-2024.onrender.com/docs`
+- napomena: free Render deploymenti se ugase nakon neaktivnosti, pa će biti potrebno neko vrijeme za učitavanje
 
 ##
 ### LOKALNO POKRETANJE BACKENDA
