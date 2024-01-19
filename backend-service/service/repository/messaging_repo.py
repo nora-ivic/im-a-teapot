@@ -29,7 +29,9 @@ class MessagingRepository:
         self.session.flush()
 
         for link in message_input.picture_links:
-            link = link.lstrip('https://lost-pets-progi-backend-2023-2024.onrender.com')
+            base_url = 'https://lost-pets-progi-backend-2023-2024.onrender.com'
+            if link.startswith(base_url):
+                link = link[len(base_url):]
             new_picture = Picture(
                 message_id=new_message.id,
                 link=link
