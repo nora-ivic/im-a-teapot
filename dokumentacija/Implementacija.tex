@@ -386,5 +386,67 @@ uvicorn service.main:app \end{lstlisting}
 		
 		U oba slučaja servis bi se sada trebao nalaziti na http://localhost:8000, a Swagger dokumentacija (popis endpointa i mogućnost slanja direktnog requesta) dostupna je na http://localhost:8000/docs .
 		
+		\subsection{Postupak izgradnje i objave aplikacije}
+		
+		\subsubsection{Priprema za objavu}
+		\begin{enumerate}
+			\item[a)] Odabir ikone aplikacije
+			\item[b)] Konfiguracija aplikacije
+			
+			Konfiguracija aplikacije uključuje: isključivanje debugginga
+		\end{enumerate}
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.6]{slike/deploy2.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{Isključivanje logiranja, pregleda android manifesta te build opcija, odabir odgovarajučeg ID-a aplikacije.}
+			\label{fig:deploy2}
+		\end{figure}
+		
+		\subsubsection{Postavljanje verzije}
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.5]{slike/deploy3.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\label{fig:deploy3}
+		\end{figure}
+		
+		\subsubsection{Potpis aplikacije i release build aplikacije}
+		
+		Potrebno je generirati upload key i keystore, što je moguće korištenjem alata Android Studio.
+		
+		Nakon što je keystore generiran, moguće je izgraditi release verziju aplikacije u .aab ili .apk formatu. U Android Studiu odabrati \texttt{Build -> Select Build Variant} i odabrati "release". Zatim \texttt{Build -> Generate Signed Bundle(s) / Apk}, odabrati, u našem slučaju, APK.
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.45]{slike/deploy4.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\label{fig:deploy4}
+		\end{figure}
+		
+		Stisnuti \texttt{Next}, odabrati \texttt{key store path} koji vodi na ranije generirani keystore i unjeti \texttt{keystore}, \texttt{key password} i \texttt{alias}.
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.4]{slike/deploy5.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\label{fig:deploy5}
+		\end{figure}
+		
+		Stisnuti \texttt{Next}, odabrati \texttt{build variant}, odredišni folder i kliknuti \texttt{Create}. Potpisani APK će se nalaziti u specificiranom folderu.
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.43]{slike/deploy6.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\label{fig:deploy6}
+		\end{figure}
+		
+		\subsubsection{Objava aplikacije na odabranom appstore-u}
+		
+		Objava aplikacije znatno se razlikuje na različitim trgovinama aplikacija, a postupak objave često je rigorozan te se nerijetko plaća. Zbog takve kompleksnosti i spomenutih razlika u procesu objave, nećemo ulaziti u detalje već ćemo ukratko opisati postupak objave na Amazon Appstoreu.
+		
+		Za početak, potrebno je napraviti račun na Amazon Appstoreu te se navigirati na sljedeću stranicu: \sloppy\url{https://developer.amazon.com/docs/app-submission/submitting-apps-to-amazon-appstore.html}.
+		
+		Prateći upute na priloženoj stranici, potrebno se ulogirati u Amazon Developer konzolu. Zatim kliknuti na \textit{dashboard} te nakon toga odabrati \textit{Add a New App} iz padajućeg izbornika i odabrati \textit{Android}. Ponovno odabrati \textit{Add a New App} te \textit{Android}. Zatim je potrebno pratiti formu te ispuniti sva polja koja Amazon zahtijeva te generirati zahtjev za objavu. Nakon što se to uspješno obavi, potrebno je čekati da Amazon Appstore odobri upload aplikacije.
+		
+		
 		\eject
 		
