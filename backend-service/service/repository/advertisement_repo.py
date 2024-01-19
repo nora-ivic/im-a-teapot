@@ -187,6 +187,7 @@ class AdvertisementRepository:
         self.session.flush()
 
         for picture_link in advert_input.picture_links:
+            picture_link = picture_link.lstrip('https://lost-pets-progi-backend-2023-2024.onrender.com')
             new_picture = Picture(
                 advert_id=new_advert.id,
                 link=picture_link,
@@ -225,6 +226,7 @@ class AdvertisementRepository:
         advert.shelter_id = user.id if user.is_shelter and advert_input.is_in_shelter else None
 
         for picture_link in advert_input.picture_links:
+            picture_link = picture_link.lstrip('https://lost-pets-progi-backend-2023-2024.onrender.com')
             existing = self.session.query(Picture).filter(Picture.link == picture_link).first()
             if existing:
                 continue

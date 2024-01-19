@@ -3,10 +3,8 @@ import os
 
 load_dotenv()
 
-
 APP_NAME = "Nestali ljubimci"
-APP_VERSION = "2.0.1"
-
+APP_VERSION = "2.0.2"
 
 POSTGRES_USER = os.getenv('POSTGRES_USER')
 POSTGRES_PASSWORD = os.getenv('POSTGRES_PASSWORD')
@@ -22,3 +20,6 @@ TOKEN_EXPIRE_MINUTES = 120
 
 PICTURE_FOLDER = 'service/api/pictures/media/'
 PICTURE_PATH = '/media/'
+
+FIREBASE_CERTIFICATE = 'nestali-ljubimci-633ce905492c.json'
+FIREBASE_PATH = 'nestali-ljubimci.appspot.com'

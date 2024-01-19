@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "nestali-ljubimci",
+  "private_key_id": "633ce905492cd409e38ccb700699951eae36ad3e",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDD+vQBVd297pLM\nu2db6yFQQ5AptD0ggbNfGDl+IEbwejnVhKSgiQcOjH4ooCf2DwvYcdICfRge/ped\n6fVSQ8q5QIcQVpSxE7ObnygyKzNKC4My22hIoJvzsgPqPNvUv2RQzIYLJUhxfvsQ\nr398NIQzkKWqCXYUrwuh/Dj2cQFvXdkj0LAnwf0zVs5V4uT5JVMw6ndm25yv9eml\n+kzK40gno/evXNF0iGCYLZOxKpypRCPPn44B6I/rI8YQP0oqCuA/ksLuoo9ngH7t\nhkLoqf7VpOxAE+DKdboc2+4Jr/vNejnsbXNTM6W1YVGT6nkky4Jahm6u7fUGtB/s\nTFJTqkiTAgMBAAECggEAA+dHsjnHmjTaRQGmjrTMNmZiGgfg/84ViIYEVHgdcZoS\n9NHDham1CPEmF3Zj1V7PWZb1cTSUpRQPvlwelW4253cFjv8VJGxus2F5fND8yzNs\n1Y0mh+vLBLuS9bi97YAyZfmXjI6djBp/XaxhLv7MyJ96QpIVrAEgi4VpN7S11ptQ\nVHaQC4IsiOBog4YmnfPjD2louV1Lrjed0DpVtkjqP5z7rVDCS2T3LOcV9cHyrtcU\nV4qb3OXB0siXfPhriLghV1SONnhxAkg59v6KSG+hV2kw3zOFOXDOgjcId6J3lbRy\na9JrGIB0hp9kMjgurnem9DfCiZkflCpuxvY840h5IQKBgQDk2Bi8mnzozNqbFGBZ\nuf0htk8VK+i7Pt1K0Xqpv/lc9WwyJYsqjZ2ujsediRJq2tMHr+Mpz3GnwD4Bgfq4\nTWe5zTfDfQTG92v9v7cxwRF7lKW6ru40xeYPWUD57gnJJZI1KJdMk471gKA/Hm7X\nGb7MVfzAQp3LdE+nDF09OoG0zwKBgQDbPIH8CU32QOgvWMh3F3E2UsSsNht35RMf\ng6sv3WwJbPFO5LuAbsag71QkRnIPqHECPswynE/vHy4EUJLrEYY+WSROFQ0E1MYC\nPzrP+40udQ9Zwn34+CJfpX4vulJpiQtLk463CseGz0/RCBr3Sus5DOVyiWe6L2pu\nqiEOhjHo/QKBgCh7FX0fcuMXgcAXDagxn1Z8UmbzWnrs9uZKQgGPJQRNobMJMyH2\n5SLAvQzf93MRfG0KrwtxV7CN8CoCHSDHCIc0hx28msC7ec3sQPK7LWWH+P0Z/qc1\nLqoeZsEPW4nKbJ+cq47vN0W0WCRyNLc2JasttsUnw5P+4iwxori3BcS/AoGBAJLu\nu6NCTSj0mWhaFYiTgoHI+Rz96mzxb16YrVuYB7dNd3DLpcrO83qazAa/2+QYnRzH\nH63vyzbU689ifQTkqtcQgV9/hkktnUOWQwFvc1CmjdI3opwBGXCHBspQErm+an6N\nd4G/zLfSK4lJ6GDCqmGC/ihEZOuIqclfZmZIlBy1AoGAOqZTZQnog/F7R3ErWKYv\ntDRjFqSrP0c86rfe1WV+qsa8C1u7/+w+9F+8jH32R0QqhDEhrT5+NRM50FPr3lLu\nE8DGn7LccmiB2LO6DzfXrNWNKa7yiCt1SGmB+uFQOQhP3Lk6ad8fLvwbrcRkVvDr\nvnBBvBh86F+bvc2QA3jXZdY=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-lost-pets@nestali-ljubimci.iam.gserviceaccount.com",
+  "client_id": "111533996597093319738",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-lost-pets%40nestali-ljubimci.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
