@@ -10,5 +10,6 @@
         app:showAsAction="ifRoom" />
     <item
         android:title="@string/mojiOglasi"
+        android:enabled="false"
         app:showAsAction="ifRoom" />
 </menu>

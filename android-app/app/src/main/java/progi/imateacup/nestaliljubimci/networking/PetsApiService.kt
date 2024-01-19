@@ -53,6 +53,12 @@ interface PetsApiService {
         @Body request: AddCommentRequest
     ): Response<AddCommentResponse>
 
+    @POST("api/advert/{advert_id}/in_shelter")
+    suspend fun addToShelter(
+        @Path("advert_id") advertId: Int,
+    ): Response<Unit>
+
+
     @Multipart
     @POST("api/pictures/upload")
     suspend fun uploadImage(

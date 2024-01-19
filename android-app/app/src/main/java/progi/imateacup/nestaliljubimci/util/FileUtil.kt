@@ -29,7 +29,6 @@ object FileUtil {
 
         val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), AVATAR_FILENAME)
         if (file.exists().not()) {
-            Log.e("FileUtil", "Image file does not exist.")
             return null
         }
         return makeImageSmaller(file)
@@ -70,13 +69,10 @@ object FileUtil {
         try {
             val file = File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), AVATAR_FILENAME)
             if (file.exists().not() && file.createNewFile().not()) {
-                Log.e("FileUtil", "Failed to create image file.")
-
                 return null
             }
             return file
         } catch (e: IOException) {
-            Log.e("FileUtil", e.message.orEmpty())
             return null
         }
 

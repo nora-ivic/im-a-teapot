@@ -127,7 +127,6 @@ class AdvertDetailsViewModel : ViewModel() {
                 if (err.localizedMessage == "Unauthorized") {
                     _accessTokenExpiredLiveData.value = true
                 }
-                Log.e("EXCEPTION", err.toString())
                 _imageUploadSuccessLiveData.value = false
             }
 
