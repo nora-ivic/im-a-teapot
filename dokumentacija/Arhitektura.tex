@@ -225,15 +225,29 @@
 			
 		\section{Dijagram razreda}
 		
-			Na slikama \ref{fig:drModels}, \ref{fig:drDataTransferObjects} i \ref{fig:drRepository} su prikazani razredi koji pripadaju \textit{backend} dijelu MVC arhitekture. Na slici \ref{fig:drView} prikazani su razredi \textit{frontend} dijela arhitekture. Razredi prikazani na slici \ref{fig:drRepository} prikazuju \textit{Repository}. Metode implementirane u tim razredima manipuliraju s DTO \textit{(Data transfer object)}, a oni su dohvaćeni pomoću metoda implementiranih u Model razredima.
+			Na slikama \ref{fig:drModels}, \ref{fig:drDataTransferObjects}, \ref{fig:drRepository} i \ref{fig:drControllers} su prikazani razredi koji pripadaju \textit{backend} dijelu MVC arhitekture. Na slikama \ref{fig:drView1}, \ref{fig:drView2} i \ref{fig:drView3} prikazani su razredi \textit{frontend} dijela arhitekture, podjeljeni na 3 povezana dijagrama zbog lakšeg snalaženja. Razredi prikazani na slici \ref{fig:drRepository} prikazuju \textit{Repository} koji je zadužen za interakciju s bazom. Razredi na slici \ref{fig:drControllers} nasljeđuju razred \textit{APIRouter} i predstavljaju \textit{controllere}. Metode implementirane u tim razredima manipuliraju s DTO \textit{(Data transfer object)}, a oni su dohvaćeni pomoću metoda implementiranih u \textit{Model} razredima.
 
 			Zbog lakše organizacije, razredi su podijeljeni logički po pravu pristupa metodama određenih aktora. Prikazane su isključivo ovisnosti između razreda koji pripadaju istom dijelu dijagrama. Ostale ovisnosti mogu se zaključiti iz naziva i tipova atributa u razredima.
 
 			\begin{figure}[H]
-				\includegraphics[scale=0.45]{dijagrami/dijagramiRazreda/View.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.48]{dijagrami/dijagramiRazreda/View1.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
-				\caption{Dijagram razreda - dio View}
-				\label{fig:drView}
+				\caption{Dijagram razreda - 1. dio View: Pets i Shelters klase}
+				\label{fig:drView1}
+			\end{figure}
+
+			\begin{figure}[H]
+				\includegraphics[scale=0.48]{dijagrami/dijagramiRazreda/View2.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - 2. dio View: Login, Register i Map klase}
+				\label{fig:drView2}
+			\end{figure}
+
+			\begin{figure}[H]
+				\includegraphics[scale=0.45]{dijagrami/dijagramiRazreda/View3.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - 3. dio View: Advert i Message klase}
+				\label{fig:drView3}
 			\end{figure}
 
 			Model razredi preslikavaju strukturu baze podataka u aplikaciji. Implementirane metode direktno komuniciraju s bazom podataka te vraćaju tražene podatke. Razred UserCustom predstavlja registriranog korisnika koji ima pristup svim stavkama aplikacije. Razred UserAuth predstavlja podatke za prijavu registriranog korisnika. Razred Advertisement predstavlja objavljeni oglas. Pet je razred koji sadrži unesene podatke o nestalom ljubimcu. Razred message predstavlja poruke vezane za komunikaciju o potrazi. Razred Picture predstavlja sliku koja se nalazi ili u oglasu ili u poruci. PetSpecies je enumeracija s mogućim vrstama ljubimca, a AdvertisementCategory enumeracija s kategorijama oglasa.
@@ -246,17 +260,24 @@
 			\end{figure}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.55]{dijagrami/dijagramiRazreda/dto.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.45]{dijagrami/dijagramiRazreda/dto.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Data transfer objects}
 				\label{fig:drDataTransferObjects}
 			\end{figure}
 			
 			\begin{figure}[H]
-				\includegraphics[scale=0.55]{dijagrami/dijagramiRazreda/repo.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\includegraphics[scale=0.6]{dijagrami/dijagramiRazreda/repo.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
 				\centering
 				\caption{Dijagram razreda - dio Repository}
 				\label{fig:drRepository}
+			\end{figure}
+
+			\begin{figure}[H]
+				\includegraphics[scale=0.6]{dijagrami/dijagramiRazreda/Controllers.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram razreda - dio Controllers}
+				\label{fig:drControllers}
 			\end{figure}
 			
 			\eject
@@ -264,22 +285,36 @@
 		\section{Dijagram stanja}
 			
 			
-			\textbf{\textit{dio 2. revizije}}\\
+			Koristeći aplikaciju korisnik prelazi iz jednog stanja u drugo. Prijelaz iz stanja prikazuje se na dijagramu. Na slici \ref{fig:dStanja} nalazi se dijagram stanja za klijenta aplikacije. Nakon što korisnik obavi prijavu, prikazuje mu se početna stranica na kojoj može listati oglase. S pomoću jasno definiranih tipki lako se može navigirati kroz aplikaciju odabirući nekoliko mogućnosti. Može objaviti novi oglas, pregledati svoj profil, vidjeti sve vlastite oglase ili pretražiti postojeće oglase.
 			
-			...
-			
+			\begin{figure}[H]
+				\includegraphics[scale=0.4]{dijagrami/dijagramStanja/dijagramStanja.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram stanja}
+				\label{fig:dStanja}
+			\end{figure}
 			
 			\eject 
 		
 		\section{Dijagram aktivnosti}
+
+			UML-dijagrami aktivnosti su ponašajni UML-dijagrami koji se upotrebljavaju za modeliranje i vizualizaciju dinamičkog ponašanja sustava. Prikazuju tijek aktivnosti, akcija i odluka procesa u sustavu. Svaki novi korak ovisi o završetku i rezultatu prethodnog. Na dijagramu \ref{fig:dAktivnosti} prikazan je proces kreiranja novog oglasa za nestalog ljubimca. Korisnik se prvo prijavljuje u sustav, a zatim odabire opciju za objavu novog oglasa. Unosi željene podatke o ljubimcu koji se onda provjeravaju u aplikaciji i na bazi. Ako su neispravni aplikacija traži ponovni unos, inače se spremaju u bazu. Novi oglas se zatim prikazuje korisniku.
 			
-			\textbf{\textit{dio 2. revizije}}\\
-			
-			...
+			\begin{figure}[H]
+				\includegraphics[scale=0.6]{dijagrami/dijagramAktivnosti/dAktivnosti.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram aktivnosti - Postavljanje oglasa}
+				\label{fig:dAktivnosti}
+			\end{figure}
 			
 			\eject
 		\section{Dijagram komponenti}
 		
-			\textbf{\textit{dio 2. revizije}}\\
-		
-			...
+			Na slici \ref{fig:dKomponenti} prikazan je dijagram komponenti naše mobilne aplikacije.  Opisuje organizaciju i međuovisnost komponenti. Instalacijom aplikacije na mobilni uređaj korisnika, na uređaju se nalaze sve datoteke koje pripadaju \textit{frontend} dijelu aplikacije. \textit{Frontend} dio aplikacije sastoji se od niza Kotlin datoteka koje su raspoređene u logičke cjeline s obzirom na funkcionalnosti koje ostvaruju. Sve Kotlin datoteke ovise o nizu Kotlin biblioteka. PetsAPIService je komponenta koja dohvaća podatke sa poslužitelja i određuje koji fragment mobilne aplikacije se prikazuje korisniku. Sustavu se pristupa preko dva sučelja. Preko sučelja za dohvat JSON podataka pristupa se FastApi komponenti. Ona poslužuje podatke koji pripadaju \textit{backend} dijelu aplikacije. SQLAlchemy je zadužen za dohvaćanje tablica iz baze preko SQL upita. Pristigli podaci dalje se šalju MVC arhitekturi u obliku DTO (\textit{Data transfer object}). Sučelje za dohvaćanje slika pristupa Media komponenti na poslužitelju u kojoj se nalaze spremljene sve fotografije aplikacije. Aplikacija preko dostupnih sučelja komunicira s poslužiteljem te ovisno o korisničkim akcijama dohvaća nove podatke ili slike.
+
+			\begin{figure}[H]
+				\includegraphics[scale=0.48]{dijagrami/dijagramKomponenti/dKomponenti.PNG} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+				\centering
+				\caption{Dijagram komponenti}
+				\label{fig:dKomponenti}
+			\end{figure}
