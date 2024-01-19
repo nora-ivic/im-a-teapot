@@ -353,6 +353,38 @@ class TestHome:
 		
 		Kada je sve od navedenog postavljeno, baza je spremna za početak rada servera. Tablice stvara repeatable skripta run\_migrations, a početne podatke ubacuje repeatable skripta init\_populate, koje se obje pokreću automatski kod pokretanja servisa.
 		
+		\subsubsection{Pokretanje servisa}
+		
+		Najlakši način za deploy servisa jest buildati Docker image iz Dockerfilea, a zatim pokrenuti Docker container iz spomenutog imagea. Ovo osigurava da će server imati sve što mu je potrebno i pokretati se u izoliranom okruženju. Upute za to pratiti na službenim Docker stranicama.
+		
+		Ovaj će se pristup skoro uvijek koristiti, i automatiziran je, kod deploya na remote server, a za detaljnije upute (poput postavljanja varijabli okruženja objašnjenih prije) potrebno je slijediti upute alata koji pruža usluge poslužitelja.
+		
+		Ipak, postoji relativno jednostavan način za pokretanje bez buildanja Docker image-a, a to je u virtualnom okruženju, uz lokalni python interpreter. Ukoliko ste na Linuxu, dovoljno će biti izvršiti sljedeće naredbe iz root foldera backenda (folder backend-service):
+		
+		\begin{lstlisting}
+sudo apt-get update
+sudo apt-get install python3
+sudo apt-get install python3-pip
+sudo apt install python3-venv
+python3 -m venv ./venv
+source venv/bin/activate
+pip3 install -r requirements.txt
+uvicorn service.main:app \end{lstlisting}
+
+		Na windows OS-u pokretanje je nešto drugačije.
+		
+		Potrebno je imati instaliran python 3.10 (radi i sa 3.11) i odgovarajući pip installer.
+		
+		Nakon toga pozicionirati se u root folder backenda (backend-service) u command promptu i pokrenuti slijedno naredbe:
+		
+		\begin{lstlisting}
+python -m venv ./venv
+venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn service.main:app \end{lstlisting}
+		
+		
+		U oba slučaja servis bi se sada trebao nalaziti na http://localhost:8000, a Swagger dokumentacija (popis endpointa i mogućnost slanja direktnog requesta) dostupna je na http://localhost:8000/docs .
 		
 		\eject
 		
