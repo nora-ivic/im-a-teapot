@@ -13,4 +13,10 @@
         android:icon="@drawable/baseline_delete_forever_24"
         android:title="@string/delete_advert"
         app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/add_to_shelter"
+        android:contentDescription="@string/delete_advert"
+        android:icon="@drawable/baseline_edit_24"
+        android:title="@string/add_to_shelter"
+        app:showAsAction="ifRoom" />
 </menu>

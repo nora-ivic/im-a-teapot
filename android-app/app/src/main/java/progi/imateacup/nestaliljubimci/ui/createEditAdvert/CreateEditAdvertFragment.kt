@@ -21,6 +21,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -34,17 +35,19 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
+import progi.imateacup.nestaliljubimci.BuildConfig
+import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
-import progi.imateacup.nestaliljubimci.BuildConfig
+
+const val IS_SHELTER = "IS_SHELTER"
 
 class CreateEditAdvertFragment : Fragment() {
 
@@ -131,8 +134,14 @@ class CreateEditAdvertFragment : Fragment() {
                             ArrayAdapter(requireContext(), R.layout.advert_category_list, species)
                         (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
 
-                        val categories =
-                            listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Uginuo")
+                        petCategoryFieldLayout.isVisible = true
+                        val categories: List<String> =
+                            if (sharedPreferences.getBoolean(IS_SHELTER, false)) {
+                                listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Uginuo")
+                            } else {
+                                listOf("Izgubljen", "Pronađen", "Napušten", "Uginuo")
+                            }
+
                         val adapter2 =
                             ArrayAdapter(
                                 requireContext(),
@@ -198,7 +207,14 @@ class CreateEditAdvertFragment : Fragment() {
             val adapter1 = ArrayAdapter(requireContext(), R.layout.advert_category_list, species)
             (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
 
-            val categories = listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
+            val categories: List<String>
+            if (sharedPreferences.getBoolean(IS_SHELTER, false)) {
+                categories = listOf("Izgubljen", "U skloništu")
+            } else {
+                categories = listOf("Izgubljen")
+                petCategoryFieldLayout.isVisible = false
+            }
+
             val adapter2 =
                 ArrayAdapter(requireContext(), R.layout.advert_category_list, categories)
 
@@ -235,7 +251,7 @@ class CreateEditAdvertFragment : Fragment() {
 
     private fun initListeners() {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-        val noCommaInputFormat = SimpleDateFormat("MMM dd yyyy", Locale.getDefault())
+        val noCommaInputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
             viewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
@@ -347,7 +363,7 @@ class CreateEditAdvertFragment : Fragment() {
                             formattedDate = outputFormat.format(date!!)
                         }
                         catch (e: ParseException) {
-                            date = null
+                            e.printStackTrace()
                         }
                     }
                 }
@@ -586,7 +602,7 @@ class CreateEditAdvertFragment : Fragment() {
         "Pronađen" to AdvertisementCategory.found,
         "Napušten" to AdvertisementCategory.abandoned,
         "U skloništu" to AdvertisementCategory.sheltered,
-        "Mrtav" to AdvertisementCategory.dead,
+        "Uginuo" to AdvertisementCategory.dead,
     )
 
     val speciesMapping = mapOf(
