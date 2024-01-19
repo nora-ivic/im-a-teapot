@@ -330,9 +330,29 @@ class TestHome:
 		
 		\section{Upute za puštanje u pogon}
 		
-			\textbf{\textit{dio 2. revizije}}\\
+		\subsection{Lokalni deploy aplikacije}
 		
-			...
-			
-			
-			\eject 
+		\subsubsection{Baza podataka}
+		
+		Prije pokretanja backend servisa potrebno je lokalno stvoriti bazu podataka. Za to je potreban PostgreSQL poslužitelj baza podataka. Preporučamo dodatno korištenje grafičkih alata kao što su pgAdmin ili DBeaver, ali dovoljan je i samo PostgreSQL driver i konfiguracija iz komandne linije. Upute pratiti na službenim stranicama alata, ovisno o OS-u računala na kojem se pokreće.
+		
+		Nakon instalacije potrebno je stvoriti bazu podataka. Server očekuje da će se baza zvati „lost\_pets“, ali navedeno se može „pregaziti“ u settings.py fileu u root folderu backenda, u varijabli DEFAULT\_DATABASE. Ipak, preporučujemo da bazu nazovete „lost\_pets“.
+		
+		Ako se koristi pgAdmin, baza se može stvoriti odabirom „Servers“ $\rightarrow$ „PostgreSQL“ na lijevoj strani ekrana, a zatim desni klik na „PostgreSQL“ pa „Create“ $\rightarrow$ „Database“. Zatim se otvara prozor u kojem se unosi ime baze (\ref{fig:deploy1}) i nakon toga „Save“.
+		
+		\begin{figure}[H]
+			\includegraphics[scale=0.65]{slike/deploy1.jpg} %veličina slike u odnosu na originalnu datoteku i pozicija slike
+			\centering
+			\caption{Unos imena baze u pgAdminu}
+			\label{fig:deploy1}
+		\end{figure}
+		
+		User i password za pristup bazi su konfigurabilni, i preporučujemo mijenjati ih, ako je potrebno, u .env fileu, u varijablama POSTGRES\_USER i POSTGRES\_PASSWORD (Prilagoditi svojim PostgreSQL postavkama). Kako se postgres server defaultno nalazi na portu 5432, a bazu konfiguriramo lokalno, preporučujemo ostaviti POSTGRES\_HOST="localhost" te POSTGRES\_PORT=5432, iako se navedene postavke mogu i mijenjati.
+		
+		Ove se postavke kod deploya na remote poslužitelj također "pregaze" pomoću varijabli okruženja.
+		
+		Kada je sve od navedenog postavljeno, baza je spremna za početak rada servera. Tablice stvara repeatable skripta run\_migrations, a početne podatke ubacuje repeatable skripta init\_populate, koje se obje pokreću automatski kod pokretanja servisa.
+		
+		
+		\eject
+		
