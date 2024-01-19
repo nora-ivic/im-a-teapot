@@ -309,8 +309,149 @@ class TestHome:
 			
 			\subsection{Ispitivanje sustava}
 			
-			...
-			 
+			Ispitivanje sustava provedeno je ručno za sve obrasce uporabe. U nastavku su prikazani rezultati ispitivanja za UC2 (s UC15), UC3 (uključujući UC8), UC6 i UC9.
+
+			\noindent \textbf{Ispitni  slučaj 1: Prijava korisnika u sustav}
+
+			\noindent \textbf{Ulaz: }
+			\begin{packed_enum}
+				\item Otvaranje stranice za prijavu.
+				\item Unos korisničkog imena i lozinke.
+				\item Pritisak na gumb za prijavu.
+			\end{packed_enum}
+
+			\noindent \textbf{Očekivani rezultat: }
+			\begin{packed_enum}
+				\item Prikazuje se lista oglasa
+				\item Odabirom ikone korisnika u \textit{toolbar-u} mogu se pregledati podaci o korisniku			
+			\end{packed_enum}
+
+			\noindent \textbf{Rezultat:} Očekivanja su zadovoljena. Aplikacija je prošla test.
+
+			\begin{figure}[H]
+			\centering
+			\begin{minipage}{.5\textwidth}
+	 			 \centering
+				  \includegraphics[width=.58\linewidth]{slike/app1v1.jpg}
+				  \caption{Prijava u sustav}
+				  \label{fig:app1v1}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				  \centering
+				  \includegraphics[width=.58\linewidth]{slike/app1v2.jpg}
+				  \caption{Prikaz profila}
+				  \label{fig:app1v2}
+			\end{minipage}
+			\end{figure}
+
+			\noindent \textbf{Ispitni  slučaj 2: Postavljanje oglasa}
+
+			\noindent \textbf{Ulaz: }
+			\begin{packed_enum}
+				\item Odabir opcije "Dodaj oglas".
+				\item Otvaranje forme za unos podataka.
+				\item Unos podataka o nestalom ljubimcu.
+				\item Pritisak na gumb za objavu oglasa.
+			\end{packed_enum}
+
+			\noindent \textbf{Očekivani rezultat: }
+			\begin{packed_enum}
+				\item[]\begin{packed_enum}
+					\item	 Prikazuje se detaljni prikaz stvorenog oglasa.
+					\item Nudi se mogućnost pisanja komentara.
+				\end{packed_enum}	
+			\end{packed_enum}
+
+			\noindent \textbf{Rezultat:} Očekivanja su zadovoljena. Aplikacija je prošla test.
+
+			\begin{figure}[H]
+			\centering
+			\begin{minipage}{.5\textwidth}
+	 			 \centering
+				  \includegraphics[width=.58\linewidth]{slike/app2v1.jpg}
+				  \caption{Stvaranje novog oglasa}
+				  \label{fig:app2v1}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				  \centering
+				  \includegraphics[width=.58\linewidth]{slike/app2v2.jpg}
+				  \caption{Prikaz stvorenog oglasa}
+				  \label{fig:app2v2}
+			\end{minipage}
+			\end{figure}
+
+			\noindent \textbf{Ispitni  slučaj 3: Prikaz liste i pregled oglasa}
+
+			\noindent \textbf{Ulaz: }
+			\begin{packed_enum}
+				\item Otvaranje aplikacije (već prijavljen korisnik ili odabir ulaska kao gost).
+				\item Odabire se oglas za prikaz.
+			\end{packed_enum}
+
+			\noindent \textbf{Očekivani rezultat: }
+			\begin{packed_enum}
+				\item	 Prikazuje se lista svih oglasa.
+				\item Prikazuje se detaljni prikaz odabranog oglasa.
+			\end{packed_enum}
+
+			\noindent \textbf{Rezultat:} Očekivanja su zadovoljena. Aplikacija je prošla test.
+
+			\begin{figure}[H]
+			\centering
+			\begin{minipage}{.5\textwidth}
+	 			 \centering
+				  \includegraphics[width=.58\linewidth]{slike/app3v1.jpg}
+				  \caption{Lista oglasa}
+				  \label{fig:app3v1}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				  \centering
+				  \includegraphics[width=.58\linewidth]{slike/app3v2.jpg}
+				  \caption{Detaljni prikaz oglasa}
+				  \label{fig:app3v2}
+			\end{minipage}
+			\end{figure}
+			
+			\noindent \textbf{Ispitni  slučaj 4: Brisanje oglasa}
+
+			\noindent \textbf{Ulaz: }
+			\begin{packed_enum}
+				\item Pregled vlastitih oglasa.
+				\item Odabir opcije za brisanje.
+				\item Potvrda brisanja.
+			\end{packed_enum}
+
+			\noindent \textbf{Očekivani rezultat: }
+			\begin{packed_enum}
+				\item	[]\begin{packed_enum}
+					\item	 Ispis poruke o uspješnom brisanju.
+					\item Prikaz preostalih vlastitih oglasa ili poruka da ih više nema.
+				\end{packed_enum}	
+			\end{packed_enum}	
+
+			\noindent \textbf{Rezultat:} Očekivanja su zadovoljena. Aplikacija je prošla test.
+
+			\begin{figure}[H]
+			\centering
+			\begin{minipage}{.5\textwidth}
+	 			 \centering
+				  \includegraphics[width=.58\linewidth]{slike/app4v1.jpg}
+				  \caption{Odabir brisanja}
+				  \label{fig:app4v1}
+			\end{minipage}%
+			\begin{minipage}{.5\textwidth}
+				  \centering
+				  \includegraphics[width=.58\linewidth]{slike/app4v2.jpg}
+				  \caption{Potvrda brisanja}
+				  \label{fig:app4v2}
+			\end{minipage}
+			\end{figure}
+			\begin{figure}[H]
+				  \includegraphics[scale=0.3]{slike/app4v3.jpg}
+				  \centering
+				  \caption{Prikaz preostalih oglasa}
+				  \label{fig:app4v3}
+			\end{figure}	 
 			
 			\eject 
 		
