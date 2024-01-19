@@ -38,7 +38,6 @@ import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
 import progi.imateacup.nestaliljubimci.model.networking.response.Advert
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
-import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
 import progi.imateacup.nestaliljubimci.util.isInternetAvailable
@@ -169,7 +168,8 @@ class AdvertDetailsFragment : Fragment() {
         advertDetailsViewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
             if (accessTokenExpired) {
                 sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
-                val direction = AdvertDetailsFragmentDirections.actionAdvertDetailsFragmentToLoginFragment(true)
+                val direction =
+                    AdvertDetailsFragmentDirections.actionAdvertDetailsFragmentToLoginFragment(true)
                 findNavController().navigate(direction)
             }
         }
@@ -212,6 +212,9 @@ class AdvertDetailsFragment : Fragment() {
         val oldTimeFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
         val newTimeFormat = DateTimeFormatter.ofPattern("dd.MM.yyyy.")
         with(binding) {
+            usernameTextValue.text = advert.username ?: "Nepoznato"
+            emailTextValue.text = advert.userEmail ?: "Nepoznato"
+            phoneValue.text = advert.userPhone ?: "Nepoznato"
             petStatusValue.text = categoryMapping.entries.find { it.value == advert.category }?.key
                 ?: "Nepoznato"
             petSpeciesValue.text =
@@ -432,8 +435,6 @@ class AdvertDetailsFragment : Fragment() {
                     }
 
                     uploadImage()
-                } else {
-                    Log.e("SavePicture", "Picture not saved")
                 }
             }
     }

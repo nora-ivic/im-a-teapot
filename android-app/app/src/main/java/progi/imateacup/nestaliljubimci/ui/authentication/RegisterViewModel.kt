@@ -38,7 +38,6 @@ class RegisterViewModel : ViewModel() {
                     isShelter
                 )
             } catch (err: Exception) {
-                Log.e("Exception", err.toString())
                 _registrationResultLiveData.value = false
             }
         }

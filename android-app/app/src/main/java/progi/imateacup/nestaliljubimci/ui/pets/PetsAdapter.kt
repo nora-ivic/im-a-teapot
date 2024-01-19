@@ -1,5 +1,6 @@
 package progi.imateacup.nestaliljubimci.ui.pets
 
+import android.content.SharedPreferences
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
@@ -9,17 +10,22 @@ import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewbinding.ViewBinding
 import com.bumptech.glide.Glide
+import com.google.android.material.snackbar.Snackbar
 import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.LoadingSpinnerBinding
 import progi.imateacup.nestaliljubimci.databinding.MissingPetPostBinding
 import progi.imateacup.nestaliljubimci.model.networking.response.Pet
 import progi.imateacup.nestaliljubimci.util.MyRequestListener
 
+const val IS_SHELTER = "IS_SHELTER"
+
 class PetsAdapter(
     private var pets: List<Pet>,
     private val onPetPostClickCallback: (Pet) -> Unit,
     private val onEditPostClickCallback: (Pet) -> Unit,
-    private val onDeletePostClickCallback: (Pet) -> Unit
+    private val onDeletePostClickCallback: (Pet) -> Unit,
+    private val onAddToShelterPostClickCallback: (Pet) -> Unit,
+    private val sharedPreferences: SharedPreferences
 ) : RecyclerView.Adapter<PetsAdapter.MyViewHolder>() {
     private var showLoadingSpinner = true
     private var showingMyPets = false
@@ -35,7 +41,11 @@ class PetsAdapter(
             when (binding) {
                 is MissingPetPostBinding -> {
                     with(binding) {
-                        if (showingMyPets) {
+                        if (showingMyPets || sharedPreferences.getBoolean(
+                                IS_SHELTER,
+                                false
+                            )
+                        ) {
                             menuCard.visibility = View.VISIBLE
                             menuCard.bringToFront()
                             menuCard.setOnClickListener {
@@ -45,6 +55,17 @@ class PetsAdapter(
                                 )
                                 popupMenu.inflate(R.menu.advert_menu)
                                 popupMenu.setForceShowIcon(true)
+                                if (pet != null) {
+                                    if (pet.ownerUsername != sharedPreferences.getString(
+                                            "USERNAME",
+                                            ""
+                                        )) {
+                                        popupMenu.menu.removeItem(R.id.delete_advert)
+                                        popupMenu.menu.removeItem(R.id.edit_advert)
+                                    } else {
+                                        popupMenu.menu.removeItem(R.id.add_to_shelter)
+                                    }
+                                }
                                 popupMenu.setOnMenuItemClickListener { item ->
                                     when (item.itemId) {
                                         R.id.edit_advert -> {
@@ -54,6 +75,11 @@ class PetsAdapter(
 
                                         R.id.delete_advert -> {
                                             onDeletePostClickCallback.invoke(pet!!)
+                                            true
+                                        }
+
+                                        R.id.add_to_shelter -> {
+                                            onAddToShelterPostClickCallback.invoke(pet!!)
                                             true
                                         }
 

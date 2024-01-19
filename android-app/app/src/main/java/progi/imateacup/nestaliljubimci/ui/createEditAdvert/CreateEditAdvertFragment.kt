@@ -21,6 +21,7 @@ import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.core.content.edit
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -34,17 +35,19 @@ import progi.imateacup.nestaliljubimci.R
 import progi.imateacup.nestaliljubimci.databinding.CreateAdvertFragmentBinding
 import progi.imateacup.nestaliljubimci.model.networking.enums.AdvertisementCategory
 import progi.imateacup.nestaliljubimci.model.networking.enums.PetSpecies
-import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
 import progi.imateacup.nestaliljubimci.ui.authentication.LoginFragment
 import progi.imateacup.nestaliljubimci.ui.authentication.PREFERENCES_NAME
-import progi.imateacup.nestaliljubimci.ui.pets.PetsFragmentDirections
 import progi.imateacup.nestaliljubimci.util.FileUtil
 import progi.imateacup.nestaliljubimci.util.getRealPathFromURI
+import progi.imateacup.nestaliljubimci.BuildConfig
+import progi.imateacup.nestaliljubimci.ui.advertDetails.PFP_URI_NAME_DECORATOR
 import java.io.File
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+const val IS_SHELTER = "IS_SHELTER"
 
 class CreateEditAdvertFragment : Fragment() {
 
@@ -105,7 +108,6 @@ class CreateEditAdvertFragment : Fragment() {
                 with(binding) {
                     if (advert != null) {
                         petNameField.setText(advert.petName)
-                        petColorField.setText(advert.petColor)
                         descriptionField.setText(advert.description)
                         petAgeField.setText(advert.petAge?.toString() ?: "")
 
@@ -114,7 +116,7 @@ class CreateEditAdvertFragment : Fragment() {
                                 SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss", Locale.getDefault())
                             val outputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
                             try {
-                                val date = advert.dateTimeLost?.let { inputFormat.parse(it) }
+                                val date = advert.dateTimeLost.let { inputFormat.parse(it) }
                                 dateField.setText(outputFormat.format(date!!))
                             } catch (e: ParseException) {
                                 e.printStackTrace()
@@ -127,27 +129,23 @@ class CreateEditAdvertFragment : Fragment() {
 
                         viewModel.setAdvertCoordinates(advert.locationLost)
 
-                        val species =
-                            listOf(
-                                "Ptica",
-                                "Mačka",
-                                "Pas",
-                                "Gušter",
-                                "Zec",
-                                "Glodavac",
-                                "Zmija",
-                                "Ostalo"
-                            )
+                        val species = resources.getStringArray(R.array.species)
                         val adapter1 =
-                            ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
+                            ArrayAdapter(requireContext(), R.layout.advert_category_list, species)
                         (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
 
-                        val categories =
-                            listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
+                        petCategoryFieldLayout.isVisible = true
+                        val categories: List<String> =
+                            if (sharedPreferences.getBoolean(IS_SHELTER, false)) {
+                                listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Uginuo")
+                            } else {
+                                listOf("Izgubljen", "Pronađen", "Napušten", "Uginuo")
+                            }
+
                         val adapter2 =
                             ArrayAdapter(
                                 requireContext(),
-                                R.layout.advert_chategory_list,
+                                R.layout.advert_category_list,
                                 categories
                             )
 
@@ -166,6 +164,15 @@ class CreateEditAdvertFragment : Fragment() {
                             (petSpeciesField as? AutoCompleteTextView)?.setText(specie, false)
                         }
                         (petCategoryField as? AutoCompleteTextView)?.setAdapter(adapter2)
+
+                        val colors = resources.getStringArray(R.array.colors)
+                        val colorPosition = colors.indexOf(advert.petColor)
+                        if (colorPosition != -1) {
+                            (colorsAutoComplete as? AutoCompleteTextView)?.setText(
+                                advert.petColor,
+                                false
+                            )
+                        }
 
                         submitButton.text = getString(R.string.edit_advert)
                     }
@@ -197,12 +204,19 @@ class CreateEditAdvertFragment : Fragment() {
         with(binding) {
             val species =
                 listOf("Ptica", "Mačka", "Pas", "Gušter", "Zec", "Glodavac", "Zmija", "Ostalo")
-            val adapter1 = ArrayAdapter(requireContext(), R.layout.advert_chategory_list, species)
+            val adapter1 = ArrayAdapter(requireContext(), R.layout.advert_category_list, species)
             (petSpeciesField as? AutoCompleteTextView)?.setAdapter(adapter1)
 
-            val categories = listOf("Izgubljen", "Pronađen", "Napušten", "U skloništu", "Mrtav")
+            val categories: List<String>
+            if (sharedPreferences.getBoolean(IS_SHELTER, false)) {
+                categories = listOf("Izgubljen", "U skloništu")
+            } else {
+                categories = listOf("Izgubljen")
+                petCategoryFieldLayout.isVisible = false
+            }
+
             val adapter2 =
-                ArrayAdapter(requireContext(), R.layout.advert_chategory_list, categories)
+                ArrayAdapter(requireContext(), R.layout.advert_category_list, categories)
 
             val defaultCategory = "Izgubljen"
             val defaultCategoryPosition = categories.indexOf(defaultCategory)
@@ -237,13 +251,16 @@ class CreateEditAdvertFragment : Fragment() {
 
     private fun initListeners() {
         val inputFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+        val noCommaInputFormat = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
         val outputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
         with(binding) {
             viewModel.accessTokenExpiredLiveData.observe(viewLifecycleOwner) { accessTokenExpired ->
                 if (accessTokenExpired) {
                     sharedPreferences.edit().remove(LoginFragment.ACCESS_TOKEN).apply()
                     val direction =
-                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToLoginFragment()
+                        CreateEditAdvertFragmentDirections.actionCreateAdvertFragmentToLoginFragment(
+                            true
+                        )
                     findNavController().navigate(direction)
                 }
             }
@@ -281,11 +298,6 @@ class CreateEditAdvertFragment : Fragment() {
                     setSubmitButton()
                 }
             })
-            petColorField.setOnFocusChangeListener { _, hasFocus ->
-                if (!hasFocus) {
-                    updatePetColorField()
-                }
-            }
             petAgeField.setOnFocusChangeListener { _, hasFocus ->
                 if (!hasFocus) {
                     updatePetAgeField()
@@ -341,12 +353,18 @@ class CreateEditAdvertFragment : Fragment() {
 
                 var formattedDate: String? = null
                 if (dateField.text.toString().isNotBlank()) {
-                    val date: Date?
+                    var date: Date?
                     try {
-                        date = inputFormat.parse(dateField.text.toString())
+                        date = noCommaInputFormat.parse(dateField.text.toString())
                         formattedDate = outputFormat.format(date!!)
                     } catch (e: ParseException) {
-                        e.printStackTrace()
+                        try {
+                            date = inputFormat.parse(dateField.text.toString())
+                            formattedDate = outputFormat.format(date!!)
+                        }
+                        catch (e: ParseException) {
+                            e.printStackTrace()
+                        }
                     }
                 }
 
@@ -358,7 +376,7 @@ class CreateEditAdvertFragment : Fragment() {
                         advert_category = categoryMapping[petCategoryField.text.toString()]!!,
                         pet_name = petNameField.text.toString(),
                         pet_species = selectedSpecies,
-                        pet_color = petColorField.text.toString().ifBlank { null },
+                        pet_color = colorsAutoComplete.text.toString().ifBlank { null },
                         pet_age = selectedAge,
                         date_time_lost = formattedDate,
                         location_lost = viewModel.advertCoordinatesLiveData.value,
@@ -370,7 +388,7 @@ class CreateEditAdvertFragment : Fragment() {
                         advert_category = categoryMapping[petCategoryField.text.toString()]!!,
                         pet_name = petNameField.text.toString(),
                         pet_species = selectedSpecies,
-                        pet_color = petColorField.text.toString().ifBlank { null },
+                        pet_color = colorsAutoComplete.text.toString().ifBlank { null },
                         pet_age = selectedAge,
                         date_time_lost = formattedDate,
                         location_lost = viewModel.advertCoordinatesLiveData.value,
@@ -488,7 +506,7 @@ class CreateEditAdvertFragment : Fragment() {
         if (file != null) {
             imageUri = FileProvider.getUriForFile(
                 requireContext(),
-                "${requireContext().applicationContext.packageName}.provider",
+                "${BuildConfig.APPLICATION_ID}.provider",
                 file!!
             )
         }
@@ -537,8 +555,6 @@ class CreateEditAdvertFragment : Fragment() {
                     }
 
                     uploadImage()
-                } else {
-                    Log.e("SavePicture", "Picture not saved")
                 }
             }
     }
@@ -573,12 +589,6 @@ class CreateEditAdvertFragment : Fragment() {
         }
     }
 
-    private fun updatePetColorField() {
-        with(binding) {
-            petNameFieldLayout.error = null
-        }
-    }
-
     private fun updateDescriptionField() {
         with(binding) {
             petNameFieldLayout.error = null
@@ -590,7 +600,7 @@ class CreateEditAdvertFragment : Fragment() {
         "Pronađen" to AdvertisementCategory.found,
         "Napušten" to AdvertisementCategory.abandoned,
         "U skloništu" to AdvertisementCategory.sheltered,
-        "Mrtav" to AdvertisementCategory.dead,
+        "Uginuo" to AdvertisementCategory.dead,
     )
 
     val speciesMapping = mapOf(
