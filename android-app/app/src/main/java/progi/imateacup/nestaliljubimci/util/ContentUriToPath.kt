@@ -30,13 +30,11 @@ fun getRealPathFromURI(uri: Uri, context: Context): String? {
             } != -1) {
             outputStream.write(buffers, 0, read)
         }
-        Log.e("File Size", "Size " + file.length())
         inputStream?.close()
         outputStream.close()
-        Log.e("File Path", "Path " + file.path)
 
     } catch (e: java.lang.Exception) {
-        Log.e("Exception", e.message!!)
+        e.printStackTrace()
     }
     returnCursor.close()
     return file.path

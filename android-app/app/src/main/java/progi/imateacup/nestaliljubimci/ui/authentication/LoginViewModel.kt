@@ -46,7 +46,6 @@ class LoginViewModel : ViewModel() {
                     ApiModule.setSessionInfo(response.body()?.token!!)
                 }
             } catch (err: Exception) {
-                Log.e("Exception", err.toString())
                 _loginResultLiveData.value = false
             }
         }

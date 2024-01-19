@@ -555,8 +555,6 @@ class CreateEditAdvertFragment : Fragment() {
                     }
 
                     uploadImage()
-                } else {
-                    Log.e("SavePicture", "Picture not saved")
                 }
             }
     }
