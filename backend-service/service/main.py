@@ -1,8 +1,7 @@
-from os.path import realpath
+from firebase_admin import credentials, initialize_app
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.staticfiles import StaticFiles
 from starlette.responses import JSONResponse
 
 from service.api.messaging.endpoints import messages_router
@@ -11,11 +10,12 @@ from service.migrations import run_migrations
 from service.init_populate import init_populate
 from service.api.advertisement.endpoints import advert_router
 from service.api.authorization.endpoints import auth_router
-from settings import DEFAULT_DATABASE
+from settings import DEFAULT_DATABASE, FIREBASE_CERTIFICATE, FIREBASE_PATH
 
 app = FastAPI()
 
-app.mount('/media', StaticFiles(directory=realpath(f'{realpath(__file__)}/../api/pictures/media')), name='media')
+cred = credentials.Certificate(FIREBASE_CERTIFICATE)
+initialize_app(cred, {'storageBucket': FIREBASE_PATH})
 
 app.include_router(auth_router, prefix="/api/authorization")
 app.include_router(advert_router, prefix="/api/advert")
