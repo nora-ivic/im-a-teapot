@@ -123,7 +123,6 @@ class CreateEditAdvertViewModel : ViewModel() {
                 _advertLiveData.value = advert
                 _advertFetchSuccessLiveData.value = true
             } catch (err: Exception) {
-                Log.e("EXCEPTION", err.toString())
                 _advertFetchSuccessLiveData.value = false
             }
         }
@@ -151,7 +150,6 @@ class CreateEditAdvertViewModel : ViewModel() {
                 _imageLinksLiveData.value = newList
                 _imageUploadSuccessLiveData.value = true
             } catch (err: Exception) {
-                Log.e("EXCEPTION", err.toString())
                 _imageUploadSuccessLiveData.value = false
             }
 
